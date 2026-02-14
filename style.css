@@ -333,16 +333,27 @@ textarea {
 }
 
 .signature-text {
-  /* Using the Google Font we just linked */
   font-family: "Dancing Script", cursive;
-  font-size: 2.5rem; /* Made it a bit larger */
+  font-size: 2.8rem;
   color: var(--link);
   display: inline-block;
-  transform: rotate(-2deg); /* Slight tilt for realism */
+  /* Starting position */
+  transform: rotate(-4deg) scale(1);
   margin-bottom: 5px;
   user-select: none;
-  /* Subtle glow to make it look like fresh ink */
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  /* This makes the "snap" back to normal smooth */
+  transition:
+    transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+    color 0.3s ease;
+  cursor: pointer;
+}
+
+/* The Hover Animation */
+.signature-text:hover {
+  /* Tilts a bit more and grows slightly when touched */
+  transform: rotate(-2deg) scale(1.05);
+  color: #5ac8fa; /* A slightly brighter Apple-style blue */
 }
 
 .founder-title {
@@ -352,4 +363,9 @@ textarea {
   letter-spacing: 2px;
   opacity: 0.5;
   font-weight: 700;
+}
+@media (max-width: 768px) {
+  .signature-text {
+    font-size: 2.2rem;
+  }
 }
