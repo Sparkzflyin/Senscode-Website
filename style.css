@@ -216,13 +216,31 @@ body {
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 40px;
 }
+/* Footer Column Headings */
+.footer-column h4 {
+  color: var(--text);
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  /* This creates the space between the heading and the first link */
+  margin-bottom: 25px; 
+}
+
+/* Footer Links */
 .footer-column a {
   display: block;
   text-decoration: none;
   color: var(--text);
   font-size: 0.85rem;
-  margin-bottom: 12px;
+  /* This controls the vertical space between the links themselves */
+  margin-bottom: 15px; 
   opacity: 0.5;
+  transition: opacity 0.3s ease;
+}
+
+.footer-column a:hover {
+  opacity: 1;
 }
 /* Contact Page Specific Cleanup */
 /* --- Refined Contact Card --- */
@@ -423,5 +441,11 @@ body {
     position: fixed;
     top: 0;
     width: 100%;
+  }
+}
+@media (max-width: 768px) {
+  .footer-content {
+    /* Increases the space between stacked footer columns on mobile */
+    gap: 50px; 
   }
 }
