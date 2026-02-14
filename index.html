@@ -3,17 +3,15 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Senscode | Home</title>
+    <title>SensorMedia | Home</title>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <div id="visit-counter" class="glass-panel">
-      <span class="pulse">●</span> <span id="count-display">0 Live</span>
-    </div>
-    <nav class="navbar glass-panel">
-    <div class="logo">
-    <a href="index.html" class="logo-link">SensorMedia</a>
-</div>
+    <div id="page-transition"></div>
+    <nav class="navbar">
+      <div class="logo">
+        <a href="index.html" class="logo-link">SensorMedia</a>
+      </div>
       <ul class="nav-links">
         <li><a href="index.html" class="active">Home</a></li>
         <li><a href="products.html">Products</a></li>
@@ -21,78 +19,87 @@
         <li><a href="contact.html">Contact</a></li>
       </ul>
       <div class="nav-actions">
-        <button id="theme-toggle">
-          <span class="sun-icon">Dark</span><span class="moon-icon">Light</span>
-        </button>
+        <button id="theme-toggle">Loading...</button>
         <div class="hamburger" id="hamburger"><span></span><span></span></div>
       </div>
     </nav>
-    <div class="mobile-menu" id="mobile-menu">
-      <a href="index.html">Home</a><a href="products.html">Products</a
-      ><a href="about.html">About Us</a><a href="contact.html">Contact</a>
-    </div>
+
     <header class="hero">
       <video autoplay muted loop playsinline class="hero-video">
         <source src="vid2.mp4" type="video/mp4" />
       </video>
       <div class="hero-overlay"></div>
+
       <div class="hero-content reveal">
+        <div class="greeting-container">
+          <p id="time-greeting"></p>
+        </div>
         <h1>Website Design.</h1>
         <p>Experience the next generation of beauty in web-design.</p>
         <a href="products.html" class="cta-button">Explore</a>
       </div>
     </header>
+
     <main>
       <section class="panel reveal">
         <h2>Built for Recognition.</h2>
         <div class="grid-3">
-          <div class="card">
+          <div class="card glass-panel">
             <h3>Personalized</h3>
             <p>Uniquely designed for you in a way no one else could.</p>
           </div>
-          <div class="card">
+          <div class="card glass-panel">
             <h3>Style</h3>
             <p>Fluid-like motion encompassing your dreams.</p>
           </div>
-          <div class="card">
-            <h3>Versitile</h3>
+          <div class="card glass-panel">
+            <h3>Versatile</h3>
             <p>Run your website across multiple platforms and browsers.</p>
           </div>
         </div>
       </section>
+
+      <section class="panel">
+        <p class="story-text">Design that breathes.</p>
+        <p class="story-text">Precision in every pixel.</p>
+        <p class="story-text">Your vision, realized.</p>
+      </section>
     </main>
+
     <button id="back-to-top">↑</button>
+
+    <footer class="footer-panel">
+      <div class="footer-content">
+        <div class="footer-column">
+          <h4>Explore</h4>
+          <a href="index.html">Home</a>
+          <a href="products.html">Products</a>
+          <a href="about.html">About Us</a>
+        </div>
+        <div class="footer-column">
+          <h4>Support</h4>
+          <a href="contact.html">Contact Us</a>
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Use</a>
+        </div>
+        <div class="footer-column">
+          <h4>Connect</h4>
+          <a href="https://github.com/Sparkzflyin" target="_blank">Github</a>
+          <a href="https://www.instagram.com/thekid_sparks/" target="_blank"
+            >Instagram</a
+          >
+          <a
+            href="https://www.linkedin.com/in/christian-sparks/"
+            target="_blank"
+            >LinkedIn</a
+          >
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>Copyright © 2026 SensorMedia LLC All rights reserved.</p>
+      </div>
+    </footer>
+
     <script src="script.js"></script>
   </body>
-  <footer class="footer-panel">
-    <div class="footer-content">
-      <div class="footer-column">
-        <h4>Explore</h4>
-        <a href="index.html">Home</a>
-        <a href="products.html">Products</a>
-        <a href="about.html">About Us</a>
-      </div>
-
-      <div class="footer-column">
-        <h4>Support</h4>
-        <a href="contact.html">Contact Us</a>
-        <a href="https://example.com/privacy">Privacy Policy</a>
-        <a href="https://example.com/terms">Terms of Use</a>
-      </div>
-
-      <div class="footer-column">
-        <h4>Connect</h4>
-        <a href="https://github.com/Sparkzflyin" target="_blank">Github</a>
-        <a href="https://www.instagram.com/thekid_sparks/" target="_blank"
-          >Instagram</a
-        >
-        <a href="https://www.linkedin.com/in/christian-sparks/" target="_blank"
-          >LinkedIn</a
-        >
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <p>Copyright © 2026 SensorMedia LLC All rights reserved.</p>
-    </div>
-  </footer>
 </html>
