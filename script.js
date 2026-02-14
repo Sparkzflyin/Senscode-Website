@@ -159,3 +159,30 @@ toggle.addEventListener("click", () => {
   localStorage.setItem("theme", nextTheme);
   updateButtonText(nextTheme);
 });
+// 7. Mobile Menu Toggle
+const hamburger = document.getElementById("hamburger");
+const mobileMenu = document.getElementById("mobile-menu");
+
+if (hamburger && mobileMenu) {
+  hamburger.addEventListener("click", () => {
+    // Toggle the "active" class on both the button and the menu
+    hamburger.classList.toggle("active");
+    mobileMenu.classList.toggle("active");
+
+    // Prevent scrolling when menu is open
+    if (mobileMenu.classList.contains("active")) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+  });
+
+  // Close menu when a link is clicked
+  document.querySelectorAll(".mobile-menu a").forEach((link) => {
+    link.addEventListener("click", () => {
+      hamburger.classList.remove("active");
+      mobileMenu.classList.remove("active");
+      document.body.style.overflow = "auto";
+    });
+  });
+}
