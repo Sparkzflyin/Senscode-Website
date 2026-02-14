@@ -186,3 +186,19 @@ if (hamburger && mobileMenu) {
     });
   });
 }
+let lastScrollY = window.scrollY;
+const navbar = document.querySelector(".navbar");
+
+window.addEventListener("scroll", () => {
+  // Check if we are on mobile (optional, but keeps desktop menu static if preferred)
+  if (window.innerWidth <= 768) {
+    if (lastScrollY < window.scrollY && window.scrollY > 50) {
+      // Swiping up / Scrolling down -> Hide
+      navbar.classList.add("navbar--hidden");
+    } else {
+      // Swiping down / Scrolling up -> Show
+      navbar.classList.remove("navbar--hidden");
+    }
+  }
+  lastScrollY = window.scrollY;
+});
