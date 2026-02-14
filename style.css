@@ -378,21 +378,35 @@ body {
 
 /* --- Responsive Viewport Logic --- */
 @media (max-width: 768px) {
-  .nav-links {
+  /* Center everything in the navbar */
+  .navbar {
+    justify-content: center;
+    padding: 0; /* Remove side padding for perfect centering */
+  }
+
+  /* Hide the logo on mobile to let the hamburger be centered */
+  /* Or keep it but it will push the hamburger off-center */
+  .logo {
     display: none;
-  } /* Hide desktop links */
+  }
+
+  /* Ensure the nav-actions container doesn't have extra margin */
+  .nav-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  /* The Hamburger itself */
   .hamburger {
     display: flex;
-  } /* Show hamburger */
-}
+    margin: 0 auto; /* Force horizontal centering */
+  }
 
-/* --- Hamburger to "X" Animation --- */
-.hamburger.active span:nth-child(1) {
-  transform: translateY(7px) rotate(45deg);
-}
-.hamburger.active span:nth-child(2) {
-  opacity: 0;
-}
-.hamburger.active span:nth-child(3) {
-  transform: translateY(-7px) rotate(-45deg);
+  /* Move the Theme Toggle below or hide it on mobile if it clutters */
+  #theme-toggle {
+    font-size: 0.6rem;
+    padding: 4px 10px;
+  }
 }
