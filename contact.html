@@ -7,30 +7,22 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <div id="visit-counter" class="glass-panel">
-      <span class="pulse">●</span> <span id="count-display">0 Live</span>
-    </div>
-    <nav class="navbar glass-panel">
-    <div class="logo">
-    <a href="index.html" class="logo-link">SensorMedia</a>
-</div>
+    <div id="page-transition"></div>
+    <nav class="navbar">
+      <div class="logo">
+        <a href="index.html" class="logo-link">SensorMedia</a>
+      </div>
       <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
+        <li><a href="index.html" class="active">Home</a></li>
         <li><a href="products.html">Products</a></li>
         <li><a href="about.html">About Us</a></li>
-        <li><a href="contact.html" class="active">Contact</a></li>
+        <li><a href="contact.html">Contact</a></li>
       </ul>
       <div class="nav-actions">
-        <button id="theme-toggle">
-          <span class="sun-icon">Dark</span><span class="moon-icon">Light</span>
-        </button>
+        <button id="theme-toggle">Loading...</button>
         <div class="hamburger" id="hamburger"><span></span><span></span></div>
       </div>
     </nav>
-    <div class="mobile-menu" id="mobile-menu">
-      <a href="index.html">Home</a><a href="products.html">Products</a
-      ><a href="about.html">About Us</a><a href="contact.html">Contact</a>
-    </div>
     <header class="hero">
       <video autoplay muted loop playsinline class="hero-video">
         <source src="vid1.mp4" type="video/mp4" />
@@ -43,22 +35,39 @@
     </header>
     <main>
       <section class="panel">
-        <div class="contact-box reveal" id="contact-container">
+        <div class="contact-card reveal" id="contact-container">
+          <div class="contact-header">
+            <span class="tag">Get in Touch</span>
+            <h2>Let's create together.</h2>
+            <p>Send a message and I'll get back to you within 24 hours.</p>
+          </div>
+
           <form
             id="contact-form"
             action="https://formspree.io/f/mreaewrb"
             method="POST"
           >
-            <input type="text" name="name" placeholder="Name" required />
-            <input type="email" name="email" placeholder="Email" required />
-            <textarea
-              name="message"
-              placeholder="Message"
-              rows="5"
-              required
-            ></textarea>
+            <div class="input-group">
+              <input type="text" name="name" placeholder="Name" required />
+            </div>
+            <div class="input-group">
+              <input
+                type="email"
+                name="email"
+                placeholder="Email Address"
+                required
+              />
+            </div>
+            <div class="input-group">
+              <textarea
+                name="message"
+                placeholder="Tell me about your project..."
+                rows="5"
+                required
+              ></textarea>
+            </div>
             <button type="submit" id="submit-btn" class="cta-button">
-              Send
+              Send Message
             </button>
           </form>
         </div>
