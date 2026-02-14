@@ -378,35 +378,29 @@ body {
 
 /* --- Responsive Viewport Logic --- */
 @media (max-width: 768px) {
-  /* Center everything in the navbar */
   .navbar {
-    justify-content: center;
-    padding: 0; /* Remove side padding for perfect centering */
-  }
-
-  /* Hide the logo on mobile to let the hamburger be centered */
-  /* Or keep it but it will push the hamburger off-center */
-  .logo {
-    display: none;
-  }
-
-  /* Ensure the nav-actions container doesn't have extra margin */
-  .nav-actions {
-    display: flex;
+    height: auto;
     flex-direction: column;
-    align-items: center;
-    gap: 10px;
+    padding: 20px 0; /* Increased padding for more breathing room */
+    gap: 20px; /* This creates space between the Logo, the Links, and the Toggle */
   }
 
-  /* The Hamburger itself */
-  .hamburger {
+  .nav-links {
     display: flex;
-    margin: 0 auto; /* Force horizontal centering */
+    justify-content: center;
+    gap: 15px; /* Space between individual page names */
+    width: 100%;
   }
 
-  /* Move the Theme Toggle below or hide it on mobile if it clutters */
+  /* Specifically targets the container of the Theme Toggle */
+  .nav-actions {
+    margin-top: 10px; /* Extra manual push away from the "Contact" link */
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
   #theme-toggle {
-    font-size: 0.6rem;
-    padding: 4px 10px;
+    padding: 8px 20px; /* Slightly larger button for easier tapping on mobile */
   }
 }
