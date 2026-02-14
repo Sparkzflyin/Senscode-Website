@@ -209,7 +209,7 @@ body {
 .footer-panel {
   background: var(--bg);
   border-top: 1px solid var(--border);
-  padding: 60px 5%;
+  padding: 65px 5%;
 }
 .footer-content {
   display: grid;
