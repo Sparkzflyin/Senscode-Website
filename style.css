@@ -266,62 +266,90 @@ textarea {
 }
 /* Footer Styling */
 .footer-panel {
-    background: var(--bg);
-    border-top: 1px solid var(--border);
-    padding: 60px 5% 30px 5%;
-    margin-top: 100px;
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+  padding: 60px 5% 30px 5%;
+  margin-top: 100px;
 }
 
 .footer-content {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 40px;
-    margin-bottom: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 40px;
+  margin-bottom: 40px;
 }
 
 .footer-column h4 {
-    font-size: 0.8rem;
-    font-weight: 600;
-    margin-bottom: 20px;
-    color: var(--text);
-    text-transform: uppercase;
-    letter-spacing: 1px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: var(--text);
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .footer-column a {
-    display: block;
-    text-decoration: none;
-    color: var(--text);
-    font-size: 0.85rem;
-    margin-bottom: 12px;
-    opacity: 0.5;
-    transition: opacity 0.3s;
+  display: block;
+  text-decoration: none;
+  color: var(--text);
+  font-size: 0.85rem;
+  margin-bottom: 12px;
+  opacity: 0.5;
+  transition: opacity 0.3s;
 }
 
 .footer-column a:hover {
-    opacity: 1;
-    color: var(--link);
+  opacity: 1;
+  color: var(--link);
 }
 
 .footer-bottom {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding-top: 20px;
-    border-top: 1px solid var(--border);
-    text-align: left;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+  text-align: left;
 }
 
 .footer-bottom p {
-    font-size: 0.75rem;
-    opacity: 0.4;
+  font-size: 0.75rem;
+  opacity: 0.4;
 }
 
 /* Responsive Footer */
 @media (max-width: 600px) {
-    .footer-content {
-        grid-template-columns: 1fr;
-        gap: 30px;
-    }
+  .footer-content {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+}
+/* Founder's Signature Style */
+.signature-container {
+  margin-top: 30px;
+  text-align: center;
+  opacity: 0.9;
+}
+
+.signature-text {
+  /* Using the Google Font we just linked */
+  font-family: "Dancing Script", cursive;
+  font-size: 2.5rem; /* Made it a bit larger */
+  color: var(--link);
+  display: inline-block;
+  transform: rotate(-2deg); /* Slight tilt for realism */
+  margin-bottom: 5px;
+  user-select: none;
+  /* Subtle glow to make it look like fresh ink */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.founder-title {
+  display: block;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  opacity: 0.5;
+  font-weight: 700;
 }
