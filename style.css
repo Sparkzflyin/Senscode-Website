@@ -369,3 +369,12 @@ textarea {
     font-size: 2.2rem;
   }
 }
+.logo a {
+  text-decoration: none; /* Removes the underline */
+  color: inherit; /* Inherits the dark color we set for the header */
+  display: block; /* Makes the entire area clickable */
+}
+
+.logo a:hover {
+  opacity: 0.7; /* Gives a subtle "press" effect when hovered */
+}
