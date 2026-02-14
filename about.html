@@ -4,78 +4,58 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Senscode | About</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <div id="visit-counter" class="glass-panel">
-      <span class="pulse">●</span> <span id="count-display">0 Live</span>
-    </div>
-    <nav class="navbar glass-panel">
+    <div id="page-transition"></div>
+    <nav class="navbar">
       <div class="logo">
-    <div class="logo">
-    <a href="index.html" class="logo-link">SensorMedia</a>
-</div>
-</div>
+        <a href="index.html" class="logo-link">SensorMedia</a>
+      </div>
       <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
+        <li><a href="index.html" class="active">Home</a></li>
         <li><a href="products.html">Products</a></li>
-        <li><a href="about.html" class="active">About Us</a></li>
+        <li><a href="about.html">About Us</a></li>
         <li><a href="contact.html">Contact</a></li>
       </ul>
       <div class="nav-actions">
-        <button id="theme-toggle">
-          <span class="sun-icon">Dark</span><span class="moon-icon">Light</span>
-        </button>
+        <button id="theme-toggle">Loading...</button>
         <div class="hamburger" id="hamburger"><span></span><span></span></div>
       </div>
     </nav>
-    <div class="mobile-menu" id="mobile-menu">
-      <a href="index.html">Home</a><a href="products.html">Products</a
-      ><a href="about.html">About Us</a><a href="contact.html">Contact</a>
-    </div>
-    <header class="hero">
-      <video autoplay muted loop playsinline class="hero-video">
-        <source src="vid1.mp4" type="video/mp4" />
-      </video>
-      <div class="hero-overlay"></div>
-      <div class="hero-content reveal">
-        <h1>Our Story.</h1>
-        <p>How we started.</p>
-      </div>
     </header>
     <main>
-      <section class="panel reveal">
-        <div class="founder-note">
-          <span class="tag">Direct from the Founder</span>
-          <h2 style="margin-top: 10px">Quality without Compromise.</h2>
-          <p
-            style="
-              font-size: 1.2rem;
-              line-height: 1.6;
-              max-width: 800px;
-              margin: 20px auto;
-              opacity: 0.8;
-            "
-          >
-            At the heart of every product I build is a simple belief:
-            professional grade quality shouldn't be out of reach for the
-            everyday user. As a dedicated one-man operation, I cut out the
-            corporate noise to focus entirely on the craftsmanship of your
-            experience. By handling every line of code and every design detail
-            myself, I’m able to offer premium, reliable services with the kind
-            of personal accountability a large firm can’t match, all while
-            keeping our solutions exceptionally affordable. This isn’t just
-            business; it’s a commitment to providing tools that work as hard as
-            you do, without the premium price tag.
-            <div class="signature-container reveal">
-    <span class="signature-text">Christian Sparks</span>
-    <span class="founder-title">Founder & Lead Engineer</span>
-</div>
-          </p>
-        </div>
-      </section>
-    </main>
+  <section class="panel">
+    <div class="founder-note">
+      <span class="tag reveal">Direct from the Founder</span>
+      <h2 class="reveal" style="margin-top: 10px">Quality without Compromise.</h2>
+      
+      <p class="story-text">
+        At the heart of every product I build is a simple belief: 
+        professional grade quality shouldn't be out of reach for the everyday user.
+      </p>
+      
+      <p class="story-text" style="transition-delay: 0.4s;">
+        As a dedicated one-man operation, I cut out the corporate noise 
+        to focus entirely on the craftsmanship of your experience.
+      </p>
+
+      <p class="story-text" style="transition-delay: 0.8s;">
+        By handling every line of code myself, I’m able to offer premium, 
+        reliable services with personal accountability.
+      </p>
+
+      <div class="signature-container reveal" style="transition-delay: 1.2s;">
+        <span class="signature-text">Christian Sparks</span>
+        <span class="founder-title">Founder & Lead Engineer</span>
+      </div>
+    </div>
+  </section>
+</main>
     <button id="back-to-top">↑</button>
     <script src="script.js"></script>
   </body>
