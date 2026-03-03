@@ -372,6 +372,18 @@ body {
   transition: 0.3s ease;
 }
 
+.hamburger.active span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.hamburger.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
 /* --- Mobile Menu Overlay --- */
 .mobile-menu {
   position: fixed;
