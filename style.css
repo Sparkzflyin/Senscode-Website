@@ -142,6 +142,12 @@ body {
   overflow: hidden;
 }
 
+.glass-panel {
+  background: var(--glass);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
 .spotlight {
   position: absolute;
   top: 0;
@@ -397,37 +403,28 @@ body {
 /* --- Responsive Viewport Logic --- */
 @media (max-width: 768px) {
   .navbar {
-    height: auto;
-    flex-direction: column;
-    padding: 20px 0; /* Increased padding for more breathing room */
-    gap: 20px; /* This creates space between the Logo, the Links, and the Toggle */
-  }
-
-  .nav-links {
-    display: flex;
-    justify-content: center;
-    gap: 15px; /* Space between individual page names */
+    height: 60px;
+    flex-direction: row;
+    padding: 0 5%;
+    position: fixed;
+    top: 0;
     width: 100%;
   }
 
-  /* Specifically targets the container of the Theme Toggle */
-  .nav-actions {
-    margin-top: 10px; /* Extra manual push away from the "Contact" link */
-    width: 100%;
-    display: flex;
-    justify-content: center;
+  .nav-links, .nav-actions {
+    display: none;
   }
 
-  #theme-toggle {
-    padding: 8px 20px; /* Slightly larger button for easier tapping on mobile */
+  .hamburger {
+    display: flex;
   }
 }
+
 /* Ensure the navbar has a transition for a smooth slide */
 .navbar {
   transition:
     transform 0.4s ease-in-out,
     background var(--transition);
-  /* other existing styles... */
 }
 
 /* This class will be toggled by JavaScript */
@@ -436,16 +433,8 @@ body {
 }
 
 @media (max-width: 768px) {
-  .navbar {
-    /* Keep it fixed so it can slide in and out of view */
-    position: fixed;
-    top: 0;
-    width: 100%;
-  }
-}
-@media (max-width: 768px) {
   .footer-content {
     /* Increases the space between stacked footer columns on mobile */
-    gap: 50px; 
+    gap: 50px;
   }
 }
