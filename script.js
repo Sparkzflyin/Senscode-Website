@@ -48,11 +48,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // 5. Back to Top
   const btt = document.getElementById("back-to-top");
-  window.addEventListener(
-    "scroll",
-    () => (btt.style.opacity = window.scrollY > 400 ? "1" : "0"),
-  );
-  btt.onclick = () => window.scrollTo({ top: 0, behavior: "smooth" });
+  if (btt) {
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 400) {
+        btt.classList.add("visible");
+      } else {
+        btt.classList.remove("visible");
+      }
+    });
+    btt.onclick = () => window.scrollTo({ top: 0, behavior: "smooth" });
+  }
 });
 document.addEventListener("DOMContentLoaded", () => {
   // 1. Page Transition Fade-In
