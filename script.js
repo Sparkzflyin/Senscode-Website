@@ -196,4 +196,17 @@ document.addEventListener("DOMContentLoaded", () => {
       heroVideo.style.transform = `translateY(${scrollY * 0.4}px)`;
     });
   }
+
+  // 11. Dynamic Navigation Highlighting
+  const currentPath = window.location.pathname;
+  const currentPage = currentPath.split("/").pop() || "index.html";
+
+  document.querySelectorAll(".nav-links a, .mobile-menu a").forEach((link) => {
+    const linkHref = link.getAttribute("href");
+    if (linkHref === currentPage) {
+      link.classList.add("active");
+    } else {
+      link.classList.remove("active");
+    }
+  });
 });
