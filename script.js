@@ -261,14 +261,10 @@ document.addEventListener("DOMContentLoaded", () => {
     header.textContent = "";
     header.classList.add("typewriter-cursor");
     
-    // Track if we have already played the typo effect for this specific text
-    const pageKey = 'typewriter_typo_' + btoa(text);
-    const hasPlayed = localStorage.getItem(pageKey);
-    
     let actions = [];
     
-    // Only introduce a typo if there are multiple words and it's the first time
-    if (!hasPlayed && text.trim().indexOf(' ') !== -1) {
+    // Always introduce a typo if there are multiple words
+    if (text.trim().indexOf(' ') !== -1) {
       const words = text.trim().split(' ');
       const firstWordAndSpace = words[0] + ' ';
       const secondWord = words[1];
@@ -291,8 +287,6 @@ document.addEventListener("DOMContentLoaded", () => {
       for (let i = 0; i < typoWord.length; i++) actions.push({ type: 'delete' });
       actions.push({ type: 'pause', ms: 200 });
       for (let c of (secondWord + restOfText)) actions.push({ type: 'type', char: c });
-      
-      localStorage.setItem(pageKey, 'true');
     } else {
       for (let c of text) actions.push({ type: 'type', char: c });
     }
