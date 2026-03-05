@@ -235,6 +235,10 @@ main {
     font-size: 0.8rem;
     padding: 6px 0;
   }
+
+  .contact-card {
+    padding: 25px;
+  }
 }
 
 /* --- Process Timeline --- */
