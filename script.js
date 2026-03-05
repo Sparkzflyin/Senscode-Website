@@ -209,4 +209,48 @@ document.addEventListener("DOMContentLoaded", () => {
       link.classList.remove("active");
     }
   });
+
+  // 12. Contact Form AJAX Submission
+  const contactForm = document.getElementById("contact-form");
+  if (contactForm) {
+    contactForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const submitBtn = document.getElementById("submit-btn");
+      const originalText = submitBtn.innerText;
+      submitBtn.innerText = "Sending...";
+      submitBtn.disabled = true;
+
+      const data = new FormData(contactForm);
+      try {
+        const response = await fetch(contactForm.action, {
+          method: contactForm.method,
+          body: data,
+          headers: {
+            'Accept': 'application/json'
+          }
+        });
+        
+        if (response.ok) {
+          submitBtn.innerText = "Message Sent!";
+          contactForm.reset();
+          setTimeout(() => {
+            submitBtn.innerText = originalText;
+            submitBtn.disabled = false;
+          }, 5000);
+        } else {
+          submitBtn.innerText = "Error. Try again.";
+          setTimeout(() => {
+            submitBtn.innerText = originalText;
+            submitBtn.disabled = false;
+          }, 3000);
+        }
+      } catch (error) {
+        submitBtn.innerText = "Error. Try again.";
+        setTimeout(() => {
+          submitBtn.innerText = originalText;
+          submitBtn.disabled = false;
+        }, 3000);
+      }
+    });
+  }
 });
