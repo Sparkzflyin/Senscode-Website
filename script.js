@@ -12,9 +12,20 @@ document.addEventListener("DOMContentLoaded", () => {
   const html = document.documentElement;
 
   if (toggle) {
-    const currentTheme = localStorage.getItem("theme") || "dark";
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)");
+    const systemTheme = prefersDark.matches ? "dark" : "light";
+    const currentTheme = localStorage.getItem("theme") || systemTheme;
+    
     html.setAttribute("data-theme", currentTheme);
     toggle.innerText = currentTheme === "dark" ? "Light Mode" : "Dark Mode";
+
+    prefersDark.addEventListener("change", (e) => {
+      if (!localStorage.getItem("theme")) {
+        const newSystemTheme = e.matches ? "dark" : "light";
+        html.setAttribute("data-theme", newSystemTheme);
+        toggle.innerText = newSystemTheme === "dark" ? "Light Mode" : "Dark Mode";
+      }
+    });
 
     toggle.addEventListener("click", () => {
       const nextTheme =
