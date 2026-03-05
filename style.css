@@ -672,3 +672,118 @@ body {
   transform: translateY(-3px);
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
+
+/* --- Services Page Additions --- */
+.card {
+  display: flex;
+  flex-direction: column;
+}
+
+.card-desc {
+  font-size: 0.95rem;
+  opacity: 0.8;
+  margin-bottom: 20px;
+  line-height: 1.5;
+  min-height: 65px;
+}
+
+.service-list {
+  list-style: none;
+  margin-bottom: 30px;
+  padding: 0;
+  flex: 1;
+}
+
+.service-list li {
+  font-size: 0.9rem;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  align-items: center;
+}
+
+.service-list li::before {
+  content: "→";
+  color: var(--link);
+  margin-right: 10px;
+  font-family: monospace;
+}
+
+[data-theme="light"] .service-list li {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+  border-top: 1px solid var(--border);
+  padding-top: 20px;
+}
+
+.price-hint {
+  font-size: 0.8rem;
+  opacity: 0.6;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.small-btn {
+  padding: 8px 20px;
+  font-size: 0.85rem;
+  margin-top: 0;
+}
+
+/* --- Metrics Banner --- */
+.metrics-banner {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 60px 5%;
+  background: var(--glass);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  margin: 60px 0;
+}
+
+.metric {
+  text-align: center;
+  padding: 20px;
+}
+
+.metric-value {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: 3rem;
+  color: var(--link);
+  margin-bottom: 10px;
+  font-style: italic;
+}
+
+.metric-label {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  opacity: 0.7;
+}
+
+/* --- CTA Banner --- */
+.cta-banner {
+  text-align: center;
+  padding: 80px 5%;
+  margin-bottom: 40px;
+}
+
+.cta-banner h2 {
+  margin-bottom: 15px;
+}
+
+.cta-banner p {
+  font-size: 1.1rem;
+  opacity: 0.8;
+  margin-bottom: 30px;
+}
