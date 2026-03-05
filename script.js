@@ -253,4 +253,25 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
+
+  // 13. Typewriter Effect for Hero Headers
+  const heroHeaders = document.querySelectorAll(".hero-content h1, .founder-note h2");
+  heroHeaders.forEach(header => {
+    const text = header.textContent;
+    header.textContent = "";
+    
+    let i = 0;
+    function typeWriter() {
+      if (i < text.length) {
+        header.textContent += text.charAt(i);
+        i++;
+        // Randomize typing speed slightly for realism (between 50ms and 100ms)
+        const speed = Math.floor(Math.random() * 50) + 50;
+        setTimeout(typeWriter, speed);
+      }
+    }
+    
+    // Start typing after a short delay to allow page transition to finish
+    setTimeout(typeWriter, 500); 
+  });
 });
