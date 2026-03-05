@@ -17,7 +17,8 @@ document.addEventListener("DOMContentLoaded", () => {
     toggle.innerText = currentTheme === "dark" ? "Light Mode" : "Dark Mode";
 
     toggle.addEventListener("click", () => {
-      const nextTheme = html.getAttribute("data-theme") === "dark" ? "light" : "dark";
+      const nextTheme =
+        html.getAttribute("data-theme") === "dark" ? "light" : "dark";
       html.setAttribute("data-theme", nextTheme);
       localStorage.setItem("theme", nextTheme);
       toggle.innerText = nextTheme === "dark" ? "Light Mode" : "Dark Mode";
@@ -27,7 +28,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // 3. Smooth Fade-Out for Internal Links
   document.querySelectorAll("a").forEach((link) => {
     link.addEventListener("click", (e) => {
-      const isInternal = link.hostname === window.location.hostname || !link.hostname;
+      const isInternal =
+        link.hostname === window.location.hostname || !link.hostname;
       if (isInternal && !link.hash && !link.target) {
         e.preventDefault();
         const destination = link.href;
@@ -55,36 +57,40 @@ document.addEventListener("DOMContentLoaded", () => {
     { threshold: 0.2 },
   );
 
-  document.querySelectorAll(".reveal, .story-text").forEach((el) => observer.observe(el));
+  document
+    .querySelectorAll(".reveal, .story-text")
+    .forEach((el) => observer.observe(el));
 
   // 5. Advanced Card Tilt & Spotlight Effect
-  document.querySelectorAll(".glass-panel, .card, .process-step").forEach((card) => {
-    if (!card.querySelector('.spotlight')) {
-      const spotlight = document.createElement("div");
-      spotlight.classList.add("spotlight");
-      card.appendChild(spotlight);
-    }
+  document
+    .querySelectorAll(".glass-panel, .card, .process-step")
+    .forEach((card) => {
+      if (!card.querySelector(".spotlight")) {
+        const spotlight = document.createElement("div");
+        spotlight.classList.add("spotlight");
+        card.appendChild(spotlight);
+      }
 
-    card.addEventListener("mousemove", (e) => {
-      const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      card.style.setProperty("--x", `${x}px`);
-      card.style.setProperty("--y", `${y}px`);
+      card.addEventListener("mousemove", (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        card.style.setProperty("--x", `${x}px`);
+        card.style.setProperty("--y", `${y}px`);
 
-      // 3D Tilt Physics
-      const centerX = rect.width / 2;
-      const centerY = rect.height / 2;
-      const tiltX = ((y - centerY) / centerY) * -10; // Max tilt 10deg
-      const tiltY = ((x - centerX) / centerX) * 10;
-      
-      card.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale3d(1.02, 1.02, 1.02)`;
+        // 3D Tilt Physics
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        const tiltX = ((y - centerY) / centerY) * -10; // Max tilt 10deg
+        const tiltY = ((x - centerX) / centerX) * 10;
+
+        card.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale3d(1.02, 1.02, 1.02)`;
+      });
+
+      card.addEventListener("mouseleave", () => {
+        card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+      });
     });
-
-    card.addEventListener("mouseleave", () => {
-      card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
-    });
-  });
 
   // 6. Back to Top
   const btt = document.getElementById("back-to-top");
@@ -96,7 +102,9 @@ document.addEventListener("DOMContentLoaded", () => {
         btt.classList.remove("visible");
       }
     });
-    btt.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+    btt.addEventListener("click", () =>
+      window.scrollTo({ top: 0, behavior: "smooth" }),
+    );
   }
 
   // 7. Mobile Menu Toggle
@@ -107,7 +115,9 @@ document.addEventListener("DOMContentLoaded", () => {
     hamburger.addEventListener("click", () => {
       hamburger.classList.toggle("active");
       mobileMenu.classList.toggle("active");
-      document.body.style.overflow = mobileMenu.classList.contains("active") ? "hidden" : "auto";
+      document.body.style.overflow = mobileMenu.classList.contains("active")
+        ? "hidden"
+        : "auto";
     });
 
     document.querySelectorAll(".mobile-menu a").forEach((link) => {
