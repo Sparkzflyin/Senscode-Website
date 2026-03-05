@@ -11,22 +11,30 @@ document.addEventListener("DOMContentLoaded", () => {
   const toggle = document.getElementById("theme-toggle");
   const html = document.documentElement;
 
+  const prefersDark = window.matchMedia("(prefers-color-scheme: dark)");
+  const isMobile = window.matchMedia("(max-width: 768px)").matches;
+  const systemTheme = prefersDark.matches ? "dark" : "light";
+  
+  // On mobile, force system theme. Otherwise, respect localStorage preference.
+  const currentTheme = isMobile ? systemTheme : (localStorage.getItem("theme") || systemTheme);
+  
+  html.setAttribute("data-theme", currentTheme);
   if (toggle) {
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)");
-    const systemTheme = prefersDark.matches ? "dark" : "light";
-    const currentTheme = localStorage.getItem("theme") || systemTheme;
-    
-    html.setAttribute("data-theme", currentTheme);
     toggle.innerText = currentTheme === "dark" ? "Light Mode" : "Dark Mode";
+  }
 
-    prefersDark.addEventListener("change", (e) => {
-      if (!localStorage.getItem("theme")) {
-        const newSystemTheme = e.matches ? "dark" : "light";
-        html.setAttribute("data-theme", newSystemTheme);
+  prefersDark.addEventListener("change", (e) => {
+    const currentlyMobile = window.matchMedia("(max-width: 768px)").matches;
+    if (currentlyMobile || !localStorage.getItem("theme")) {
+      const newSystemTheme = e.matches ? "dark" : "light";
+      html.setAttribute("data-theme", newSystemTheme);
+      if (toggle) {
         toggle.innerText = newSystemTheme === "dark" ? "Light Mode" : "Dark Mode";
       }
-    });
+    }
+  });
 
+  if (toggle) {
     toggle.addEventListener("click", () => {
       const nextTheme =
         html.getAttribute("data-theme") === "dark" ? "light" : "dark";
