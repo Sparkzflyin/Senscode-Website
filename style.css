@@ -630,6 +630,13 @@ body {
   color: var(--text);
   text-decoration: none;
   font-weight: 600;
+  opacity: 0.6;
+  transition: opacity 0.3s;
+}
+
+.mobile-menu a.active {
+  opacity: 1;
+  color: var(--link) !important;
 }
 
 /* --- Responsive Viewport Logic --- */
