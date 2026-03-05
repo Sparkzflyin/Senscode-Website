@@ -220,6 +220,21 @@ main {
   .panel {
     padding: 30px 4%; /* Reduced further from 40px 5% */
   }
+
+  .card-desc {
+    min-height: auto;
+    margin-bottom: 15px;
+    font-size: 0.85rem;
+  }
+
+  .service-list {
+    margin-bottom: 20px;
+  }
+
+  .service-list li {
+    font-size: 0.8rem;
+    padding: 6px 0;
+  }
 }
 
 /* --- Process Timeline --- */
