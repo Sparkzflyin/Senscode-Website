@@ -181,11 +181,11 @@ main {
   }
   
   .card {
-    padding: 25px; /* Reduced from 40px */
+    padding: 20px; /* Reduced further from 25px */
   }
 
   .panel {
-    padding: 40px 5%; /* Reduced from 80px */
+    padding: 30px 4%; /* Reduced further from 40px 5% */
   }
 }
 
@@ -420,20 +420,38 @@ main {
   opacity: 0.6;
 }
 
-.contact-header .phone-link {
-  margin: 15px 0 5px;
+.phone-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  padding: 18px;
+  border-radius: 16px;
+  margin-bottom: 30px;
+  transition: all 0.3s ease;
+  text-decoration: none;
 }
 
-.contact-header .phone-link a {
-  text-decoration: none;
+.phone-box:hover {
+  border-color: var(--link);
+  box-shadow: 0 0 0 4px rgba(41, 151, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+.phone-box .phone-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  opacity: 0.5;
+  margin-right: 15px;
+  font-weight: 700;
+}
+
+.phone-box .phone-number {
   color: var(--text);
   font-weight: 600;
-  font-size: 1.2rem;
-  transition: opacity 0.3s;
-}
-
-.contact-header .phone-link a:hover {
-  opacity: 0.7;
+  font-size: 1.1rem;
 }
 
 /* --- Form Elements --- */
