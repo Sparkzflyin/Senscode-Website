@@ -632,3 +632,33 @@ body {
   opacity: 1;
   pointer-events: auto;
 }
+
+/* --- Skills Grid --- */
+.skills-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.skill-tag {
+  background: var(--glass);
+  border: 1px solid var(--border);
+  padding: 12px 24px;
+  border-radius: 30px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.skill-tag:hover {
+  border-color: var(--link);
+  color: var(--link);
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
