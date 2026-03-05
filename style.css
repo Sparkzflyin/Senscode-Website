@@ -175,20 +175,6 @@ main {
   margin-top: 40px;
 }
 
-@media (max-width: 768px) {
-  .grid-3 {
-    grid-template-columns: 1fr;
-  }
-  
-  .card {
-    padding: 20px; /* Reduced further from 25px */
-  }
-
-  .panel {
-    padding: 30px 4%; /* Reduced further from 40px 5% */
-  }
-}
-
 .card {
   background: var(--accent);
   padding: 40px;
@@ -220,6 +206,20 @@ main {
   background: var(--glass);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
+}
+
+@media (max-width: 768px) {
+  .grid-3 {
+    grid-template-columns: 1fr;
+  }
+  
+  .card {
+    padding: 20px; /* Reduced further from 25px */
+  }
+
+  .panel {
+    padding: 30px 4%; /* Reduced further from 40px 5% */
+  }
 }
 
 /* --- Process Timeline --- */
