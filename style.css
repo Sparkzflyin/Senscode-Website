@@ -139,8 +139,6 @@ main {
 
 /* --- Theme Toggle Fix --- */
 #theme-toggle {
-  background: var(--accent);
-  color: var(--text);
   border: 1px solid var(--border);
   cursor: pointer;
   padding: 6px 14px;
@@ -149,6 +147,18 @@ main {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 1px;
+  transition: all 0.3s ease;
+  color: white;
+}
+
+[data-theme="dark"] #theme-toggle {
+  background: #ff9500; /* Vibrant Orange for Light Mode option */
+  border-color: #ff9500;
+}
+
+[data-theme="light"] #theme-toggle {
+  background: #0066cc; /* Deep Blue for Dark Mode option */
+  border-color: #0066cc;
 }
 
 /* --- Hero & Grid --- */
