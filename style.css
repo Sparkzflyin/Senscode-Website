@@ -179,6 +179,14 @@ main {
   .grid-3 {
     grid-template-columns: 1fr;
   }
+  
+  .card {
+    padding: 25px; /* Reduced from 40px */
+  }
+
+  .panel {
+    padding: 40px 5%; /* Reduced from 80px */
+  }
 }
 
 .card {
@@ -272,6 +280,16 @@ main {
 @media (max-width: 768px) {
   .process-timeline {
     flex-direction: column;
+    gap: 15px; /* Tighter gap */
+  }
+
+  .process-step {
+    padding: 20px; /* Reduced from 30px */
+  }
+
+  .process-step h4 {
+    font-size: 1.3rem;
+    margin-top: 5px;
   }
 }
 
@@ -400,6 +418,22 @@ main {
 .contact-header p {
   font-size: 0.9rem;
   opacity: 0.6;
+}
+
+.contact-header .phone-link {
+  margin: 15px 0 5px;
+}
+
+.contact-header .phone-link a {
+  text-decoration: none;
+  color: var(--text);
+  font-weight: 600;
+  font-size: 1.2rem;
+  transition: opacity 0.3s;
+}
+
+.contact-header .phone-link a:hover {
+  opacity: 0.7;
 }
 
 /* --- Form Elements --- */
