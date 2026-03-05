@@ -259,19 +259,25 @@ document.addEventListener("DOMContentLoaded", () => {
   heroHeaders.forEach(header => {
     const text = header.textContent;
     header.textContent = "";
+    header.classList.add("typewriter-cursor");
     
     let i = 0;
     function typeWriter() {
       if (i < text.length) {
         header.textContent += text.charAt(i);
         i++;
-        // Randomize typing speed slightly for realism (between 50ms and 100ms)
-        const speed = Math.floor(Math.random() * 50) + 50;
+        // Randomize typing speed slightly for realism (slower: between 70ms and 150ms)
+        const speed = Math.floor(Math.random() * 80) + 70;
         setTimeout(typeWriter, speed);
+      } else {
+        // Remove the cursor a few seconds after typing is complete
+        setTimeout(() => {
+          header.classList.add("done");
+        }, 2500);
       }
     }
     
-    // Start typing after a short delay to allow page transition to finish
-    setTimeout(typeWriter, 500); 
+    // Wait for 2 seconds (with the flashing cursor) before starting to type
+    setTimeout(typeWriter, 2000); 
   });
 });
