@@ -473,6 +473,10 @@ main {
   font-size: 1.1rem;
 }
 
+.calendly-inline-widget {
+  margin-bottom: -40px; /* Pull the form up closer */
+}
+
 /* --- Form Elements --- */
 #contact-form {
   display: flex;
