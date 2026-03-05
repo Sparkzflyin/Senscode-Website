@@ -261,16 +261,60 @@ document.addEventListener("DOMContentLoaded", () => {
     header.textContent = "";
     header.classList.add("typewriter-cursor");
     
-    let i = 0;
-    function typeWriter() {
-      if (i < text.length) {
-        header.textContent += text.charAt(i);
-        i++;
-        // Randomize typing speed slightly for realism (slower: between 70ms and 150ms)
-        const speed = Math.floor(Math.random() * 80) + 70;
-        setTimeout(typeWriter, speed);
+    // Track if we have already played the typo effect for this specific text
+    const pageKey = 'typewriter_typo_' + btoa(text);
+    const hasPlayed = localStorage.getItem(pageKey);
+    
+    let actions = [];
+    
+    // Only introduce a typo if there are multiple words and it's the first time
+    if (!hasPlayed && text.trim().indexOf(' ') !== -1) {
+      const words = text.trim().split(' ');
+      const firstWordAndSpace = words[0] + ' ';
+      const secondWord = words[1];
+      const restOfText = text.substring(text.indexOf(firstWordAndSpace) + firstWordAndSpace.length + secondWord.length);
+      
+      // Generate a realistic transposition typo for the second word
+      let typoWord = secondWord;
+      if (secondWord.length >= 3) {
+        typoWord = secondWord.charAt(0) + secondWord.charAt(2) + secondWord.charAt(1) + secondWord.slice(3);
+      } else if (secondWord.length === 2) {
+        typoWord = secondWord.charAt(1) + secondWord.charAt(0);
       } else {
-        // Remove the cursor a few seconds after typing is complete
+        typoWord = secondWord + 'x';
+      }
+
+      // Action queue: type prefix -> type typo -> pause -> delete typo -> pause -> type correctly
+      for (let c of firstWordAndSpace) actions.push({ type: 'type', char: c });
+      for (let c of typoWord) actions.push({ type: 'type', char: c });
+      actions.push({ type: 'pause', ms: 400 });
+      for (let i = 0; i < typoWord.length; i++) actions.push({ type: 'delete' });
+      actions.push({ type: 'pause', ms: 200 });
+      for (let c of (secondWord + restOfText)) actions.push({ type: 'type', char: c });
+      
+      localStorage.setItem(pageKey, 'true');
+    } else {
+      for (let c of text) actions.push({ type: 'type', char: c });
+    }
+    
+    let i = 0;
+    function processAction() {
+      if (i < actions.length) {
+        const action = actions[i];
+        i++;
+        
+        if (action.type === 'type') {
+          header.textContent += action.char;
+          const speed = Math.floor(Math.random() * 80) + 70; // Slower typing
+          setTimeout(processAction, speed);
+        } else if (action.type === 'delete') {
+          header.textContent = header.textContent.slice(0, -1);
+          const speed = Math.floor(Math.random() * 40) + 30; // Fast deletion
+          setTimeout(processAction, speed);
+        } else if (action.type === 'pause') {
+          setTimeout(processAction, action.ms);
+        }
+      } else {
         setTimeout(() => {
           header.classList.add("done");
         }, 2500);
@@ -278,6 +322,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     
     // Wait for 2 seconds (with the flashing cursor) before starting to type
-    setTimeout(typeWriter, 2000); 
+    setTimeout(processAction, 2000); 
   });
 });
