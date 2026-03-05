@@ -72,6 +72,9 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       const handleMove = (e) => {
+        if (e.type === 'touchmove') {
+          e.preventDefault();
+        }
         const rect = card.getBoundingClientRect();
         const clientX = e.touches ? e.touches[0].clientX : e.clientX;
         const clientY = e.touches ? e.touches[0].clientY : e.clientY;
@@ -94,7 +97,7 @@ document.addEventListener("DOMContentLoaded", () => {
       };
 
       card.addEventListener("mousemove", handleMove);
-      card.addEventListener("touchmove", handleMove, { passive: true });
+      card.addEventListener("touchmove", handleMove, { passive: false });
       card.addEventListener("touchstart", handleMove, { passive: true });
 
       card.addEventListener("mouseleave", handleLeave);
