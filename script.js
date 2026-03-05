@@ -57,8 +57,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.querySelectorAll(".reveal, .story-text").forEach((el) => observer.observe(el));
 
-  // 5. Spotlight Effect
-  document.querySelectorAll(".glass-panel, .card").forEach((card) => {
+  // 5. Advanced Card Tilt & Spotlight Effect
+  document.querySelectorAll(".glass-panel, .card, .process-step").forEach((card) => {
     if (!card.querySelector('.spotlight')) {
       const spotlight = document.createElement("div");
       spotlight.classList.add("spotlight");
@@ -67,8 +67,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
     card.addEventListener("mousemove", (e) => {
       const rect = card.getBoundingClientRect();
-      card.style.setProperty("--x", `${e.clientX - rect.left}px`);
-      card.style.setProperty("--y", `${e.clientY - rect.top}px`);
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      card.style.setProperty("--x", `${x}px`);
+      card.style.setProperty("--y", `${y}px`);
+
+      // 3D Tilt Physics
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      const tiltX = ((y - centerY) / centerY) * -10; // Max tilt 10deg
+      const tiltY = ((x - centerX) / centerX) * 10;
+      
+      card.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale3d(1.02, 1.02, 1.02)`;
+    });
+
+    card.addEventListener("mouseleave", () => {
+      card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
     });
   });
 
@@ -119,6 +133,26 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
       lastScrollY = window.scrollY;
+    });
+  }
+
+  // 9. Time Greeting Logic
+  const greetingEl = document.getElementById("time-greeting");
+  if (greetingEl) {
+    const hour = new Date().getHours();
+    let greeting = "Good evening.";
+    if (hour < 12) greeting = "Good morning.";
+    else if (hour < 18) greeting = "Good afternoon.";
+    greetingEl.innerText = greeting;
+  }
+
+  // 10. Parallax Effect on Hero Video
+  const heroVideo = document.querySelector(".hero-video");
+  if (heroVideo) {
+    window.addEventListener("scroll", () => {
+      const scrollY = window.scrollY;
+      // Parallax ratio of 0.4
+      heroVideo.style.transform = `translateY(${scrollY * 0.4}px)`;
     });
   }
 });
