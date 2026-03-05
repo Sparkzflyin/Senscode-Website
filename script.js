@@ -71,10 +71,12 @@ document.addEventListener("DOMContentLoaded", () => {
         card.appendChild(spotlight);
       }
 
-      card.addEventListener("mousemove", (e) => {
+      const handleMove = (e) => {
         const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        const x = clientX - rect.left;
+        const y = clientY - rect.top;
         card.style.setProperty("--x", `${x}px`);
         card.style.setProperty("--y", `${y}px`);
 
@@ -85,11 +87,18 @@ document.addEventListener("DOMContentLoaded", () => {
         const tiltY = ((x - centerX) / centerX) * 10;
 
         card.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale3d(1.02, 1.02, 1.02)`;
-      });
+      };
 
-      card.addEventListener("mouseleave", () => {
+      const handleLeave = () => {
         card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
-      });
+      };
+
+      card.addEventListener("mousemove", handleMove);
+      card.addEventListener("touchmove", handleMove, { passive: true });
+      card.addEventListener("touchstart", handleMove, { passive: true });
+
+      card.addEventListener("mouseleave", handleLeave);
+      card.addEventListener("touchend", handleLeave);
     });
 
   // 6. Back to Top
