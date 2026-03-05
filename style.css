@@ -863,3 +863,23 @@ body {
   opacity: 0.8;
   margin-bottom: 30px;
 }
+
+/* --- Typewriter Cursor --- */
+.typewriter-cursor::after {
+  content: '|';
+  display: inline-block;
+  opacity: 1;
+  animation: blink 0.8s infinite;
+  margin-left: 4px;
+  color: var(--link);
+  font-weight: 300;
+}
+
+.typewriter-cursor.done::after {
+  display: none;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
