@@ -187,15 +187,7 @@ document.addEventListener("DOMContentLoaded", () => {
     greetingEl.innerText = greeting;
   }
 
-  // 10. Parallax Effect on Hero Video
-  const heroVideo = document.querySelector(".hero-video");
-  if (heroVideo) {
-    window.addEventListener("scroll", () => {
-      const scrollY = window.scrollY;
-      // Parallax ratio of 0.4
-      heroVideo.style.transform = `translateY(${scrollY * 0.4}px)`;
-    });
-  }
+
 
   // 11. Dynamic Navigation Highlighting
   const currentPath = window.location.pathname;
