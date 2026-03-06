@@ -498,30 +498,7 @@ main {
   /* Optional: gives it a subtle glow */
   text-shadow: 0 0 10px rgba(255, 149, 0, 0.2);
 }
-/* --- Page Transition Overlay --- */
-#page-transition {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: var(--bg);
-  z-index: 9999;
-  pointer-events: none;
-  transition: opacity 0.8s ease-in-out;
-}
 
-/* Initial state: everything is hidden until the CSS loads */
-body {
-  opacity: 0;
-  animation: fadeInPage 1s forwards;
-}
-
-@keyframes fadeInPage {
-  to {
-    opacity: 1;
-  }
-}
 /* --- Hamburger Icon --- */
 .hamburger {
   display: none; /* Hidden on desktop */
