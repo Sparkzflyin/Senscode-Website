@@ -9,10 +9,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const isMobile = window.matchMedia("(max-width: 768px)").matches;
   const systemTheme = prefersDark.matches ? "dark" : "light";
 
-  // On mobile, force system theme. Otherwise, respect localStorage preference.
-  const currentTheme = isMobile
-    ? systemTheme
-    : localStorage.getItem("theme") || systemTheme;
+  // Respect localStorage preference universally, fallback to system theme.
+  const currentTheme = localStorage.getItem("theme") || systemTheme;
 
   html.setAttribute("data-theme", currentTheme);
   if (toggle) {
@@ -20,8 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   prefersDark.addEventListener("change", (e) => {
-    const currentlyMobile = window.matchMedia("(max-width: 768px)").matches;
-    if (currentlyMobile || !localStorage.getItem("theme")) {
+    if (!localStorage.getItem("theme")) {
       const newSystemTheme = e.matches ? "dark" : "light";
       html.setAttribute("data-theme", newSystemTheme);
       if (toggle) {
@@ -107,13 +104,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // 6. Back to Top
   const btt = document.getElementById("back-to-top");
   if (btt) {
-    window.addEventListener("scroll", () => {
-      if (window.scrollY > 400) {
-        btt.classList.add("visible");
-      } else {
-        btt.classList.remove("visible");
-      }
-    });
     btt.addEventListener("click", () =>
       window.scrollTo({ top: 0, behavior: "smooth" }),
     );
@@ -129,34 +119,47 @@ document.addEventListener("DOMContentLoaded", () => {
       mobileMenu.classList.toggle("active");
       document.body.style.overflow = mobileMenu.classList.contains("active")
         ? "hidden"
-        : "auto";
+        : "";
     });
 
     document.querySelectorAll(".mobile-menu a").forEach((link) => {
       link.addEventListener("click", () => {
         hamburger.classList.remove("active");
         mobileMenu.classList.remove("active");
-        document.body.style.overflow = "auto";
+        document.body.style.overflow = "";
       });
     });
   }
 
-  // 8. Mobile Navbar Auto-Hide on Scroll
+  // 8. Mobile Navbar Auto-Hide & Back to Top on Scroll
   let lastScrollY = window.scrollY;
   const navbar = document.querySelector(".navbar");
+  let ticking = false;
 
-  if (navbar) {
-    window.addEventListener("scroll", () => {
-      if (window.innerWidth <= 768) {
-        if (lastScrollY < window.scrollY && window.scrollY > 50) {
-          navbar.classList.add("navbar--hidden");
-        } else {
-          navbar.classList.remove("navbar--hidden");
+  window.addEventListener("scroll", () => {
+    if (!ticking) {
+      window.requestAnimationFrame(() => {
+        if (btt) {
+          if (window.scrollY > 400) {
+            btt.classList.add("visible");
+          } else {
+            btt.classList.remove("visible");
+          }
         }
-      }
-      lastScrollY = window.scrollY;
-    });
-  }
+
+        if (navbar && window.innerWidth <= 768) {
+          if (lastScrollY < window.scrollY && window.scrollY > 50) {
+            navbar.classList.add("navbar--hidden");
+          } else {
+            navbar.classList.remove("navbar--hidden");
+          }
+        }
+        lastScrollY = window.scrollY;
+        ticking = false;
+      });
+      ticking = true;
+    }
+  });
 
   // 9. Time Greeting Logic
   const greetingEl = document.getElementById("time-greeting");
@@ -232,7 +235,25 @@ document.addEventListener("DOMContentLoaded", () => {
   heroHeaders.forEach((header) => {
     const text = header.textContent;
     header.textContent = "";
-    header.classList.add("typewriter-cursor");
+
+    // Accessibility structure
+    const srOnly = document.createElement("span");
+    srOnly.style.position = "absolute";
+    srOnly.style.width = "1px";
+    srOnly.style.height = "1px";
+    srOnly.style.padding = "0";
+    srOnly.style.margin = "-1px";
+    srOnly.style.overflow = "hidden";
+    srOnly.style.clip = "rect(0, 0, 0, 0)";
+    srOnly.style.whiteSpace = "nowrap";
+    srOnly.style.border = "0";
+    srOnly.textContent = text;
+    header.appendChild(srOnly);
+
+    const animatedPart = document.createElement("span");
+    animatedPart.setAttribute("aria-hidden", "true");
+    animatedPart.classList.add("typewriter-cursor");
+    header.appendChild(animatedPart);
 
     let actions = [];
 
@@ -281,11 +302,11 @@ document.addEventListener("DOMContentLoaded", () => {
         i++;
 
         if (action.type === "type") {
-          header.textContent += action.char;
+          animatedPart.textContent += action.char;
           const speed = Math.floor(Math.random() * 80) + 70; // Slower typing
           setTimeout(processAction, speed);
         } else if (action.type === "delete") {
-          header.textContent = header.textContent.slice(0, -1);
+          animatedPart.textContent = animatedPart.textContent.slice(0, -1);
           const speed = Math.floor(Math.random() * 40) + 30; // Fast deletion
           setTimeout(processAction, speed);
         } else if (action.type === "pause") {
@@ -293,7 +314,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       } else {
         setTimeout(() => {
-          header.classList.add("done");
+          animatedPart.classList.add("done");
         }, 2500);
       }
     }
