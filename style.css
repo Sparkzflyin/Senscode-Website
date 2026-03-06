@@ -152,7 +152,7 @@ main {
 }
 
 /* --- Theme Toggle Fix --- */
-#theme-toggle {
+.theme-toggle {
   border: 1px solid var(--border);
   cursor: pointer;
   padding: 6px 14px;
@@ -165,12 +165,12 @@ main {
   color: white;
 }
 
-[data-theme="dark"] #theme-toggle {
+[data-theme="dark"] .theme-toggle {
   background: #ff9500; /* Vibrant Orange for Light Mode option */
   border-color: #ff9500;
 }
 
-[data-theme="light"] #theme-toggle {
+[data-theme="light"] .theme-toggle {
   background: #0066cc; /* Deep Blue for Dark Mode option */
   border-color: #0066cc;
 }
