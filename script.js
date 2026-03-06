@@ -287,7 +287,20 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
     
-    // Wait for 2 seconds (with the flashing cursor) before starting to type
-    setTimeout(processAction, 2000); 
+  // 14. Performance Metric: Load Time
+  window.addEventListener("load", () => {
+    const loadTimeVal = document.getElementById("load-time-val");
+    if (loadTimeVal) {
+      // Use the Navigation Timing API
+      const [navigation] = performance.getEntriesByType('navigation');
+      if (navigation) {
+        const loadTime = Math.round(navigation.duration);
+        loadTimeVal.innerText = `${loadTime}ms`;
+      } else {
+        // Fallback for older browsers
+        const loadTime = Math.round(performance.now());
+        loadTimeVal.innerText = `${loadTime}ms`;
+      }
+    }
   });
 });
