@@ -25,7 +25,10 @@ html {
   -webkit-text-size-adjust: 100%;
 }
 
-a, button, input, textarea {
+a,
+button,
+input,
+textarea {
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -81,13 +84,21 @@ body::before {
   left: 0;
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.07) 0%, transparent 80%);
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.07) 0%,
+    transparent 80%
+  );
   pointer-events: none;
   z-index: 1;
 }
 
 [data-theme="light"] body::before {
-  background: radial-gradient(circle, transparent 30%, rgba(0, 0, 0, 0.12) 100%);
+  background: radial-gradient(
+    circle,
+    transparent 30%,
+    rgba(0, 0, 0, 0.12) 100%
+  );
 }
 
 main {
@@ -174,8 +185,6 @@ main {
   text-align: center;
 }
 
-
-
 .panel {
   padding: 80px 5%;
   max-width: 1200px;
@@ -227,7 +236,7 @@ main {
   .grid-3 {
     grid-template-columns: 1fr;
   }
-  
+
   .card {
     padding: 20px; /* Reduced further from 25px */
   }
@@ -454,8 +463,6 @@ main {
   opacity: 0.6;
 }
 
-
-
 .calendly-inline-widget {
   margin-bottom: -125px; /* Pull the form up closer */
 }
@@ -495,7 +502,6 @@ main {
   font-weight: 600;
   cursor: pointer;
 }
-
 
 /* Product Page Tags */
 .tag {
@@ -799,7 +805,7 @@ main {
 
 /* --- Typewriter Cursor --- */
 .typewriter-cursor::after {
-  content: '|';
+  content: "|";
   display: inline-block;
   opacity: 1;
   animation: blink 0.8s infinite;
@@ -813,6 +819,11 @@ main {
 }
 
 @keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
 }

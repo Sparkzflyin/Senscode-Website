@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
   // 1. Page Transition Fade-In
-  
 
   // 2. Theme Logic
   const toggle = document.getElementById("theme-toggle");
@@ -9,10 +8,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const prefersDark = window.matchMedia("(prefers-color-scheme: dark)");
   const isMobile = window.matchMedia("(max-width: 768px)").matches;
   const systemTheme = prefersDark.matches ? "dark" : "light";
-  
+
   // On mobile, force system theme. Otherwise, respect localStorage preference.
-  const currentTheme = isMobile ? systemTheme : (localStorage.getItem("theme") || systemTheme);
-  
+  const currentTheme = isMobile
+    ? systemTheme
+    : localStorage.getItem("theme") || systemTheme;
+
   html.setAttribute("data-theme", currentTheme);
   if (toggle) {
     toggle.innerText = currentTheme === "dark" ? "Light Mode" : "Dark Mode";
@@ -24,7 +25,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const newSystemTheme = e.matches ? "dark" : "light";
       html.setAttribute("data-theme", newSystemTheme);
       if (toggle) {
-        toggle.innerText = newSystemTheme === "dark" ? "Light Mode" : "Dark Mode";
+        toggle.innerText =
+          newSystemTheme === "dark" ? "Light Mode" : "Dark Mode";
       }
     }
   });
@@ -40,7 +42,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // 3. Smooth Fade-Out for Internal Links
-  
 
   // 4. Scroll Reveal & Story Text
   const observer = new IntersectionObserver(
@@ -71,7 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       const handleMove = (e) => {
-        if (e.type === 'touchmove') {
+        if (e.type === "touchmove") {
           e.preventDefault();
         }
         const rect = card.getBoundingClientRect();
@@ -167,8 +168,6 @@ document.addEventListener("DOMContentLoaded", () => {
     greetingEl.innerText = greeting;
   }
 
-
-
   // 11. Dynamic Navigation Highlighting
   const currentPath = window.location.pathname;
   const currentPage = currentPath.split("/").pop() || "index.html";
@@ -198,10 +197,10 @@ document.addEventListener("DOMContentLoaded", () => {
           method: contactForm.method,
           body: data,
           headers: {
-            'Accept': 'application/json'
-          }
+            Accept: "application/json",
+          },
         });
-        
+
         if (response.ok) {
           submitBtn.innerText = "Message Sent!";
           contactForm.reset();
@@ -227,57 +226,69 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // 13. Typewriter Effect for Hero Headers
-  const heroHeaders = document.querySelectorAll(".hero-content h1, .founder-note h2");
-  heroHeaders.forEach(header => {
+  const heroHeaders = document.querySelectorAll(
+    ".hero-content h1, .founder-note h2",
+  );
+  heroHeaders.forEach((header) => {
     const text = header.textContent;
     header.textContent = "";
     header.classList.add("typewriter-cursor");
-    
+
     let actions = [];
-    
+
     // Always introduce a typo if there are multiple words
-    if (text.trim().indexOf(' ') !== -1) {
-      const words = text.trim().split(' ');
-      const firstWordAndSpace = words[0] + ' ';
+    if (text.trim().indexOf(" ") !== -1) {
+      const words = text.trim().split(" ");
+      const firstWordAndSpace = words[0] + " ";
       const secondWord = words[1];
-      const restOfText = text.substring(text.indexOf(firstWordAndSpace) + firstWordAndSpace.length + secondWord.length);
-      
+      const restOfText = text.substring(
+        text.indexOf(firstWordAndSpace) +
+          firstWordAndSpace.length +
+          secondWord.length,
+      );
+
       // Generate a realistic transposition typo for the second word
       let typoWord = secondWord;
       if (secondWord.length >= 3) {
-        typoWord = secondWord.charAt(0) + secondWord.charAt(2) + secondWord.charAt(1) + secondWord.slice(3);
+        typoWord =
+          secondWord.charAt(0) +
+          secondWord.charAt(2) +
+          secondWord.charAt(1) +
+          secondWord.slice(3);
       } else if (secondWord.length === 2) {
         typoWord = secondWord.charAt(1) + secondWord.charAt(0);
       } else {
-        typoWord = secondWord + 'x';
+        typoWord = secondWord + "x";
       }
 
       // Action queue: type prefix -> type typo -> pause -> delete typo -> pause -> type correctly
-      for (let c of firstWordAndSpace) actions.push({ type: 'type', char: c });
-      for (let c of typoWord) actions.push({ type: 'type', char: c });
-      actions.push({ type: 'pause', ms: 400 });
-      for (let i = 0; i < typoWord.length; i++) actions.push({ type: 'delete' });
-      actions.push({ type: 'pause', ms: 200 });
-      for (let c of (secondWord + restOfText)) actions.push({ type: 'type', char: c });
+      for (let c of firstWordAndSpace) actions.push({ type: "type", char: c });
+      for (let c of typoWord) actions.push({ type: "type", char: c });
+      actions.push({ type: "pause", ms: 400 });
+      for (let i = 0; i < typoWord.length; i++)
+        actions.push({ type: "delete" });
+      actions.push({ type: "pause", ms: 200 });
+      for (let c of secondWord + restOfText)
+        actions.push({ type: "type", char: c });
     } else {
-      for (let c of text) actions.push({ type: 'type', char: c });
+      for (let c of text) actions.push({ type: "type", char: c });
     }
-    
+
     let i = 0;
     function processAction() {
       if (i < actions.length) {
         const action = actions[i];
         i++;
-        
-        if (action.type === 'type') {
+
+        if (action.type === "type") {
           header.textContent += action.char;
           const speed = Math.floor(Math.random() * 80) + 70; // Slower typing
           setTimeout(processAction, speed);
-        } else if (action.type === 'delete') {
+        } else if (action.type === "delete") {
           header.textContent = header.textContent.slice(0, -1);
           const speed = Math.floor(Math.random() * 40) + 30; // Fast deletion
           setTimeout(processAction, speed);
-        } else if (action.type === 'pause') {
+        } else if (action.type === "pause") {
           setTimeout(processAction, action.ms);
         }
       } else {
@@ -298,7 +309,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const loadTimeVal = document.getElementById("load-time-val");
       if (loadTimeVal) {
         // Use the Navigation Timing API
-        const [navigation] = performance.getEntriesByType('navigation');
+        const [navigation] = performance.getEntriesByType("navigation");
         if (navigation && navigation.duration > 0) {
           const loadTime = Math.round(navigation.duration);
           loadTimeVal.innerText = `${loadTime}ms`;
