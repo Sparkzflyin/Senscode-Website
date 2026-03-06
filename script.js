@@ -68,10 +68,41 @@ document.addEventListener("DOMContentLoaded", () => {
         card.appendChild(spotlight);
       }
 
+      let playTimer;
+      let isPlaying = false;
+      let startX, startY;
+
+      const handleTouchStart = (e) => {
+        isPlaying = false;
+        startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
+        playTimer = setTimeout(() => {
+          isPlaying = true;
+        }, 150); // Enter play mode after 150ms of holding
+        handleMove(e);
+      };
+
       const handleMove = (e) => {
         if (e.type === "touchmove") {
-          e.preventDefault();
+          const currentX = e.touches[0].clientX;
+          const currentY = e.touches[0].clientY;
+          const deltaX = Math.abs(currentX - startX);
+          const deltaY = Math.abs(currentY - startY);
+
+          // If they haven't held it long enough to enter 'play mode',
+          // check if they are moving significantly. If so, cancel the timer.
+          if (!isPlaying && (deltaX > 10 || deltaY > 10)) {
+            clearTimeout(playTimer);
+          }
+
+          if (isPlaying && e.cancelable) {
+            e.preventDefault(); // lock screen for playing
+          } else if (!isPlaying && deltaY > deltaX) {
+             // User is scrolling vertically, let the browser handle it natively
+             return;
+          }
         }
+        
         const rect = card.getBoundingClientRect();
         const clientX = e.touches ? e.touches[0].clientX : e.clientX;
         const clientY = e.touches ? e.touches[0].clientY : e.clientY;
@@ -90,15 +121,18 @@ document.addEventListener("DOMContentLoaded", () => {
       };
 
       const handleLeave = () => {
+        clearTimeout(playTimer);
+        isPlaying = false;
         card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
       };
 
       card.addEventListener("mousemove", handleMove);
       card.addEventListener("touchmove", handleMove, { passive: false });
-      card.addEventListener("touchstart", handleMove, { passive: true });
+      card.addEventListener("touchstart", handleTouchStart, { passive: true });
 
       card.addEventListener("mouseleave", handleLeave);
       card.addEventListener("touchend", handleLeave);
+      card.addEventListener("touchcancel", handleLeave);
     });
 
   // 6. Back to Top
