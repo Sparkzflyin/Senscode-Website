@@ -20,11 +20,22 @@
   --link: #0066cc;
 }
 
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+a, button, input, textarea {
+  -webkit-tap-highlight-color: transparent;
+}
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: var(--font-body);
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
 }
 
 h1,
