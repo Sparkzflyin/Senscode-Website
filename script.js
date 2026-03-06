@@ -286,7 +286,11 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 2500);
       }
     }
-    
+
+    // Wait for 2 seconds (with the flashing cursor) before starting to type
+    setTimeout(processAction, 2000);
+  });
+
   // 14. Performance Metric: Load Time
   window.addEventListener("load", () => {
     const loadTimeVal = document.getElementById("load-time-val");
