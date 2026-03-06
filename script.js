@@ -293,18 +293,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // 14. Performance Metric: Load Time
   window.addEventListener("load", () => {
-    const loadTimeVal = document.getElementById("load-time-val");
-    if (loadTimeVal) {
-      // Use the Navigation Timing API
-      const [navigation] = performance.getEntriesByType('navigation');
-      if (navigation) {
-        const loadTime = Math.round(navigation.duration);
-        loadTimeVal.innerText = `${loadTime}ms`;
-      } else {
-        // Fallback for older browsers
-        const loadTime = Math.round(performance.now());
-        loadTimeVal.innerText = `${loadTime}ms`;
+    // Delay the calculation slightly to ensure the browser has finished recording the load event
+    setTimeout(() => {
+      const loadTimeVal = document.getElementById("load-time-val");
+      if (loadTimeVal) {
+        // Use the Navigation Timing API
+        const [navigation] = performance.getEntriesByType('navigation');
+        if (navigation && navigation.duration > 0) {
+          const loadTime = Math.round(navigation.duration);
+          loadTimeVal.innerText = `${loadTime}ms`;
+        } else {
+          // Fallback for older browsers or if duration is not yet available
+          const loadTime = Math.round(performance.now());
+          loadTimeVal.innerText = `${loadTime}ms`;
+        }
       }
-    }
+    }, 0);
   });
 });
