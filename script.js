@@ -1,11 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   // 1. Page Transition Fade-In
-  const transitionLayer = document.getElementById("page-transition");
-  if (transitionLayer) {
-    setTimeout(() => {
-      transitionLayer.style.opacity = "0";
-    }, 50);
-  }
+  
 
   // 2. Theme Logic
   const toggle = document.getElementById("theme-toggle");
@@ -45,22 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // 3. Smooth Fade-Out for Internal Links
-  document.querySelectorAll("a").forEach((link) => {
-    link.addEventListener("click", (e) => {
-      const isInternal =
-        link.hostname === window.location.hostname || !link.hostname;
-      if (isInternal && !link.hash && !link.target) {
-        e.preventDefault();
-        const destination = link.href;
-        if (transitionLayer) {
-          transitionLayer.style.opacity = "1";
-        }
-        setTimeout(() => {
-          window.location.href = destination;
-        }, 600);
-      }
-    });
-  });
+  
 
   // 4. Scroll Reveal & Story Text
   const observer = new IntersectionObserver(
