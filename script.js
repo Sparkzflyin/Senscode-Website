@@ -78,7 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
         startY = e.touches[0].clientY;
         playTimer = setTimeout(() => {
           isPlaying = true;
-        }, 150); // Enter play mode after 150ms of holding
+        }, 50); // Enter play mode after 50ms of holding
         handleMove(e);
       };
 
