@@ -520,29 +520,33 @@ main {
 .hamburger {
   display: none; /* Hidden on desktop */
   flex-direction: column;
-  gap: 5px;
+  gap: 6px;
   cursor: pointer;
   z-index: 3000;
+  padding: 5px; /* Increase clickable area */
 }
 
 .hamburger span {
   display: block;
-  width: 25px;
+  width: 28px;
   height: 2px;
   background: var(--text);
-  transition: 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: center;
 }
 
+/* The 'X' Animation */
 .hamburger.active span:nth-child(1) {
-  transform: translateY(7px) rotate(45deg);
+  transform: translateY(8px) rotate(45deg);
 }
 
 .hamburger.active span:nth-child(2) {
   opacity: 0;
+  transform: scale(0);
 }
 
 .hamburger.active span:nth-child(3) {
-  transform: translateY(-7px) rotate(-45deg);
+  transform: translateY(-8px) rotate(-45deg);
 }
 
 /* --- Mobile Menu Overlay --- */
