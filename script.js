@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // 1. Page Transition Fade-In
 
   // 2. Theme Logic
-  const toggle = document.getElementById("theme-toggle");
+  const toggles = document.querySelectorAll(".theme-toggle");
   const html = document.documentElement;
 
   const prefersDark = window.matchMedia("(prefers-color-scheme: dark)");
@@ -13,30 +13,30 @@ document.addEventListener("DOMContentLoaded", () => {
   const currentTheme = localStorage.getItem("theme") || systemTheme;
 
   html.setAttribute("data-theme", currentTheme);
-  if (toggle) {
+  toggles.forEach(toggle => {
     toggle.innerText = currentTheme === "dark" ? "Light Mode" : "Dark Mode";
-  }
+  });
 
   prefersDark.addEventListener("change", (e) => {
     if (!localStorage.getItem("theme")) {
       const newSystemTheme = e.matches ? "dark" : "light";
       html.setAttribute("data-theme", newSystemTheme);
-      if (toggle) {
-        toggle.innerText =
-          newSystemTheme === "dark" ? "Light Mode" : "Dark Mode";
-      }
+      toggles.forEach(toggle => {
+        toggle.innerText = newSystemTheme === "dark" ? "Light Mode" : "Dark Mode";
+      });
     }
   });
 
-  if (toggle) {
+  toggles.forEach(toggle => {
     toggle.addEventListener("click", () => {
-      const nextTheme =
-        html.getAttribute("data-theme") === "dark" ? "light" : "dark";
+      const nextTheme = html.getAttribute("data-theme") === "dark" ? "light" : "dark";
       html.setAttribute("data-theme", nextTheme);
       localStorage.setItem("theme", nextTheme);
-      toggle.innerText = nextTheme === "dark" ? "Light Mode" : "Dark Mode";
+      toggles.forEach(t => {
+        t.innerText = nextTheme === "dark" ? "Light Mode" : "Dark Mode";
+      });
     });
-  }
+  });
 
   // 3. Smooth Fade-Out for Internal Links
 
