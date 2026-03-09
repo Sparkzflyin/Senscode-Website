@@ -439,7 +439,7 @@ main {
 }
 .footer-content {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
   gap: 40px;
 }
 /* Footer Column Headings */
@@ -808,15 +808,42 @@ main {
   transition: transform 0.3s ease;
 }
 
-.sticky-skill-card:nth-child(1) { top: 100px; z-index: 1; }
-.sticky-skill-card:nth-child(2) { top: 110px; z-index: 2; }
-.sticky-skill-card:nth-child(3) { top: 120px; z-index: 3; }
-.sticky-skill-card:nth-child(4) { top: 130px; z-index: 4; }
-.sticky-skill-card:nth-child(5) { top: 140px; z-index: 5; }
-.sticky-skill-card:nth-child(6) { top: 150px; z-index: 6; }
-.sticky-skill-card:nth-child(7) { top: 160px; z-index: 7; }
-.sticky-skill-card:nth-child(8) { top: 170px; z-index: 8; }
-.sticky-skill-card:nth-child(9) { top: 180px; z-index: 9; }
+.sticky-skill-card:nth-child(1) {
+  top: 100px;
+  z-index: 1;
+}
+.sticky-skill-card:nth-child(2) {
+  top: 110px;
+  z-index: 2;
+}
+.sticky-skill-card:nth-child(3) {
+  top: 120px;
+  z-index: 3;
+}
+.sticky-skill-card:nth-child(4) {
+  top: 130px;
+  z-index: 4;
+}
+.sticky-skill-card:nth-child(5) {
+  top: 140px;
+  z-index: 5;
+}
+.sticky-skill-card:nth-child(6) {
+  top: 150px;
+  z-index: 6;
+}
+.sticky-skill-card:nth-child(7) {
+  top: 160px;
+  z-index: 7;
+}
+.sticky-skill-card:nth-child(8) {
+  top: 170px;
+  z-index: 8;
+}
+.sticky-skill-card:nth-child(9) {
+  top: 180px;
+  z-index: 9;
+}
 
 .sticky-skill-card h3 {
   font-size: 2.5rem;

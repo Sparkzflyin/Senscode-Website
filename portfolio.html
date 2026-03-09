@@ -1,0 +1,638 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Explore the portfolio, case studies, and digital experiments by SensCode."
+    />
+    <meta
+      name="keywords"
+      content="portfolio, web design case study, UI/UX experiments, SensCode work"
+    />
+    <meta name="author" content="Christian Sparks" />
+    <title>Senscode | Portfolio & Lab</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <script defer src="/_vercel/insights/script.js"></script>
+    <script defer src="script.js"></script>
+    <style>
+      .bento-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+        gap: 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        grid-auto-flow: dense;
+        transition:
+          gap 0.5s ease,
+          padding 0.5s ease;
+      }
+
+      .bento-grid.blown-up {
+        gap: 40px;
+        padding: 40px 20px;
+      }
+
+      .bento-item {
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        padding: 30px;
+        min-height: 250px;
+      }
+
+      .bento-large {
+        grid-column: span 2;
+        grid-row: span 2;
+      }
+
+      .bento-wide {
+        grid-column: span 2;
+      }
+
+      .bento-tall {
+        grid-row: span 2;
+      }
+
+      @media (max-width: 768px) {
+        .bento-large,
+        .bento-wide,
+        .bento-tall {
+          grid-column: span 1;
+          grid-row: span 1;
+        }
+      }
+
+      .bento-icon {
+        font-size: 2.5rem;
+        margin-bottom: 15px;
+      }
+
+      .bento-item h3 {
+        margin-bottom: 10px;
+        font-family: "Playfair Display", serif;
+        font-size: 2rem;
+        transition: font-size 0.5s ease;
+      }
+
+      .bento-grid.blown-up .bento-item h3 {
+        font-size: 1.4rem;
+      }
+
+      .bento-item p {
+        font-size: 0.95rem;
+        opacity: 0;
+        line-height: 1.5;
+        max-height: 0;
+        margin: 0;
+        overflow: hidden;
+        transition:
+          max-height 0.5s ease,
+          opacity 0.5s ease,
+          margin 0.5s ease;
+      }
+
+      .bento-visual {
+        margin-top: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        max-height: 0;
+        opacity: 0;
+        overflow: hidden;
+        transition:
+          max-height 0.5s ease,
+          opacity 0.5s ease,
+          margin-top 0.5s ease;
+      }
+
+      .bento-grid.blown-up .bento-item p {
+        opacity: 0.8;
+        max-height: 400px;
+        margin-top: 10px;
+        flex-grow: 1;
+      }
+
+      .bento-grid.blown-up .bento-visual {
+        margin-top: 20px;
+        opacity: 1;
+        max-height: 300px;
+        flex-grow: 1;
+        min-height: 100px;
+        overflow: visible;
+      }
+
+      .blow-up-container {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 20px;
+      }
+
+      .blow-up-btn {
+        background: var(--text);
+        color: var(--bg);
+        border: none;
+        padding: 12px 32px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        border-radius: 30px;
+        cursor: pointer;
+        box-shadow: 0 4px 15px rgba(255, 149, 0, 0.4);
+        transition:
+          transform 0.3s ease,
+          box-shadow 0.3s ease;
+        position: relative;
+        z-index: 10;
+      }
+
+      .blow-up-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 20px rgba(255, 149, 0, 0.6);
+      }
+
+      /* Specific Visuals */
+      @keyframes float {
+        0% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-15px);
+        }
+        100% {
+          transform: translateY(0px);
+        }
+      }
+      @keyframes click-bounce {
+        0% {
+          transform: scale(1.1) translateY(-15px);
+        }
+        30% {
+          transform: scale(1.4) translateY(-40px);
+        }
+        50% {
+          transform: scale(0.9) translateY(0px);
+        }
+        70% {
+          transform: scale(1.2) translateY(-15px);
+        }
+        100% {
+          transform: scale(1) translateY(0px);
+        }
+      }
+      .interactive-orb {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--accent), #ff5e62);
+        box-shadow: 0 10px 20px rgba(255, 149, 0, 0.3);
+        animation: float 3s ease-in-out infinite;
+        cursor: pointer;
+        transition:
+          transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+          box-shadow 0.4s ease,
+          filter 0.4s ease;
+      }
+      .interactive-orb:hover {
+        transform: scale(1.1);
+        box-shadow: 0 15px 30px rgba(255, 149, 0, 0.5);
+      }
+      .interactive-orb.bounce-glow {
+        animation: click-bounce 0.6s cubic-bezier(0.28, 0.84, 0.42, 1) forwards;
+        box-shadow:
+          0 0 40px rgba(255, 149, 0, 0.8),
+          0 0 80px rgba(255, 94, 98, 0.6);
+        filter: brightness(1.3);
+      }
+
+      .spotlight-demo {
+        position: relative;
+        padding: 15px 30px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 30px;
+        overflow: hidden;
+      }
+      .spotlight-demo:hover .demo-spotlight {
+        background: radial-gradient(
+          circle at 50% 50%,
+          rgba(255, 255, 255, 0.2) 0%,
+          transparent 80%
+        );
+      }
+      [data-theme="light"] .spotlight-demo:hover .demo-spotlight {
+        background: radial-gradient(
+          circle at 50% 50%,
+          rgba(0, 0, 0, 0.05) 0%,
+          transparent 80%
+        );
+      }
+      [data-theme="light"] .spotlight-demo {
+        border-color: rgba(0, 0, 0, 0.1) !important;
+      }
+
+      .theme-demo-btn {
+        background: var(--text);
+        color: var(--bg);
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+      }
+      .theme-demo-btn:hover {
+        transform: scale(1.05);
+      }
+
+      /* Exploding Orbs Animation */
+      @keyframes orb-explode {
+        0% {
+          transform: translate(-50%, -50%) scale(0);
+          opacity: 0;
+        }
+        100% {
+          transform: translate(
+              calc(-50% + var(--tx)),
+              calc(-50% + var(--ty) + var(--parallax-y, 0px))
+            )
+            scale(var(--scale));
+          opacity: 0.6;
+        }
+      }
+
+      @keyframes orb-implode {
+        0% {
+          transform: translate(
+              calc(-50% + var(--tx)),
+              calc(-50% + var(--ty) + var(--parallax-y, 0px))
+            )
+            scale(var(--scale));
+          opacity: 0.6;
+        }
+        100% {
+          transform: translate(-50%, -50%) scale(0);
+          opacity: 0;
+        }
+      }
+
+      .exploding-orb {
+        position: fixed;
+        border-radius: 50%;
+        background: radial-gradient(
+          circle at 30% 30%,
+          #fff 10%,
+          var(--orb-color, var(--link)) 65%,
+          transparent 100%
+        );
+        box-shadow: 0 0 80px 15px var(--orb-color, var(--link));
+        pointer-events: none;
+        z-index: 0;
+        opacity: 0;
+        animation: orb-explode 1.5s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+        mix-blend-mode: screen;
+        filter: blur(45px);
+      }
+
+      .exploding-orb.implode {
+        animation: orb-implode 0.8s cubic-bezier(0.7, 0, 0.3, 1) forwards;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="logo">
+        <a href="index.html" class="logo-link">SensCode</a>
+      </div>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="products.html">Services</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="portfolio.html" class="active">Work</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="theme-toggle">Mode</button>
+      </div>
+      <div class="hamburger" id="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </nav>
+    <nav aria-label="Mobile Navigation" class="mobile-menu" id="mobile-menu">
+      <a href="index.html">Home</a>
+      <a href="products.html">Services</a>
+      <a href="about.html">About Us</a>
+      <a href="portfolio.html" class="active">Work</a>
+      <a href="contact.html">Contact</a>
+      <button
+        class="theme-toggle"
+        style="margin-top: 20px; font-size: 1.2rem; padding: 10px 20px"
+      >
+        Mode
+      </button>
+    </nav>
+    <header class="hero">
+      <div class="hero-content reveal">
+        <h1>The Architecture.</h1>
+        <p>A deconstruction of the elements that forge SensCode.</p>
+      </div>
+    </header>
+    <main>
+      <section class="panel" style="padding-top: 20px; position: relative">
+        <div
+          class="blow-up-container reveal"
+          style="position: relative; z-index: 1"
+        >
+          <button id="blowUpBtn" class="blow-up-btn">Blow Up</button>
+        </div>
+        <div class="bento-grid" style="position: relative; z-index: 1">
+          <!-- Bento Item 1: Glassmorphism (Large) -->
+          <article class="card glass-panel reveal bento-large bento-item">
+            <div class="bento-icon">🪟</div>
+            <h3>Glassmorphism UI</h3>
+            <p>
+              The defining aesthetic of the platform. Instead of flat, solid
+              colors, we utilize a combination of CSS
+              <code>backdrop-filter: blur()</code>, semi-transparent
+              backgrounds, and subtle 1px luminous borders. This creates a
+              frosted-glass effect that allows the underlying gradients and
+              parallax elements to softly bleed through, providing a profound
+              sense of depth and hierarchy without overwhelming the content.
+            </p>
+            <div class="bento-visual" style="margin-top: 30px">
+              <div
+                style="
+                  width: 100%;
+                  height: 100px;
+                  background: rgba(255, 255, 255, 0.05);
+                  border: 1px solid rgba(255, 255, 255, 0.1);
+                  backdrop-filter: blur(10px);
+                  border-radius: 15px;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  position: relative;
+                  overflow: hidden;
+                "
+              >
+                <div
+                  style="
+                    position: absolute;
+                    width: 60px;
+                    height: 60px;
+                    background: var(--accent);
+                    border-radius: 50%;
+                    top: -10px;
+                    left: -10px;
+                    filter: blur(20px);
+                    opacity: 0.5;
+                  "
+                ></div>
+                <span style="font-weight: 500; z-index: 2"
+                  >Translucent Depth</span
+                >
+              </div>
+            </div>
+          </article>
+
+          <!-- Bento Item 2: Kinetic Interactions -->
+          <article class="card glass-panel reveal bento-item">
+            <div class="bento-icon">🕹️</div>
+            <h3>Kinetic 3D Tilt</h3>
+            <p>
+              Every major card on the site acts as a physical object. Using
+              custom Javascript mathematics, we track mouse and touch
+              coordinates across the element's bounding box, mapping them to CSS
+              <code>rotateX</code> and <code>rotateY</code> transforms. It’s a
+              tactile response that makes the interface feel alive.
+            </p>
+          </article>
+
+          <!-- Bento Item 3: Typewriter -->
+          <article class="card glass-panel reveal bento-item">
+            <div class="bento-icon">⌨️</div>
+            <h3>Humanized Typing</h3>
+            <p id="bento-typewriter-p" style="min-height: 80px">
+              Rather than standard static text, the hero headers employ a custom
+              typewriter effect. On the index page, it intentionally introduces
+              realistic transposition typos before backspacing and correcting
+              itself, adding a touch of humanity to the digital experience.
+            </p>
+          </article>
+
+          <!-- Bento Item 4: Parallax Orbs (Wide) -->
+          <article class="card glass-panel reveal bento-wide bento-item">
+            <div class="bento-icon">✨</div>
+            <h3>Luminous Parallax Engine</h3>
+            <p>
+              The floating orbs that drift behind the content aren't static
+              images or heavy WebGL canvases. They are pure CSS shapes driven by
+              a lightweight JavaScript loop hooking into the scroll event. Each
+              orb is assigned a unique <code>data-speed</code> multiplier,
+              meaning elements closer to the "lens" move faster than those in
+              the distance, simulating true 3D space entirely through 2D DOM
+              manipulation.
+            </p>
+            <div class="bento-visual">
+              <div class="interactive-orb" id="lab-orb" title="Click me"></div>
+            </div>
+          </article>
+
+          <!-- Bento Item 5: Theme Engine -->
+          <article class="card glass-panel reveal bento-item">
+            <div class="bento-icon">🌗</div>
+            <h3>System-Aware Theming</h3>
+            <p>
+              A robust theme engine that listens to
+              <code>window.matchMedia</code>. It seamlessly tracks your
+              operating system's color scheme in real-time, instantly adjusting
+              CSS variables. If manually overridden via the toggle, it
+              gracefully stores the preference in local storage.
+            </p>
+            <div class="bento-visual">
+              <button class="theme-toggle theme-demo-btn">Toggle Theme</button>
+            </div>
+          </article>
+
+          <!-- Bento Item 6: Dynamic Spotlights -->
+          <article class="card glass-panel reveal bento-item">
+            <div class="bento-icon">🔦</div>
+            <h3>Dynamic Spotlights</h3>
+            <p>
+              A subtle luxury touch. As your cursor moves across interactive
+              panels, a radial gradient mapping tracks the coordinates,
+              illuminating the borders and content like a flashlight shining
+              across frosted glass.
+            </p>
+            <div class="bento-visual">
+              <div class="spotlight-demo">
+                <span style="position: relative; z-index: 2; font-weight: 500"
+                  >Hover Me</span
+                >
+                <div
+                  class="demo-spotlight"
+                  style="
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background: radial-gradient(
+                      circle at 50% 50%,
+                      rgba(255, 255, 255, 0.1) 0%,
+                      transparent 60%
+                    );
+                    z-index: 1;
+                  "
+                ></div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Bento Item 7: Zero Dependency (Wide) -->
+          <article
+            class="card glass-panel reveal bento-wide bento-item"
+            style="
+              justify-content: center;
+              align-items: center;
+              text-align: center;
+            "
+          >
+            <div class="bento-icon">⚡</div>
+            <h3 style="font-size: 1.8rem">Zero Dependencies</h3>
+            <p style="max-width: 600px; margin: 0 auto">
+              No React. No Vue. No jQuery. No bloated CSS frameworks like
+              Tailwind or Bootstrap. Everything you see—from the intersection
+              observers to the layout engine—is hand-forged in vanilla HTML,
+              CSS, and JavaScript, resulting in perfect Lighthouse performance
+              scores and instantaneous load times.
+            </p>
+          </article>
+        </div>
+      </section>
+    </main>
+    <button id="back-to-top">↑</button>
+    <footer class="footer-panel">
+      <div class="footer-content">
+        <section class="footer-column">
+          <h4>Explore</h4>
+          <a href="index.html">Home</a>
+          <a href="products.html">Products</a>
+          <a href="about.html">About Us</a>
+          <a href="portfolio.html">Work</a>
+        </section>
+        <section class="footer-column">
+          <h4>Support</h4>
+          <a href="contact.html">Contact Us</a>
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="terms.html">Terms of Use</a>
+        </section>
+        <section class="footer-column">
+          <h4>Connect</h4>
+          <a href="https://github.com/Sparkzflyin" target="_blank">Github</a>
+          <a href="https://www.instagram.com/thekid_sparks/" target="_blank"
+            >Instagram</a
+          >
+          <a
+            href="https://www.linkedin.com/in/christian-sparks/"
+            target="_blank"
+            >LinkedIn</a
+          >
+        </section>
+      </div>
+      <div class="footer-bottom">
+        <p>Trademark 2026 SensorMedia LLC All rights reserved.</p>
+      </div>
+    </footer>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        // Orb interaction
+        const labOrb = document.getElementById("lab-orb");
+        if (labOrb) {
+          labOrb.addEventListener("click", () => {
+            labOrb.classList.add("bounce-glow");
+            setTimeout(() => {
+              labOrb.classList.remove("bounce-glow");
+            }, 600);
+          });
+        }
+
+        // Bento Typewriter Effect
+        const bentoP = document.getElementById("bento-typewriter-p");
+        if (bentoP) {
+          const originalText = bentoP.textContent.trim();
+          bentoP.textContent = "";
+
+          const srOnly = document.createElement("span");
+          srOnly.style.position = "absolute";
+          srOnly.style.width = "1px";
+          srOnly.style.height = "1px";
+          srOnly.style.padding = "0";
+          srOnly.style.margin = "-1px";
+          srOnly.style.overflow = "hidden";
+          srOnly.style.clip = "rect(0, 0, 0, 0)";
+          srOnly.style.whiteSpace = "nowrap";
+          srOnly.style.border = "0";
+          srOnly.textContent = originalText;
+          bentoP.appendChild(srOnly);
+
+          const animatedPart = document.createElement("span");
+          animatedPart.setAttribute("aria-hidden", "true");
+          animatedPart.classList.add("typewriter-cursor");
+          bentoP.appendChild(animatedPart);
+
+          let actions = [];
+          const words = originalText.split(" ");
+          const firstPart = words.slice(0, 4).join(" ") + " ";
+          const typoWord = "statci"; // Typo for "static"
+          const correctWord = "static";
+          const rest = " " + words.slice(5).join(" ");
+
+          // Build action queue
+          for (let c of firstPart) actions.push({ type: "type", char: c });
+          for (let c of typoWord) actions.push({ type: "type", char: c });
+          actions.push({ type: "pause", ms: 500 });
+          for (let i = 0; i < typoWord.length; i++)
+            actions.push({ type: "delete" });
+          actions.push({ type: "pause", ms: 300 });
+          for (let c of correctWord + rest)
+            actions.push({ type: "type", char: c });
+
+          let i = 0;
+          function process() {
+            if (i < actions.length) {
+              const action = actions[i++];
+              if (action.type === "type") {
+                animatedPart.textContent += action.char;
+                setTimeout(process, Math.random() * 50 + 40);
+              } else if (action.type === "delete") {
+                animatedPart.textContent = animatedPart.textContent.slice(
+                  0,
+                  -1,
+                );
+                setTimeout(process, 40);
+              } else {
+                setTimeout(process, action.ms);
+              }
+            } else {
+              animatedPart.classList.add("done");
+            }
+          }
+
+          // Start after a short delay
+          setTimeout(process, 1000);
+        }
+      });
+    </script>
+  </body>
+</html>
