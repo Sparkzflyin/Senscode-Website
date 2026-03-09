@@ -118,12 +118,18 @@ document.addEventListener("DOMContentLoaded", () => {
         const tiltY = ((x - centerX) / centerX) * 10;
 
         card.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale3d(1.02, 1.02, 1.02)`;
+        
+        const spotlight = card.querySelector(".spotlight");
+        if (spotlight) spotlight.style.opacity = "1";
       };
 
       const handleLeave = () => {
         clearTimeout(playTimer);
         isPlaying = false;
         card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+        
+        const spotlight = card.querySelector(".spotlight");
+        if (spotlight) spotlight.style.opacity = "0";
       };
 
       card.addEventListener("mousemove", handleMove);
