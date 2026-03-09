@@ -775,6 +775,13 @@ main {
   right: 5%;
 }
 
+@media (max-width: 768px) {
+  .orb {
+    filter: blur(40px);
+    opacity: 0.5;
+  }
+}
+
 .sticky-skills-container {
   display: flex;
   flex-direction: column;
@@ -816,6 +823,7 @@ main {
   margin-bottom: 10px;
   background: linear-gradient(90deg, var(--text), var(--link));
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   text-align: center;
 }
