@@ -18,13 +18,12 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   prefersDark.addEventListener("change", (e) => {
-    if (!localStorage.getItem("theme")) {
-      const newSystemTheme = e.matches ? "dark" : "light";
-      html.setAttribute("data-theme", newSystemTheme);
-      toggles.forEach(toggle => {
-        toggle.innerText = newSystemTheme === "dark" ? "Light Mode" : "Dark Mode";
-      });
-    }
+    const newSystemTheme = e.matches ? "dark" : "light";
+    html.setAttribute("data-theme", newSystemTheme);
+    localStorage.removeItem("theme"); // Clear saved preference so it tracks system again
+    toggles.forEach(toggle => {
+      toggle.innerText = newSystemTheme === "dark" ? "Light Mode" : "Dark Mode";
+    });
   });
 
   toggles.forEach(toggle => {
