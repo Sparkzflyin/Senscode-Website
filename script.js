@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const currentTheme = localStorage.getItem("theme") || systemTheme;
 
   html.setAttribute("data-theme", currentTheme);
-  toggles.forEach(toggle => {
+  toggles.forEach((toggle) => {
     toggle.innerText = currentTheme === "dark" ? "Light Mode" : "Dark Mode";
   });
 
@@ -21,17 +21,18 @@ document.addEventListener("DOMContentLoaded", () => {
     const newSystemTheme = e.matches ? "dark" : "light";
     html.setAttribute("data-theme", newSystemTheme);
     localStorage.removeItem("theme"); // Clear saved preference so it tracks system again
-    toggles.forEach(toggle => {
+    toggles.forEach((toggle) => {
       toggle.innerText = newSystemTheme === "dark" ? "Light Mode" : "Dark Mode";
     });
   });
 
-  toggles.forEach(toggle => {
+  toggles.forEach((toggle) => {
     toggle.addEventListener("click", () => {
-      const nextTheme = html.getAttribute("data-theme") === "dark" ? "light" : "dark";
+      const nextTheme =
+        html.getAttribute("data-theme") === "dark" ? "light" : "dark";
       html.setAttribute("data-theme", nextTheme);
       localStorage.setItem("theme", nextTheme);
-      toggles.forEach(t => {
+      toggles.forEach((t) => {
         t.innerText = nextTheme === "dark" ? "Light Mode" : "Dark Mode";
       });
     });
@@ -97,11 +98,11 @@ document.addEventListener("DOMContentLoaded", () => {
           if (isPlaying && e.cancelable) {
             e.preventDefault(); // lock screen for playing
           } else if (!isPlaying && deltaY > deltaX) {
-             // User is scrolling vertically, let the browser handle it natively
-             return;
+            // User is scrolling vertically, let the browser handle it natively
+            return;
           }
         }
-        
+
         const rect = card.getBoundingClientRect();
         const clientX = e.touches ? e.touches[0].clientX : e.clientX;
         const clientY = e.touches ? e.touches[0].clientY : e.clientY;
@@ -117,7 +118,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const tiltY = ((x - centerX) / centerX) * 10;
 
         card.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale3d(1.02, 1.02, 1.02)`;
-        
+
         const spotlight = card.querySelector(".spotlight");
         if (spotlight) spotlight.style.opacity = "1";
       };
@@ -126,7 +127,7 @@ document.addEventListener("DOMContentLoaded", () => {
         clearTimeout(playTimer);
         isPlaying = false;
         card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
-        
+
         const spotlight = card.querySelector(".spotlight");
         if (spotlight) spotlight.style.opacity = "0";
       };
@@ -296,8 +297,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let actions = [];
 
-    // Always introduce a typo if there are multiple words
-    if (text.trim().indexOf(" ") !== -1) {
+    const isIndexPage =
+      window.location.pathname.endsWith("index.html") ||
+      window.location.pathname === "/";
+
+    // Introduce a typo if there are multiple words AND we are on the index page
+    if (text.trim().indexOf(" ") !== -1 && isIndexPage) {
       const words = text.trim().split(" ");
       const firstWordAndSpace = words[0] + " ";
       const secondWord = words[1];
@@ -385,34 +390,34 @@ document.addEventListener("DOMContentLoaded", () => {
   // 15. Sticky Footer Reveal (Curtain Effect)
   const footer = document.querySelector(".footer-panel");
   if (footer) {
-    if (!document.querySelector('.curtain-wrapper')) {
+    if (!document.querySelector(".curtain-wrapper")) {
       const mainWrapper = document.createElement("div");
       mainWrapper.classList.add("curtain-wrapper");
-      
+
       // Wrap everything before the footer
       while (document.body.firstChild && document.body.firstChild !== footer) {
         mainWrapper.appendChild(document.body.firstChild);
       }
       document.body.insertBefore(mainWrapper, footer);
-      
+
       // Styling the wrapper
-      mainWrapper.style.backgroundColor = "var(--bg)"; 
+      mainWrapper.style.backgroundColor = "var(--bg)";
       mainWrapper.style.position = "relative";
       mainWrapper.style.zIndex = "2";
       mainWrapper.style.minHeight = "100vh";
       mainWrapper.style.boxShadow = "0 20px 40px rgba(0,0,0,0.5)";
-      
+
       // Styling the footer
       footer.style.position = "fixed";
       footer.style.bottom = "0";
       footer.style.left = "0";
       footer.style.width = "100%";
       footer.style.zIndex = "1";
-      
+
       const updateFooterMargin = () => {
         mainWrapper.style.marginBottom = `${footer.offsetHeight}px`;
       };
-      
+
       updateFooterMargin();
       if (window.ResizeObserver) {
         new ResizeObserver(updateFooterMargin).observe(footer);
@@ -420,15 +425,18 @@ document.addEventListener("DOMContentLoaded", () => {
       } else {
         window.addEventListener("resize", updateFooterMargin);
       }
-      
+
       // Parallax effect
       window.addEventListener("scroll", () => {
         const docHeight = document.documentElement.scrollHeight;
         const scrollPos = window.scrollY + window.innerHeight;
         const footerHeight = footer.offsetHeight;
-        
-        const revealAmount = Math.max(0, scrollPos - (docHeight - footerHeight));
-        
+
+        const revealAmount = Math.max(
+          0,
+          scrollPos - (docHeight - footerHeight),
+        );
+
         if (revealAmount > 0 && revealAmount < footerHeight) {
           const yPos = (footerHeight - revealAmount) * 0.4;
           footer.style.transform = `translateY(${yPos}px)`;
@@ -438,22 +446,92 @@ document.addEventListener("DOMContentLoaded", () => {
           footer.style.transform = `translateY(${footerHeight * 0.4}px)`;
         }
       });
-      window.dispatchEvent(new Event('scroll'));
+      window.dispatchEvent(new Event("scroll"));
     }
   }
 
   // 16. Luminous Orbs Parallax Effect
-  const orbs = document.querySelectorAll('.orb');
-  if (orbs.length > 0) {
-    window.addEventListener('scroll', () => {
-      window.requestAnimationFrame(() => {
-        const scrolled = window.scrollY;
-        orbs.forEach(orb => {
-          const speed = parseFloat(orb.getAttribute('data-speed')) || 0;
-          const yPos = scrolled * speed;
-          orb.style.transform = `translateY(${yPos}px)`;
-        });
-      });
+  const updateParallax = () => {
+    const scrolled = window.scrollY;
+    // Standard background orbs
+    document.querySelectorAll(".orb").forEach((orb) => {
+      const speed = parseFloat(orb.getAttribute("data-speed")) || 0;
+      const yPos = scrolled * speed;
+      orb.style.transform = `translateY(${yPos}px)`;
+    });
+    // Exploding orbs (use CSS variable to not conflict with animation transform)
+    document.querySelectorAll(".exploding-orb").forEach((orb) => {
+      const speed = parseFloat(orb.getAttribute("data-speed")) || 0;
+      const yPos = scrolled * speed;
+      orb.style.setProperty("--parallax-y", `${yPos}px`);
+    });
+  };
+
+  window.addEventListener("scroll", () => {
+    window.requestAnimationFrame(updateParallax);
+  });
+
+  // 17. Blow Up Bento Grid
+  const blowUpBtn = document.getElementById("blowUpBtn");
+  if (blowUpBtn) {
+    blowUpBtn.addEventListener("click", () => {
+      const grid = document.querySelector(".bento-grid");
+      if (grid) {
+        grid.classList.toggle("blown-up");
+        if (grid.classList.contains("blown-up")) {
+          blowUpBtn.textContent = "Collapse";
+
+          // Generate exploding orbs
+          const rect = blowUpBtn.getBoundingClientRect();
+          const centerX = rect.left + rect.width / 2;
+          const centerY = rect.top + rect.height / 2;
+
+          for (let i = 0; i < 30; i++) {
+            const orb = document.createElement("div");
+            orb.classList.add("exploding-orb");
+
+            // Random properties
+            const size = Math.random() * 60 + 20;
+            const tx = (Math.random() - 0.5) * window.innerWidth * 0.9;
+            const ty = (Math.random() - 0.5) * window.innerHeight * 0.9;
+            const scale = Math.random() * 1.5 + 0.5;
+            const speed = (Math.random() - 0.5) * 0.4; // Parallax speed
+
+            // Color randomization (Blue vs Orange)
+            const isOrange = Math.random() > 0.5;
+            orb.style.setProperty(
+              "--orb-color",
+              isOrange ? "#ff9500" : "var(--link)",
+            );
+
+            orb.style.width = `${size}px`;
+            orb.style.height = `${size}px`;
+            orb.style.left = `${centerX}px`;
+            orb.style.top = `${centerY}px`;
+            orb.setAttribute("data-speed", speed);
+            orb.style.setProperty("--tx", `${tx}px`);
+            orb.style.setProperty("--ty", `${ty}px`);
+            orb.style.setProperty("--scale", scale);
+
+            grid.parentNode.appendChild(orb);
+          }
+          // Initial parallax update
+          updateParallax();
+        } else {
+          blowUpBtn.textContent = "Blow Up";
+
+          // Implode existing orbs
+          const activeOrbs = document.querySelectorAll(
+            ".exploding-orb:not(.implode)",
+          );
+          activeOrbs.forEach((orb) => {
+            orb.classList.add("implode");
+            setTimeout(() => {
+              orb.remove();
+            }, 800); // Wait for implode animation to finish
+          });
+        }
+      }
     });
   }
 });
