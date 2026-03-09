@@ -170,9 +170,19 @@ main {
   border-color: #ff9500;
 }
 
+[data-theme="dark"] .theme-toggle:hover {
+  --glow-color: #ff9500;
+  animation: breathe 2s infinite ease-in-out;
+}
+
 [data-theme="light"] .theme-toggle {
   background: #0066cc; /* Deep Blue for Dark Mode option */
   border-color: #0066cc;
+}
+
+[data-theme="light"] .theme-toggle:hover {
+  --glow-color: #0066cc;
+  animation: breathe 2s infinite ease-in-out;
 }
 
 /* --- Hero & Grid --- */
@@ -381,6 +391,26 @@ main {
   text-decoration: none;
   margin-top: 20px;
   font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.cta-button:hover {
+  animation: breathe 2s infinite ease-in-out;
+}
+
+@keyframes breathe {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 transparent;
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px 2px var(--glow-color, var(--link));
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 transparent;
+  }
 }
 
 /* Signature Styling */
@@ -675,9 +705,7 @@ main {
 }
 
 #back-to-top:hover {
-  background: var(--text);
-  color: var(--bg);
-  transform: translateY(-5px);
+  animation: breathe 2s infinite ease-in-out;
 }
 
 #back-to-top.visible {
