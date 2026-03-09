@@ -78,15 +78,20 @@
       <a href="products.html">Services</a>
       <a href="about.html">About Us</a>
       <a href="contact.html">Contact</a>
-      <button class="theme-toggle" style="margin-top: 20px; font-size: 1.2rem; padding: 10px 20px;">Mode</button>
+      <button
+        class="theme-toggle"
+        style="margin-top: 20px; font-size: 1.2rem; padding: 10px 20px"
+      >
+        Mode
+      </button>
     </nav>
     <main>
       <section class="panel">
         <div class="founder-note">
           <span class="tag reveal">Direct from the Founder</span>
-          <h2 class="reveal" style="margin-top: 10px">
+          <h1 class="reveal" style="margin-top: 10px; font-size: clamp(1.8rem, 5.2vw, 4rem);">
             Quality without Compromise.
-          </h2>
+          </h1>
 
           <p class="story-text">
             At the heart of every product I build is a simple belief:
@@ -141,21 +146,95 @@
         </div>
       </section>
 
-      <section class="panel reveal">
-        <h2>The Arsenal.</h2>
-        <p style="margin-bottom: 30px; opacity: 0.8">
+      <section class="panel reveal" style="padding-bottom: 0; position: relative;">
+        <div class="parallax-orbs" style="overflow: hidden; position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1;">
+          <div class="orb orb-1" data-speed="0.15"></div>
+          <div class="orb orb-5" data-speed="0.08"></div>
+          <div class="orb orb-2" data-speed="-0.2"></div>
+          <div class="orb orb-6" data-speed="-0.12"></div>
+          <div class="orb orb-3" data-speed="0.1"></div>
+          <div class="orb orb-4" data-speed="-0.15"></div>
+        </div>
+        
+        <h2 style="position: relative; z-index: 2;">The Arsenal.</h2>
+        <p style="margin-bottom: 30px; opacity: 0.8; position: relative; z-index: 2;">
           The tools and technologies wielded to forge your digital experience.
         </p>
-        <div class="skills-grid">
-          <span class="skill-tag">React</span>
-          <span class="skill-tag">TypeScript</span>
-          <span class="skill-tag">Node.js</span>
-          <span class="skill-tag">Next.js</span>
-          <span class="skill-tag">Animations</span>
-          <span class="skill-tag">HTML5/CSS3</span>
-          <span class="skill-tag">Git / GitHub</span>
-          <span class="skill-tag">Python</span>
-          <span class="skill-tag">SEO</span>
+        <div class="sticky-skills-container" style="padding-bottom: 20vh; z-index: 2;">
+          <div class="sticky-skill-card">
+            <h3>React</h3>
+            <p>Component-Driven UI</p>
+          </div>
+          <div class="sticky-skill-card">
+            <h3>TypeScript</h3>
+            <p>Type-Safe Architecture</p>
+          </div>
+          <div class="sticky-skill-card">
+            <h3>Node.js</h3>
+            <p>Scalable Backend</p>
+          </div>
+          <div class="sticky-skill-card">
+            <h3>Next.js</h3>
+            <p>Modern React Framework</p>
+          </div>
+          <div class="sticky-skill-card">
+            <h3>Animations</h3>
+            <p>Fluid User Experiences</p>
+          </div>
+          <div class="sticky-skill-card">
+            <h3>HTML5/CSS3</h3>
+            <p>Semantic & Responsive</p>
+          </div>
+          <div class="sticky-skill-card">
+            <h3>Git / GitHub</h3>
+            <p>Version Control</p>
+          </div>
+          <div class="sticky-skill-card">
+            <h3>Python</h3>
+            <p>Data & Automation</p>
+          </div>
+          <div class="sticky-skill-card">
+            <h3>SEO</h3>
+            <p>Search Optimization</p>
+          </div>
+
+          <div
+            class="skills-conclusion reveal"
+            style="
+              position: sticky;
+              top: 380px;
+              z-index: 10;
+              margin-top: 5vh;
+              text-align: center;
+              max-width: 800px;
+              margin-left: auto;
+              margin-right: auto;
+              background: var(--bg);
+              padding: 30px;
+              border-radius: 20px;
+              border: 1px solid var(--border);
+              box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5);
+            "
+          >
+            <h3 style="font-size: 2rem; margin-bottom: 20px">The Synthesis.</h3>
+            <p
+              style="
+                font-size: 1.2rem;
+                line-height: 1.6;
+                opacity: 0.9;
+                margin: 0;
+              "
+            >
+              These aren't just isolated technologies; they are the synchronized
+              instruments of a masterclass orchestra. By weaving together
+              responsive <strong>HTML/CSS</strong> with the dynamic capabilities
+              of <strong>React</strong> and <strong>Next.js</strong>, powered by
+              a robust <strong>Node.js</strong> backend, every piece of code
+              operates in perfect harmony. The result? A digital experience that
+              isn't just visually stunning, it's fast, scalable, and engineered
+              to leave a lasting impression.
+            </p>
+          </div>
         </div>
       </section>
     </main>

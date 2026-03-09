@@ -715,34 +715,116 @@ main {
   pointer-events: auto;
 }
 
-/* --- Skills Grid --- */
-.skills-grid {
+/* --- Sticky Skills Cards --- */
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.35;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.orb-1 {
+  width: 50vw;
+  height: 50vw;
+  background: radial-gradient(circle, var(--link), transparent 70%);
+  top: 10%;
+  left: -15%;
+}
+
+.orb-2 {
+  width: 45vw;
+  height: 45vw;
+  background: radial-gradient(circle, #ff9500, transparent 70%);
+  top: 35%;
+  right: -10%;
+}
+
+.orb-5 {
+  width: 35vw;
+  height: 35vw;
+  background: radial-gradient(circle, #ff9500, transparent 70%);
+  top: 22%;
+  left: 30%;
+  opacity: 0.25;
+}
+
+.orb-6 {
+  width: 40vw;
+  height: 40vw;
+  background: radial-gradient(circle, var(--link), transparent 70%);
+  top: 48%;
+  right: 25%;
+  opacity: 0.25;
+}
+
+.orb-3 {
+  width: 55vw;
+  height: 55vw;
+  background: radial-gradient(circle, var(--link), transparent 70%);
+  top: 60%;
+  left: 5%;
+}
+
+.orb-4 {
+  width: 40vw;
+  height: 40vw;
+  background: radial-gradient(circle, #ff9500, transparent 70%);
+  top: 85%;
+  right: 5%;
+}
+
+.sticky-skills-container {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 15px;
+  flex-direction: column;
+  gap: 10vh;
+  padding-bottom: 0; /* Removed padding to eliminate the gap to the footer */
+  margin: 40px auto 0;
   max-width: 800px;
-  margin: 0 auto;
+  position: relative;
 }
 
-.skill-tag {
-  background: var(--glass);
+.sticky-skill-card {
+  position: sticky;
+  top: 100px; /* Standardized sticky position */
+  background: var(--bg);
   border: 1px solid var(--border);
-  padding: 12px 24px;
-  border-radius: 30px;
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: var(--text);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  transition: all 0.3s ease;
+  border-radius: 20px;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5);
+  transition: transform 0.3s ease;
 }
 
-.skill-tag:hover {
-  border-color: var(--link);
-  color: var(--link);
-  transform: translateY(-3px);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+.sticky-skill-card:nth-child(1) { top: 100px; z-index: 1; }
+.sticky-skill-card:nth-child(2) { top: 110px; z-index: 2; }
+.sticky-skill-card:nth-child(3) { top: 120px; z-index: 3; }
+.sticky-skill-card:nth-child(4) { top: 130px; z-index: 4; }
+.sticky-skill-card:nth-child(5) { top: 140px; z-index: 5; }
+.sticky-skill-card:nth-child(6) { top: 150px; z-index: 6; }
+.sticky-skill-card:nth-child(7) { top: 160px; z-index: 7; }
+.sticky-skill-card:nth-child(8) { top: 170px; z-index: 8; }
+.sticky-skill-card:nth-child(9) { top: 180px; z-index: 9; }
+
+.sticky-skill-card h3 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  background: linear-gradient(90deg, var(--text), var(--link));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-align: center;
+}
+
+.sticky-skill-card p {
+  font-size: 1.1rem;
+  opacity: 0.8;
+  margin: 0;
+  text-align: center;
 }
 
 /* --- Services Page Additions --- */

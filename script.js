@@ -270,7 +270,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // 13. Typewriter Effect for Hero Headers
   const heroHeaders = document.querySelectorAll(
-    ".hero-content h1, .founder-note h2",
+    ".hero-content h1, .founder-note h1, .founder-note h2",
   );
   heroHeaders.forEach((header) => {
     const text = header.textContent;
@@ -382,4 +382,79 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }, 0);
   });
+
+  // 15. Sticky Footer Reveal (Curtain Effect)
+  const footer = document.querySelector(".footer-panel");
+  if (footer) {
+    if (!document.querySelector('.curtain-wrapper')) {
+      const mainWrapper = document.createElement("div");
+      mainWrapper.classList.add("curtain-wrapper");
+      
+      // Wrap everything before the footer
+      while (document.body.firstChild && document.body.firstChild !== footer) {
+        mainWrapper.appendChild(document.body.firstChild);
+      }
+      document.body.insertBefore(mainWrapper, footer);
+      
+      // Styling the wrapper
+      mainWrapper.style.backgroundColor = "var(--bg)"; 
+      mainWrapper.style.position = "relative";
+      mainWrapper.style.zIndex = "2";
+      mainWrapper.style.minHeight = "100vh";
+      mainWrapper.style.boxShadow = "0 20px 40px rgba(0,0,0,0.5)";
+      
+      // Styling the footer
+      footer.style.position = "fixed";
+      footer.style.bottom = "0";
+      footer.style.left = "0";
+      footer.style.width = "100%";
+      footer.style.zIndex = "1";
+      
+      const updateFooterMargin = () => {
+        mainWrapper.style.marginBottom = `${footer.offsetHeight}px`;
+      };
+      
+      updateFooterMargin();
+      if (window.ResizeObserver) {
+        new ResizeObserver(updateFooterMargin).observe(footer);
+        new ResizeObserver(updateFooterMargin).observe(mainWrapper);
+      } else {
+        window.addEventListener("resize", updateFooterMargin);
+      }
+      
+      // Parallax effect
+      window.addEventListener("scroll", () => {
+        const docHeight = document.documentElement.scrollHeight;
+        const scrollPos = window.scrollY + window.innerHeight;
+        const footerHeight = footer.offsetHeight;
+        
+        const revealAmount = Math.max(0, scrollPos - (docHeight - footerHeight));
+        
+        if (revealAmount > 0 && revealAmount < footerHeight) {
+          const yPos = (footerHeight - revealAmount) * 0.4;
+          footer.style.transform = `translateY(${yPos}px)`;
+        } else if (revealAmount >= footerHeight) {
+          footer.style.transform = `translateY(0)`;
+        } else {
+          footer.style.transform = `translateY(${footerHeight * 0.4}px)`;
+        }
+      });
+      window.dispatchEvent(new Event('scroll'));
+    }
+  }
+
+  // 16. Luminous Orbs Parallax Effect
+  const orbs = document.querySelectorAll('.orb');
+  if (orbs.length > 0) {
+    window.addEventListener('scroll', () => {
+      window.requestAnimationFrame(() => {
+        const scrolled = window.scrollY;
+        orbs.forEach(orb => {
+          const speed = parseFloat(orb.getAttribute('data-speed')) || 0;
+          const yPos = scrolled * speed;
+          orb.style.transform = `translateY(${yPos}px)`;
+        });
+      });
+    });
+  }
 });
