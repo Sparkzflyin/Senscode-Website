@@ -4,6 +4,7 @@
   --accent: #1d1d1f;
   --glass: rgba(22, 22, 23, 0.8);
   --border: #424245;
+  --hover-border: #ff9500;
   --link: #2997ff;
   --transition: 0.6s cubic-bezier(0.28, 0.11, 0.32, 1);
   --font-body:
@@ -17,6 +18,7 @@
   --accent: #ffffff;
   --glass: rgba(245, 245, 247, 0.8);
   --border: #d2d2d7;
+  --hover-border: var(--link);
   --link: #0066cc;
 }
 
@@ -220,13 +222,15 @@ main {
   transform-style: preserve-3d;
   transition:
     transform 0.1s ease,
-    box-shadow 0.3s ease;
+    box-shadow 0.3s ease,
+    border-color 0.3s ease;
   will-change: transform;
 }
 
 .card:hover {
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
   z-index: 10;
+  border-color: var(--hover-border);
 }
 
 .card h3,
@@ -294,12 +298,14 @@ main {
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   position: relative;
-  transition: transform 0.4s cubic-bezier(0.28, 0.11, 0.32, 1);
+  transition: transform 0.4s cubic-bezier(0.28, 0.11, 0.32, 1),
+              border-color 0.3s ease;
   overflow: hidden;
 }
 
 .process-step:hover {
   transform: translateY(-10px);
+  border-color: var(--hover-border);
 }
 
 .step-number {
@@ -402,15 +408,12 @@ main {
 
 @keyframes breathe {
   0% {
-    transform: scale(1);
     box-shadow: 0 0 0 0 transparent;
   }
   50% {
-    transform: scale(1.05);
     box-shadow: 0 0 20px 2px var(--glow-color, var(--link));
   }
   100% {
-    transform: scale(1);
     box-shadow: 0 0 0 0 transparent;
   }
 }
@@ -701,7 +704,7 @@ main {
   position: fixed;
   bottom: 30px;
   right: 30px;
-  background: var(--link);
+  background: var(--hover-border);
   color: white;
   width: 50px;
   height: 50px;
@@ -724,6 +727,7 @@ main {
 }
 
 #back-to-top:hover {
+  --glow-color: var(--hover-border);
   animation: breathe 2s infinite ease-in-out;
 }
 
@@ -745,7 +749,7 @@ main {
 .orb-1 {
   width: 50vw;
   height: 50vw;
-  background: radial-gradient(circle, var(--link), transparent 70%);
+  background: radial-gradient(ellipse at 30% 30%, var(--link), transparent 70%);
   top: 10%;
   left: -15%;
 }
@@ -753,7 +757,7 @@ main {
 .orb-2 {
   width: 45vw;
   height: 45vw;
-  background: radial-gradient(circle, #ff9500, transparent 70%);
+  background: radial-gradient(ellipse at 70% 30%, #ff9500, transparent 70%);
   top: 35%;
   right: -10%;
 }
@@ -761,7 +765,7 @@ main {
 .orb-5 {
   width: 35vw;
   height: 35vw;
-  background: radial-gradient(circle, #ff9500, transparent 70%);
+  background: radial-gradient(ellipse at 40% 60%, #ff9500, transparent 70%);
   top: 22%;
   left: 30%;
   opacity: 0.25;
@@ -770,7 +774,7 @@ main {
 .orb-6 {
   width: 40vw;
   height: 40vw;
-  background: radial-gradient(circle, var(--link), transparent 70%);
+  background: radial-gradient(ellipse at 60% 40%, var(--link), transparent 70%);
   top: 48%;
   right: 25%;
   opacity: 0.25;
@@ -779,7 +783,7 @@ main {
 .orb-3 {
   width: 55vw;
   height: 55vw;
-  background: radial-gradient(circle, var(--link), transparent 70%);
+  background: radial-gradient(ellipse at 20% 80%, var(--link), transparent 70%);
   top: 60%;
   left: 5%;
 }
@@ -787,7 +791,7 @@ main {
 .orb-4 {
   width: 40vw;
   height: 40vw;
-  background: radial-gradient(circle, #ff9500, transparent 70%);
+  background: radial-gradient(ellipse at 80% 20%, #ff9500, transparent 70%);
   top: 85%;
   right: 5%;
 }
@@ -1017,4 +1021,86 @@ main {
   50% {
     opacity: 0;
   }
+}
+
+/* --- Interactive Elements Additions --- */
+
+/* Magnetic Elements Transition Enhancement */
+.cta-button, .theme-toggle, .small-btn, .blow-up-btn {
+  transition: transform 0.2s cubic-bezier(0.28, 0.11, 0.32, 1), box-shadow 0.3s ease, background 0.3s ease, border-color 0.3s ease, color 0.3s ease !important;
+}
+
+/* Particle Canvas */
+#particle-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1; /* Keep it above the background to be visible */
+  pointer-events: none;
+  opacity: 0.4;
+}
+
+/* Custom Cursor */
+@media (pointer: fine) {
+  /* Hide standard cursor */
+  body, a, button, input, textarea, .card, .process-step, .interactive-orb, canvas {
+      cursor: none !important;
+  }
+
+  .custom-cursor {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 8px;
+      height: 8px;
+      background: var(--hover-border);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 10000;
+      margin: -4px 0 0 -4px;
+      transition: background 0.3s ease, opacity 0.3s ease;
+      box-shadow: 0 0 10px var(--hover-border);
+  }
+
+  .cursor-follower {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 40px;
+      height: 40px;
+      border: 1px solid var(--hover-border);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      margin: -20px 0 0 -20px;
+      transition: width 0.3s cubic-bezier(0.28, 0.11, 0.32, 1), 
+                  height 0.3s cubic-bezier(0.28, 0.11, 0.32, 1), 
+                  margin 0.3s cubic-bezier(0.28, 0.11, 0.32, 1), 
+                  background 0.3s ease, 
+                  border-color 0.3s ease,
+                  opacity 0.3s ease;
+  }
+
+  .custom-cursor.hover, .cursor-follower.hover {
+      opacity: 0;
+  }
+
+  .custom-cursor.small {
+      width: 2px;
+      height: 2px;
+      margin: -1px 0 0 -1px;
+  }
+
+  .cursor-follower.small {
+      width: 10px;
+      height: 10px;
+      margin: -5px 0 0 -5px;
+  }
+}
+
+button:hover, .cta-button:hover, .small-btn:hover, .blow-up-btn:hover {
+    outline: 2px solid var(--hover-border);
+    outline-offset: 4px;
 }
