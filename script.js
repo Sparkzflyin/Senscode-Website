@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // 5. Advanced Card Tilt & Spotlight Effect
   document
-    .querySelectorAll(".glass-panel, .card, .process-step")
+    .querySelectorAll(".glass-panel:not(.no-spotlight), .card:not(.no-spotlight), .process-step:not(.no-spotlight)")
     .forEach((card) => {
       if (!card.querySelector(".spotlight")) {
         const spotlight = document.createElement("div");
@@ -454,10 +454,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const updateParallax = () => {
     const scrolled = window.scrollY;
     // Standard background orbs
-    document.querySelectorAll(".orb").forEach((orb) => {
-      const speed = parseFloat(orb.getAttribute("data-speed")) || 0;
+    document.querySelectorAll(".orb").forEach((orb, index) => {
+      const speed = parseFloat(orb.getAttribute("data-speed")) || ((index % 3 + 1) * 0.1);
       const yPos = scrolled * speed;
-      orb.style.transform = `translateY(${yPos}px)`;
+      const rot = scrolled * speed * 0.5;
+      orb.style.transform = `translateY(${yPos}px) rotate(${rot}deg)`;
     });
     // Exploding orbs (use CSS variable to not conflict with animation transform)
     document.querySelectorAll(".exploding-orb").forEach((orb) => {
@@ -534,4 +535,191 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
+
+  // 18. Magnetic Elements
+  const magneticElements = document.querySelectorAll('.cta-button, .theme-toggle, .small-btn, .blow-up-btn');
+  magneticElements.forEach(el => {
+      let rect;
+      el.addEventListener('mouseenter', () => {
+          rect = el.getBoundingClientRect();
+      });
+      el.addEventListener('mousemove', (e) => {
+          if (!rect) return;
+          const x = (e.clientX - rect.left - rect.width / 2) * 0.4;
+          const y = (e.clientY - rect.top - rect.height / 2) * 0.4;
+          el.style.transform = `translate(${x}px, ${y}px) scale(1.05)`;
+      });
+      el.addEventListener('mouseleave', () => {
+          el.style.transform = `translate(0px, 0px) scale(1)`;
+          rect = null;
+      });
+  });
+
+  // 19. Custom Reactive Cursor
+  if (window.matchMedia("(pointer: fine)").matches) {
+      const cursor = document.createElement('div');
+      cursor.classList.add('custom-cursor');
+      const follower = document.createElement('div');
+      follower.classList.add('cursor-follower');
+      document.body.appendChild(cursor);
+      document.body.appendChild(follower);
+
+      let mouseX = window.innerWidth / 2;
+      let mouseY = window.innerHeight / 2;
+      let cursorX = mouseX;
+      let cursorY = mouseY;
+
+      window.addEventListener('mousemove', e => {
+          mouseX = e.clientX;
+          mouseY = e.clientY;
+          cursor.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
+      });
+
+      const animateCursor = () => {
+          cursorX += (mouseX - cursorX) * 0.15;
+          cursorY += (mouseY - cursorY) * 0.15;
+          follower.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0)`;
+          requestAnimationFrame(animateCursor);
+      };
+      animateCursor();
+
+      const hoverTargets = document.querySelectorAll('a, button, .card, .interactive-orb, .theme-toggle, .process-step, .blow-up-btn');
+      hoverTargets.forEach(el => {
+          el.addEventListener('mouseenter', () => {
+              follower.classList.add('hover');
+              cursor.classList.add('hover');
+          });
+          el.addEventListener('mouseleave', () => {
+              follower.classList.remove('hover');
+              cursor.classList.remove('hover');
+          });
+      });
+
+      // Shifting to a smaller cursor for the local constellation
+      const localConstellation = document.getElementById('local-particle-canvas');
+      if (localConstellation) {
+          localConstellation.addEventListener('mouseenter', () => {
+              follower.classList.add('small');
+              cursor.classList.add('small');
+          });
+          localConstellation.addEventListener('mouseleave', () => {
+              follower.classList.remove('small');
+              cursor.classList.remove('small');
+          });
+      }
+  }
+
+  // 20. Interactive Particle Canvas
+  const canvas = document.createElement('canvas');
+  canvas.id = 'particle-canvas';
+  const curtainWrapper = document.querySelector('.curtain-wrapper');
+  if (curtainWrapper) {
+      curtainWrapper.insertBefore(canvas, curtainWrapper.firstChild);
+  } else {
+      document.body.insertBefore(canvas, document.body.firstChild);
+  }
+  const ctx = canvas.getContext('2d');
+  let width, height, particles;
+
+  const initParticles = () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+      particles = [];
+      const numParticles = Math.min(120, Math.floor(window.innerWidth / 18));
+      for(let i=0; i<numParticles; i++) {
+          particles.push({
+              x: Math.random() * width,
+              y: Math.random() * height,
+              vx: (Math.random() - 0.5) * 0.2,
+              vy: (Math.random() - 0.5) * 0.2,
+              radius: Math.random() * 1.5 + 1.5
+          });
+      }
+  };
+
+  let globalMouseX = window.innerWidth / 2;
+  let globalMouseY = window.innerHeight / 2;
+  window.addEventListener('mousemove', e => {
+      globalMouseX = e.clientX;
+      globalMouseY = e.clientY;
+  });
+
+  window.addEventListener('click', e => {
+      const clickX = e.clientX;
+      const clickY = e.clientY;
+      particles.forEach(p => {
+          const dx = p.x - clickX;
+          const dy = p.y - clickY;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 300) { // Explosion radius
+              const angle = Math.atan2(dy, dx);
+              const force = (300 - dist) * 0.15; // Force based on distance
+              p.vx += Math.cos(angle) * force;
+              p.vy += Math.sin(angle) * force;
+          }
+      });
+  });
+
+  const drawParticles = () => {
+      ctx.clearRect(0, 0, width, height);
+      const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+      const baseColor = isLight ? '0, 102, 204' : '255, 149, 0'; 
+      const lineColor = isLight ? '0,0,0' : '255,255,255';
+
+      particles.forEach((p, i) => {
+          p.x += p.vx;
+          p.y += p.vy;
+
+          // Apply friction to gracefully slow down particles after an explosion
+          const currentSpeed = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
+          if (currentSpeed > 1.5) {
+              p.vx *= 0.94;
+              p.vy *= 0.94;
+          } else if (currentSpeed < 0.15 && currentSpeed > 0) {
+              // Ensure they don't completely stop or become too sluggish
+              p.vx *= 1.01;
+              p.vy *= 1.01;
+          }
+
+          // Boundary checks to prevent them from getting stuck outside
+          if (p.x < 0) { p.x = 0; p.vx *= -1; }
+          if (p.x > width) { p.x = width; p.vx *= -1; }
+          if (p.y < 0) { p.y = 0; p.vy *= -1; }
+          if (p.y > height) { p.y = height; p.vy *= -1; }
+
+          // Mouse repel
+          const dx = globalMouseX - p.x;
+          const dy = globalMouseY - p.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 120) {
+              p.x -= dx * 0.02;
+              p.y -= dy * 0.02;
+          }
+
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(${baseColor}, 0.5)`;
+          ctx.fill();
+
+          for(let j=i+1; j<particles.length; j++){
+              const p2 = particles[j];
+              const dx2 = p.x - p2.x;
+              const dy2 = p.y - p2.y;
+              const dist2 = Math.sqrt(dx2*dx2 + dy2*dy2);
+              if(dist2 < 120) {
+                  ctx.beginPath();
+                  ctx.moveTo(p.x, p.y);
+                  ctx.lineTo(p2.x, p2.y);
+                  ctx.strokeStyle = `rgba(${lineColor}, ${0.15 - dist2/800})`;
+                  ctx.lineWidth = 0.5;
+                  ctx.stroke();
+              }
+          }
+      });
+      requestAnimationFrame(drawParticles);
+  };
+
+  initParticles();
+  drawParticles();
+  window.addEventListener('resize', initParticles);
 });
