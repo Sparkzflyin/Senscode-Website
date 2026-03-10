@@ -416,6 +416,23 @@ main {
 }
 
 /* Signature Styling */
+.signature-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 40px;
+  position: relative;
+  z-index: 10;
+}
+
+.signature-svg {
+  height: 300px;
+  width: 450px; /* 3:2 aspect ratio based on SVG viewBox */
+  max-width: 100%;
+  margin-bottom: -30px;
+  display: block;
+}
+
 .signature-text {
   font-family: "Dancing Script", cursive;
   font-size: 2.5rem;
