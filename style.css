@@ -368,26 +368,34 @@ main {
   transition: opacity 0.3s ease;
 }
 
-.story-text {
-  font-size: clamp(
-    1.2rem,
-    4vw,
-    1.8rem
-  ); /* Slightly smaller font for longer text */
-  font-weight: 500;
-  margin: 60px 0; /* Reduced margin so you don't have to scroll as far between lines */
+.reveal {
   opacity: 0;
   filter: blur(12px);
   transform: translateY(30px);
-  /* Changed from 1s to 1.8s for a much slower "breathe" */
-  transition: all 3s cubic-bezier(0.2, 0.6, 0.3, 1);
+  transition: all 1.5s cubic-bezier(0.2, 0.6, 0.3, 1);
+}
+
+.story-text {
+  font-size: clamp(1.5rem, 3.5vw, 2rem);
+  line-height: 1.8;
+  font-weight: 500;
+  margin: 80px 0;
+  opacity: 0;
+  filter: blur(12px);
+  transform: translateY(30px);
+  transition: all 1.5s cubic-bezier(0.2, 0.6, 0.3, 1);
   text-align: center;
 }
 
+.reveal.active,
 .story-text.active {
   opacity: 1;
   filter: blur(0px);
   transform: translateY(0);
+}
+
+.left-align {
+  text-align: left !important;
 }
 
 .cta-button {
