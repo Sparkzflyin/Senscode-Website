@@ -1,7 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // 1. Page Transition Fade-In
-
-  // 2. Theme Logic
+  // 1. Theme Logic
   const toggles = document.querySelectorAll(".theme-toggle");
   const html = document.documentElement;
 
@@ -596,6 +594,20 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
       // Shifting to a smaller cursor for the local constellation
+      
+      // Hide custom cursor for the estimator panel
+      const estimatorPanel = document.getElementById('estimator-panel');
+      if (estimatorPanel) {
+          estimatorPanel.addEventListener('mouseenter', () => {
+              follower.classList.add('hidden');
+              cursor.classList.add('hidden');
+          });
+          estimatorPanel.addEventListener('mouseleave', () => {
+              follower.classList.remove('hidden');
+              cursor.classList.remove('hidden');
+          });
+      }
+
       const localConstellation = document.getElementById('local-particle-canvas');
       if (localConstellation) {
           localConstellation.addEventListener('mouseenter', () => {
@@ -661,6 +673,12 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   const drawParticles = () => {
+      if (document.body.classList.contains('reduce-motion')) {
+          ctx.clearRect(0, 0, width, height);
+          requestAnimationFrame(drawParticles);
+          return;
+      }
+      
       ctx.clearRect(0, 0, width, height);
       const isLight = document.documentElement.getAttribute('data-theme') === 'light';
       const baseColor = isLight ? '0, 102, 204' : '255, 149, 0'; 
@@ -722,4 +740,124 @@ document.addEventListener("DOMContentLoaded", () => {
   initParticles();
   drawParticles();
   window.addEventListener('resize', initParticles);
+
+// Matrix Konami Code
+  const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+  let konamiIndex = 0;
+  window.addEventListener('keydown', (e) => {
+    if (e.key === konamiCode[konamiIndex]) {
+      konamiIndex++;
+      if (konamiIndex === konamiCode.length) {
+        konamiIndex = 0;
+        document.documentElement.setAttribute('data-theme', 'matrix');
+        const toggles = document.querySelectorAll('.theme-toggle');
+        toggles.forEach(t => t.innerText = 'Matrix Mode');
+        // Sparkle effect
+        for(let i=0; i<50; i++) {
+          const spark = document.createElement('div');
+          spark.style.position = 'fixed';
+          spark.style.width = '5px';
+          spark.style.height = '5px';
+          spark.style.background = '#00ff00';
+          spark.style.left = Math.random() * window.innerWidth + 'px';
+          spark.style.top = Math.random() * window.innerHeight + 'px';
+          spark.style.zIndex = '99999';
+          spark.style.transition = 'all 1s ease';
+          document.body.appendChild(spark);
+          setTimeout(() => {
+            spark.style.transform = 'translateY(100px)';
+            spark.style.opacity = '0';
+          }, 50);
+          setTimeout(() => spark.remove(), 1050);
+        }
+      }
+    } else {
+      konamiIndex = 0;
+    }
+  });
+
+  // Reduced Motion Toggle
+  const createA11yToggle = () => {
+    const navActions = document.querySelectorAll('.nav-actions, .mobile-menu');
+    navActions.forEach(container => {
+      const a11yBtn = document.createElement('button');
+      a11yBtn.classList.add('theme-toggle');
+      a11yBtn.style.marginLeft = '10px';
+      
+      const updateA11yText = () => {
+        const isReduced = document.body.classList.contains('reduce-motion');
+        a11yBtn.innerText = isReduced ? 'Motion: Off' : 'Motion: On';
+      };
+
+      // Check OS preference
+      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const savedMotion = localStorage.getItem('reduce-motion');
+      
+      if (savedMotion === 'true' || (savedMotion === null && prefersReduced)) {
+        document.body.classList.add('reduce-motion');
+      }
+
+      updateA11yText();
+
+      a11yBtn.addEventListener('click', () => {
+        document.body.classList.toggle('reduce-motion');
+        const isReduced = document.body.classList.contains('reduce-motion');
+        localStorage.setItem('reduce-motion', isReduced);
+        updateA11yText();
+        // Update all other toggles
+        document.querySelectorAll('.theme-toggle').forEach(btn => {
+          if (btn.innerText.includes('Motion')) {
+            btn.innerText = isReduced ? 'Motion: Off' : 'Motion: On';
+          }
+        });
+      });
+      container.appendChild(a11yBtn);
+    });
+  };
+  createA11yToggle();
+
+  // Interactive Estimator Logic
+  const estimatorPanel = document.getElementById("estimator-panel");
+  if (estimatorPanel) {
+    const checkboxes = estimatorPanel.querySelectorAll("input[type='checkbox']");
+    const totalPriceEl = document.getElementById("est-total-price");
+    const basePrice = 300;
+
+    const calculateTotal = () => {
+      let currentTotal = basePrice;
+      checkboxes.forEach(cb => {
+        if (cb.checked) {
+          currentTotal += parseInt(cb.value, 10);
+        }
+      });
+      
+      // Cap at 5000 just in case
+      if (currentTotal > 5000) {
+        currentTotal = 5000;
+      }
+      
+      // Animate value
+      animateValue(totalPriceEl, parseInt(totalPriceEl.innerText.replace('$', '')), currentTotal, 500);
+    };
+
+    checkboxes.forEach(cb => {
+      cb.addEventListener("change", calculateTotal);
+    });
+
+    // Helper to animate numbers
+    function animateValue(obj, start, end, duration) {
+      let startTimestamp = null;
+      const step = (timestamp) => {
+        if (!startTimestamp) startTimestamp = timestamp;
+        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+        obj.innerHTML = "$" + Math.floor(progress * (end - start) + start);
+        if (progress < 1) {
+          window.requestAnimationFrame(step);
+        } else {
+          obj.innerHTML = "$" + end; // Ensure final exact value
+        }
+      };
+      window.requestAnimationFrame(step);
+    }
+  }
 });
