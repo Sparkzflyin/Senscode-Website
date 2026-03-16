@@ -1378,3 +1378,27 @@ input:checked + .slider:before {
     grid-template-columns: repeat(2, 1fr);
   }
 }
+
+.form-toggle-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.form-toggle-group label {
+  font-size: 0.9rem;
+  opacity: 0.7;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+
+.form-toggle-group label:hover {
+  opacity: 1;
+}
+
+.form-toggle-group input[type="checkbox"] {
+  width: 1.2em;
+  height: 1.2em;
+  accent-color: var(--link);
+}
