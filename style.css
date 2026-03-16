@@ -111,7 +111,7 @@ main {
 
 /* --- Fixed Navbar --- */
 .navbar {
-  position: fixed;
+  position: relative;
   top: 0;
   width: 100%;
   height: 60px;
@@ -135,6 +135,9 @@ main {
 }
 
 .nav-links {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   gap: 25px;
   list-style: none;
@@ -1072,10 +1075,14 @@ main {
   .interactive-orb,
   canvas {
     cursor: none !important;
-    #estimator-panel,
-    #estimator-panel * {
-      cursor: auto !important;
-    }
+  }
+  #estimator-panel,
+  #estimator-panel * {
+    cursor: auto !important;
+  }
+
+  .nav-links a {
+    cursor: pointer !important;
   }
 
   .custom-cursor {
