@@ -1240,7 +1240,6 @@ body.reduce-motion * {
   animation-iteration-count: 1 !important;
   transition-duration: 0.01ms !important;
   scroll-behavior: auto !important;
-  transform: none !important;
 }
 body.reduce-motion .custom-cursor,
 body.reduce-motion .cursor-follower,
