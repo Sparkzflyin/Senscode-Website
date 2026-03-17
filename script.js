@@ -81,6 +81,10 @@ document.addEventListener("DOMContentLoaded", () => {
       };
 
       const handleMove = (e) => {
+        if (document.body.classList.contains("reduce-motion")) {
+          handleLeave();
+          return;
+        }
         if (e.type === "touchmove") {
           const currentX = e.touches[0].clientX;
           const currentY = e.touches[0].clientY;
@@ -542,6 +546,10 @@ document.addEventListener("DOMContentLoaded", () => {
           rect = el.getBoundingClientRect();
       });
       el.addEventListener('mousemove', (e) => {
+          if (document.body.classList.contains('reduce-motion')) {
+              el.style.transform = 'translate(0px, 0px) scale(1)';
+              return;
+          }
           if (!rect) return;
           const x = (e.clientX - rect.left - rect.width / 2) * 0.4;
           const y = (e.clientY - rect.top - rect.height / 2) * 0.4;
