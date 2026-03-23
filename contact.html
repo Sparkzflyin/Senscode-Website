@@ -121,10 +121,17 @@
             method="POST"
           >
             <div class="input-group">
-              <input type="text" name="name" placeholder="Name" required />
+              <input
+                type="text"
+                name="name"
+                maxlength="100"
+                placeholder="Name"
+                required
+              />
             </div>
             <div class="input-group">
               <input
+                maxlength="250"
                 type="email"
                 name="email"
                 placeholder="Email Address"
@@ -133,6 +140,7 @@
             </div>
             <div class="input-group">
               <textarea
+                maxlength="2500"
                 name="message"
                 placeholder="Tell me about your project..."
                 rows="5"
