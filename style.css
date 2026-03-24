@@ -440,7 +440,8 @@ main {
   z-index: 10;
 }
 
-.signature-svg {
+.signature-svg,
+.signature-img {
   height: 300px;
   width: 450px; /* 3:2 aspect ratio based on SVG viewBox */
   max-width: 100%;
