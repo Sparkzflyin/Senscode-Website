@@ -124,6 +124,9 @@ main {
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border);
+  transition:
+    transform 0.4s ease-in-out,
+    background var(--transition);
 }
 
 .logo-link {
@@ -228,6 +231,8 @@ main {
     box-shadow 0.3s ease,
     border-color 0.3s ease;
   will-change: transform;
+  display: flex;
+  flex-direction: column;
 }
 
 .card:hover {
@@ -693,13 +698,6 @@ main {
   }
 }
 
-/* Ensure the navbar has a transition for a smooth slide */
-.navbar {
-  transition:
-    transform 0.4s ease-in-out,
-    background var(--transition);
-}
-
 /* This class will be toggled by JavaScript */
 .navbar--hidden {
   transform: translateY(-100%);
@@ -897,10 +895,6 @@ main {
 }
 
 /* --- Services Page Additions --- */
-.card {
-  display: flex;
-  flex-direction: column;
-}
 
 .card-desc {
   font-size: 0.95rem;
@@ -1210,18 +1204,6 @@ button:hover,
   #particle-canvas {
     display: none !important;
   }
-}
-
-body.reduce-motion,
-body.reduce-motion a,
-body.reduce-motion button,
-body.reduce-motion input,
-body.reduce-motion textarea,
-body.reduce-motion .card,
-body.reduce-motion .process-step,
-body.reduce-motion .interactive-orb,
-body.reduce-motion canvas {
-  cursor: auto !important;
 }
 
 body.reduce-motion,
