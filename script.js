@@ -1,10 +1,30 @@
 document.addEventListener("DOMContentLoaded", () => {
+  // Lenis smooth scroll — falls back to native CSS scroll-behavior if library missing
+  let lenis = null;
+  if (typeof window.Lenis === "function") {
+    lenis = new window.Lenis({
+      duration: 1.1,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+      touchMultiplier: 1,
+    });
+    const lenisRaf = (time) => {
+      if (!document.hidden) lenis.raf(time);
+      requestAnimationFrame(lenisRaf);
+    };
+    requestAnimationFrame(lenisRaf);
+  }
+  const syncLenisMotion = () => {
+    if (!lenis) return;
+    if (document.body.classList.contains("reduce-motion")) lenis.stop();
+    else lenis.start();
+  };
+
   // 1. Theme Logic
   const toggles = document.querySelectorAll(".theme-toggle");
   const html = document.documentElement;
 
   const prefersDark = window.matchMedia("(prefers-color-scheme: dark)");
-  const isMobile = window.matchMedia("(max-width: 768px)").matches;
   const systemTheme = prefersDark.matches ? "dark" : "light";
 
   // Respect localStorage preference universally, fallback to system theme.
@@ -15,14 +35,19 @@ document.addEventListener("DOMContentLoaded", () => {
     toggle.innerText = currentTheme === "dark" ? "Light Mode" : "Dark Mode";
   });
 
-  prefersDark.addEventListener("change", (e) => {
+  const onSchemeChange = (e) => {
     const newSystemTheme = e.matches ? "dark" : "light";
     html.setAttribute("data-theme", newSystemTheme);
-    localStorage.removeItem("theme"); // Clear saved preference so it tracks system again
+    localStorage.removeItem("theme");
     toggles.forEach((toggle) => {
       toggle.innerText = newSystemTheme === "dark" ? "Light Mode" : "Dark Mode";
     });
-  });
+  };
+  if (typeof prefersDark.addEventListener === "function") {
+    prefersDark.addEventListener("change", onSchemeChange);
+  } else if (typeof prefersDark.addListener === "function") {
+    prefersDark.addListener(onSchemeChange);
+  }
 
   toggles.forEach((toggle) => {
     toggle.addEventListener("click", () => {
@@ -36,25 +61,25 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // 3. Smooth Fade-Out for Internal Links
-
-  // 4. Scroll Reveal & Story Text
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((e) => {
-        if (e.isIntersecting) {
-          e.target.classList.add("active");
-        } else if (e.target.classList.contains("story-text")) {
-          e.target.classList.remove("active");
-        }
-      });
-    },
-    { threshold: 0.2 },
-  );
-
-  document
-    .querySelectorAll(".reveal, .story-text")
-    .forEach((el) => observer.observe(el));
+  // Scroll Reveal & Story Text
+  const revealEls = document.querySelectorAll(".reveal, .story-text");
+  if (typeof IntersectionObserver === "function") {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add("active");
+          } else if (e.target.classList.contains("story-text")) {
+            e.target.classList.remove("active");
+          }
+        });
+      },
+      { threshold: 0.2 },
+    );
+    revealEls.forEach((el) => observer.observe(el));
+  } else {
+    revealEls.forEach((el) => el.classList.add("active"));
+  }
 
   // 5. Advanced Card Tilt & Spotlight Effect
   document
@@ -148,9 +173,10 @@ document.addEventListener("DOMContentLoaded", () => {
   // 6. Back to Top
   const btt = document.getElementById("back-to-top");
   if (btt) {
-    btt.addEventListener("click", () =>
-      window.scrollTo({ top: 0, behavior: "smooth" }),
-    );
+    btt.addEventListener("click", () => {
+      if (lenis) lenis.scrollTo(0);
+      else window.scrollTo({ top: 0, behavior: "smooth" });
+    });
   }
 
   // 7. Mobile Menu Toggle
@@ -178,32 +204,41 @@ document.addEventListener("DOMContentLoaded", () => {
   // 8. Mobile Navbar Auto-Hide & Back to Top on Scroll
   let lastScrollY = window.scrollY;
   const navbar = document.querySelector(".navbar");
-  let ticking = false;
+  const scrollTasks = [];
+  let scrollTicking = false;
 
-  window.addEventListener("scroll", () => {
-    if (!ticking) {
-      window.requestAnimationFrame(() => {
-        if (btt) {
-          if (window.scrollY > 400) {
-            btt.classList.add("visible");
-          } else {
-            btt.classList.remove("visible");
-          }
-        }
-
-        if (navbar && window.innerWidth <= 768) {
-          if (lastScrollY < window.scrollY && window.scrollY > 50) {
-            navbar.classList.add("navbar--hidden");
-          } else {
-            navbar.classList.remove("navbar--hidden");
-          }
-        }
-        lastScrollY = window.scrollY;
-        ticking = false;
-      });
-      ticking = true;
+  scrollTasks.push(() => {
+    if (btt) {
+      if (window.scrollY > 400) {
+        btt.classList.add("visible");
+      } else {
+        btt.classList.remove("visible");
+      }
     }
+
+    if (navbar && window.innerWidth <= 768) {
+      if (lastScrollY < window.scrollY && window.scrollY > 50) {
+        navbar.classList.add("navbar--hidden");
+      } else {
+        navbar.classList.remove("navbar--hidden");
+      }
+    }
+    lastScrollY = window.scrollY;
   });
+
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (!scrollTicking) {
+        window.requestAnimationFrame(() => {
+          for (const task of scrollTasks) task();
+          scrollTicking = false;
+        });
+        scrollTicking = true;
+      }
+    },
+    { passive: true },
+  );
 
   // 9. Time Greeting Logic
   const greetingEl = document.getElementById("time-greeting");
@@ -262,7 +297,7 @@ document.addEventListener("DOMContentLoaded", () => {
             submitBtn.disabled = false;
           }, 3000);
         }
-      } catch (error) {
+      } catch {
         submitBtn.innerText = "Error. Try again.";
         setTimeout(() => {
           submitBtn.innerText = originalText;
@@ -306,7 +341,7 @@ document.addEventListener("DOMContentLoaded", () => {
       window.location.pathname === "/";
 
     // Introduce a typo if there are multiple words AND we are on the index page
-    if (text.trim().indexOf(" ") !== -1 && isIndexPage) {
+    if (text.trim().includes(" ") && isIndexPage) {
       const words = text.trim().split(" ");
       const firstWordAndSpace = words[0] + " ";
       const secondWord = words[1];
@@ -343,19 +378,19 @@ document.addEventListener("DOMContentLoaded", () => {
       for (let c of text) actions.push({ type: "type", char: c });
     }
 
-    let i = 0;
-    function processAction() {
-      if (i < actions.length) {
-        const action = actions[i];
-        i++;
+    let actionIndex = 0;
+    const processAction = () => {
+      if (actionIndex < actions.length) {
+        const action = actions[actionIndex];
+        actionIndex++;
 
         if (action.type === "type") {
           animatedPart.textContent += action.char;
-          const speed = Math.floor(Math.random() * 80) + 70; // Slower typing
+          const speed = Math.floor(Math.random() * 80) + 70;
           setTimeout(processAction, speed);
         } else if (action.type === "delete") {
           animatedPart.textContent = animatedPart.textContent.slice(0, -1);
-          const speed = Math.floor(Math.random() * 40) + 30; // Fast deletion
+          const speed = Math.floor(Math.random() * 40) + 30;
           setTimeout(processAction, speed);
         } else if (action.type === "pause") {
           setTimeout(processAction, action.ms);
@@ -365,7 +400,7 @@ document.addEventListener("DOMContentLoaded", () => {
           animatedPart.classList.add("done");
         }, 2500);
       }
-    }
+    };
 
     // Wait for 2 seconds (with the flashing cursor) before starting to type
     setTimeout(processAction, 2000);
@@ -430,8 +465,7 @@ document.addEventListener("DOMContentLoaded", () => {
         window.addEventListener("resize", updateFooterMargin);
       }
 
-      // Parallax effect
-      window.addEventListener("scroll", () => {
+      scrollTasks.push(() => {
         const docHeight = document.documentElement.scrollHeight;
         const scrollPos = window.scrollY + window.innerHeight;
         const footerHeight = footer.offsetHeight;
@@ -473,9 +507,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   };
 
-  window.addEventListener("scroll", () => {
-    window.requestAnimationFrame(updateParallax);
-  });
+  scrollTasks.push(updateParallax);
 
   // 17. Blow Up Bento Grid
   const blowUpBtn = document.getElementById("blowUpBtn");
@@ -542,10 +574,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // 18. Magnetic Elements
-  const magneticElements = document.querySelectorAll(
-    ".cta-button, .theme-toggle, .small-btn, .blow-up-btn",
-  );
-  magneticElements.forEach((el) => {
+  const attachMagnetic = (el) => {
     let rect;
     el.addEventListener("mouseenter", () => {
       rect = el.getBoundingClientRect();
@@ -564,7 +593,10 @@ document.addEventListener("DOMContentLoaded", () => {
       el.style.transform = `translate(0px, 0px) scale(1)`;
       rect = null;
     });
-  });
+  };
+  document
+    .querySelectorAll(".cta-button, .theme-toggle, .small-btn, .blow-up-btn")
+    .forEach(attachMagnetic);
 
   // 19. Custom Reactive Cursor
   if (window.matchMedia("(pointer: fine)").matches) {
@@ -587,9 +619,11 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     const animateCursor = () => {
-      cursorX += (mouseX - cursorX) * 0.15;
-      cursorY += (mouseY - cursorY) * 0.15;
-      follower.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0)`;
+      if (!document.hidden) {
+        cursorX += (mouseX - cursorX) * 0.15;
+        cursorY += (mouseY - cursorY) * 0.15;
+        follower.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0)`;
+      }
       requestAnimationFrame(animateCursor);
     };
     animateCursor();
@@ -689,7 +723,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   const drawParticles = () => {
-    if (document.body.classList.contains("reduce-motion")) {
+    if (document.hidden || document.body.classList.contains("reduce-motion")) {
       ctx.clearRect(0, 0, width, height);
       requestAnimationFrame(drawParticles);
       return;
@@ -790,8 +824,8 @@ document.addEventListener("DOMContentLoaded", () => {
       if (konamiIndex === konamiCode.length) {
         konamiIndex = 0;
         document.documentElement.setAttribute("data-theme", "matrix");
-        const toggles = document.querySelectorAll(".theme-toggle");
-        toggles.forEach((t) => (t.innerText = "Matrix Mode"));
+        const matrixToggles = document.querySelectorAll(".theme-toggle");
+        matrixToggles.forEach((t) => (t.innerText = "Matrix Mode"));
         // Sparkle effect
         for (let i = 0; i < 50; i++) {
           const spark = document.createElement("div");
@@ -840,13 +874,14 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       updateA11yText();
+      syncLenisMotion();
 
       a11yBtn.addEventListener("click", () => {
         document.body.classList.toggle("reduce-motion");
         const isReduced = document.body.classList.contains("reduce-motion");
-        localStorage.setItem("reduce-motion", isReduced);
+        localStorage.setItem("reduce-motion", String(isReduced));
         updateA11yText();
-        // Update all other toggles
+        syncLenisMotion();
         document.querySelectorAll(".theme-toggle").forEach((btn) => {
           if (btn.innerText.includes("Motion")) {
             btn.innerText = isReduced ? "Motion: Off" : "Motion: On";
@@ -854,6 +889,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
       });
       container.appendChild(a11yBtn);
+      attachMagnetic(a11yBtn);
     });
   };
   createA11yToggle();
@@ -867,6 +903,21 @@ document.addEventListener("DOMContentLoaded", () => {
     const totalPriceEl = document.getElementById("est-total-price");
     const basePrice = 300;
 
+    const animateValue = (obj, start, end, duration) => {
+      let startTimestamp = null;
+      const step = (timestamp) => {
+        if (!startTimestamp) startTimestamp = timestamp;
+        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+        obj.textContent = `$${Math.floor(progress * (end - start) + start)}`;
+        if (progress < 1) {
+          window.requestAnimationFrame(step);
+        } else {
+          obj.textContent = `$${end}`;
+        }
+      };
+      window.requestAnimationFrame(step);
+    };
+
     const calculateTotal = () => {
       let currentTotal = basePrice;
       checkboxes.forEach((cb) => {
@@ -875,15 +926,13 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       });
 
-      // Cap at 5000 just in case
       if (currentTotal > 5000) {
         currentTotal = 5000;
       }
 
-      // Animate value
       animateValue(
         totalPriceEl,
-        parseInt(totalPriceEl.innerText.replace("$", "")),
+        parseInt(totalPriceEl.innerText.replace("$", ""), 10),
         currentTotal,
         500,
       );
@@ -892,21 +941,5 @@ document.addEventListener("DOMContentLoaded", () => {
     checkboxes.forEach((cb) => {
       cb.addEventListener("change", calculateTotal);
     });
-
-    // Helper to animate numbers
-    function animateValue(obj, start, end, duration) {
-      let startTimestamp = null;
-      const step = (timestamp) => {
-        if (!startTimestamp) startTimestamp = timestamp;
-        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-        obj.innerHTML = "$" + Math.floor(progress * (end - start) + start);
-        if (progress < 1) {
-          window.requestAnimationFrame(step);
-        } else {
-          obj.innerHTML = "$" + end; // Ensure final exact value
-        }
-      };
-      window.requestAnimationFrame(step);
-    }
   }
 });

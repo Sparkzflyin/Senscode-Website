@@ -1,5 +1,5 @@
 :root {
-  --bg: #000000;
+  --bg: #000;
   --text: #f5f5f7;
   --accent: #1d1d1f;
   --glass: rgba(22, 22, 23, 0.8);
@@ -15,16 +15,33 @@
 [data-theme="light"] {
   --bg: #f5f5f7;
   --text: #1d1d1f;
-  --accent: #ffffff;
+  --accent: #fff;
   --glass: rgba(245, 245, 247, 0.8);
   --border: #d2d2d7;
   --hover-border: var(--link);
-  --link: #0066cc;
+  --link: #06c;
 }
 
 html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+html.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: clip;
 }
 
 a,
@@ -75,6 +92,7 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  min-height: 100dvh;
   position: relative;
 }
 
@@ -180,16 +198,18 @@ main {
 
 [data-theme="dark"] .theme-toggle:hover {
   --glow-color: #ff9500;
+
   animation: breathe 2s infinite ease-in-out;
 }
 
 [data-theme="light"] .theme-toggle {
-  background: #0066cc; /* Deep Blue for Dark Mode option */
-  border-color: #0066cc;
+  background: #06c; /* Deep Blue for Dark Mode option */
+  border-color: #06c;
 }
 
 [data-theme="light"] .theme-toggle:hover {
-  --glow-color: #0066cc;
+  --glow-color: #06c;
+
   animation: breathe 2s infinite ease-in-out;
 }
 
@@ -399,7 +419,7 @@ main {
 .reveal.active,
 .story-text.active {
   opacity: 1;
-  filter: blur(0px);
+  filter: blur(0);
   transform: translateY(0);
 }
 
@@ -427,9 +447,11 @@ main {
   0% {
     box-shadow: 0 0 0 0 transparent;
   }
+
   50% {
     box-shadow: 0 0 20px 2px var(--glow-color, var(--link));
   }
+
   100% {
     box-shadow: 0 0 0 0 transparent;
   }
@@ -475,11 +497,13 @@ main {
   border-top: 1px solid var(--border);
   padding: 40px 5%;
 }
+
 .footer-content {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
   gap: 40px;
 }
+
 /* Footer Column Headings */
 .footer-column h4 {
   color: var(--text);
@@ -487,6 +511,7 @@ main {
   font-size: 0.9rem;
   text-transform: uppercase;
   letter-spacing: 1px;
+
   /* This creates the space between the heading and the first link */
   margin-bottom: 25px;
 }
@@ -497,6 +522,7 @@ main {
   text-decoration: none;
   color: var(--text);
   font-size: 0.85rem;
+
   /* This controls the vertical space between the links themselves */
   margin-bottom: 15px;
   opacity: 0.5;
@@ -506,7 +532,9 @@ main {
 .footer-column a:hover {
   opacity: 1;
 }
+
 /* Contact Page Specific Cleanup */
+
 /* --- Refined Contact Card --- */
 .contact-card {
   max-width: 550px;
@@ -605,6 +633,7 @@ main {
   text-transform: uppercase;
   letter-spacing: 1.5px;
   margin-bottom: 12px;
+
   /* Optional: gives it a subtle glow */
   text-shadow: 0 0 10px rgba(255, 149, 0, 0.2);
 }
@@ -649,6 +678,7 @@ main {
   right: -100%; /* Start off-screen */
   width: 100%;
   height: 100vh;
+  height: 100dvh;
   background: var(--bg);
   display: flex;
   flex-direction: column;
@@ -739,6 +769,7 @@ main {
 
 #back-to-top:hover {
   --glow-color: var(--hover-border);
+
   animation: breathe 2s infinite ease-in-out;
 }
 
@@ -844,34 +875,42 @@ main {
   top: 100px;
   z-index: 1;
 }
+
 .sticky-skill-card:nth-child(2) {
   top: 110px;
   z-index: 2;
 }
+
 .sticky-skill-card:nth-child(3) {
   top: 120px;
   z-index: 3;
 }
+
 .sticky-skill-card:nth-child(4) {
   top: 130px;
   z-index: 4;
 }
+
 .sticky-skill-card:nth-child(5) {
   top: 140px;
   z-index: 5;
 }
+
 .sticky-skill-card:nth-child(6) {
   top: 150px;
   z-index: 6;
 }
+
 .sticky-skill-card:nth-child(7) {
   top: 160px;
   z-index: 7;
 }
+
 .sticky-skill-card:nth-child(8) {
   top: 170px;
   z-index: 8;
 }
+
 .sticky-skill-card:nth-child(9) {
   top: 180px;
   z-index: 9;
@@ -1025,6 +1064,7 @@ main {
   100% {
     opacity: 1;
   }
+
   50% {
     opacity: 0;
   }
@@ -1052,6 +1092,7 @@ main {
   left: 0;
   width: 100vw;
   height: 100vh;
+  height: 100dvh;
   z-index: 1; /* Keep it above the background to be visible */
   pointer-events: none;
   opacity: 0.4;
@@ -1071,6 +1112,7 @@ main {
   canvas {
     cursor: none !important;
   }
+
   #estimator-panel,
   #estimator-panel * {
     cursor: auto !important;
@@ -1150,14 +1192,15 @@ button:hover,
 
 /* --- Matrix Theme (Easter Egg) --- */
 [data-theme="matrix"] {
-  --bg: #000000;
-  --text: #00ff00;
-  --accent: #003300;
+  --bg: #000;
+  --text: #0f0;
+  --accent: #030;
   --glass: rgba(0, 20, 0, 0.8);
-  --border: #00ff00;
-  --hover-border: #00ff00;
-  --link: #00ff00;
+  --border: #0f0;
+  --hover-border: #0f0;
+  --link: #0f0;
 }
+
 [data-theme="matrix"] body,
 [data-theme="matrix"] h1,
 [data-theme="matrix"] h2,
@@ -1165,12 +1208,15 @@ button:hover,
 [data-theme="matrix"] p {
   font-family: monospace !important;
 }
+
 [data-theme="matrix"] .glass-panel {
   box-shadow: 0 0 10px rgba(0, 255, 0, 0.2);
 }
+
 [data-theme="matrix"] body::before {
   background: radial-gradient(circle, rgba(0, 255, 0, 0.1) 0%, transparent 80%);
 }
+
 [data-theme="matrix"] .orb {
   background: radial-gradient(
     circle at 30% 30%,
@@ -1181,9 +1227,10 @@ button:hover,
     0 0 40px rgba(0, 255, 0, 0.6),
     inset 0 0 20px rgba(0, 255, 0, 0.8);
 }
+
 [data-theme="matrix"] .theme-toggle {
-  background: #00ff00;
-  border-color: #00ff00;
+  background: #0f0;
+  border-color: #0f0;
   color: #000;
 }
 
@@ -1195,6 +1242,7 @@ button:hover,
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+
   .custom-cursor,
   .cursor-follower,
   .orb,
@@ -1224,6 +1272,7 @@ body.reduce-motion * {
   transition-duration: 0.01ms !important;
   scroll-behavior: auto !important;
 }
+
 body.reduce-motion .custom-cursor,
 body.reduce-motion .cursor-follower,
 body.reduce-motion .orb,
@@ -1286,16 +1335,13 @@ body.reduce-motion #particle-canvas {
 .slider {
   position: absolute;
   cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0 0 0 0;
   background-color: var(--border);
   transition: 0.4s;
   border-radius: 34px;
 }
 
-.slider:before {
+.slider::before {
   position: absolute;
   content: "";
   height: 20px;
@@ -1313,7 +1359,7 @@ input:checked + .slider {
   box-shadow: 0 0 10px var(--link);
 }
 
-input:checked + .slider:before {
+input:checked + .slider::before {
   transform: translateX(22px);
 }
 

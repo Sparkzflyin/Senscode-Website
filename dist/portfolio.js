@@ -34,25 +34,26 @@ document.addEventListener("DOMContentLoaded", () => {
     animatedPart.classList.add("typewriter-cursor");
     bentoP.appendChild(animatedPart);
 
-    let actions = [];
+    const actions = [];
     const words = originalText.split(" ");
-    const firstPart = words.slice(0, 4).join(" ") + " ";
-    const typoWord = "statci"; // Typo for "static"
+    const firstPart = `${words.slice(0, 4).join(" ")} `;
+    const typoWord = "statci";
     const correctWord = "static";
-    const rest = " " + words.slice(5).join(" ");
+    const rest = ` ${words.slice(5).join(" ")}`;
 
-    // Build action queue
-    for (let c of firstPart) actions.push({ type: "type", char: c });
-    for (let c of typoWord) actions.push({ type: "type", char: c });
+    for (const c of firstPart) actions.push({ type: "type", char: c });
+    for (const c of typoWord) actions.push({ type: "type", char: c });
     actions.push({ type: "pause", ms: 500 });
-    for (let i = 0; i < typoWord.length; i++) actions.push({ type: "delete" });
+    for (let d = 0; d < typoWord.length; d++) {
+      actions.push({ type: "delete" });
+    }
     actions.push({ type: "pause", ms: 300 });
-    for (let c of correctWord + rest) actions.push({ type: "type", char: c });
+    for (const c of correctWord + rest) actions.push({ type: "type", char: c });
 
-    let i = 0;
-    function process() {
-      if (i < actions.length) {
-        const action = actions[i++];
+    let actionIndex = 0;
+    const process = () => {
+      if (actionIndex < actions.length) {
+        const action = actions[actionIndex++];
         if (action.type === "type") {
           animatedPart.textContent += action.char;
           setTimeout(process, Math.random() * 50 + 40);
@@ -65,9 +66,8 @@ document.addEventListener("DOMContentLoaded", () => {
       } else {
         animatedPart.classList.add("done");
       }
-    }
+    };
 
-    // Start after a short delay
     setTimeout(process, 1000);
   }
 
@@ -77,12 +77,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const ctx = localCanvas.getContext("2d");
     let width, height;
     let particles = [];
-    let animationFrameId;
-    let resizeObserver;
 
     const initLocalParticles = () => {
       const parent = localCanvas.parentElement;
-      // Wait for the parent to have actual dimensions
       if (parent.clientWidth === 0) {
         setTimeout(initLocalParticles, 100);
         return;
@@ -241,13 +238,12 @@ document.addEventListener("DOMContentLoaded", () => {
           }
         });
       }
-      animationFrameId = requestAnimationFrame(drawLocalParticles);
+      requestAnimationFrame(drawLocalParticles);
     };
 
     initLocalParticles();
 
-    // Use ResizeObserver to detect when the container resizes (e.g. during Blow Up)
-    resizeObserver = new ResizeObserver(() => {
+    const resizeObserver = new ResizeObserver(() => {
       if (localCanvas.parentElement.clientWidth > 0) {
         initLocalParticles();
       }
