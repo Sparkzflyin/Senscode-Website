@@ -41,6 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
           "You found it.",
           "Your next\nbig idea.",
           "Come to life.",
+          "__arrow__",
         ];
 
         const getDpr = () => window.devicePixelRatio || 1;
@@ -136,8 +137,53 @@ document.addEventListener("DOMContentLoaded", () => {
           return targets;
         };
 
+        const getArrowTargets = () => {
+          const { w: cssW, h: cssH } = getCssSize();
+          if (cssW < 2 || cssH < 2) return [];
+          const dpr = getDpr();
+          const physW = Math.floor(cssW * dpr);
+          const physH = Math.floor(cssH * dpr);
+          const off = document.createElement("canvas");
+          off.width = physW;
+          off.height = physH;
+          const octx = off.getContext("2d");
+          octx.scale(dpr, dpr);
+
+          // Match "Come to life." size so the arrow reads at the same visual
+          // weight as the phrase that preceded it.
+          const refLen = "Come to life.".length;
+          const fontSize =
+            Math.min(cssW / (refLen * 0.48), cssH / 1.6) * 0.88;
+          const arrowH = fontSize;
+          const arrowW = arrowH * 1.8;
+          const cx = cssW / 2;
+          const cy = cssH / 2;
+          octx.strokeStyle = "white";
+          octx.lineWidth = arrowH * 0.22;
+          octx.lineCap = "round";
+          octx.lineJoin = "round";
+          octx.beginPath();
+          octx.moveTo(cx - arrowW / 2, cy - arrowH / 2);
+          octx.lineTo(cx, cy + arrowH / 2);
+          octx.lineTo(cx + arrowW / 2, cy - arrowH / 2);
+          octx.stroke();
+
+          const img = octx.getImageData(0, 0, physW, physH).data;
+          const targets = [];
+          const density = 7;
+          for (let y = 0; y < physH; y += density) {
+            for (let x = 0; x < physW; x += density) {
+              if (img[(y * physW + x) * 4 + 3] > 128) {
+                targets.push({ x: x / dpr, y: y / dpr });
+              }
+            }
+          }
+          return targets;
+        };
+
         const assignTargets = (phrase) => {
-          const targets = getTextTargets(phrase);
+          const targets =
+            phrase === "__arrow__" ? getArrowTargets() : getTextTargets(phrase);
           for (let i = targets.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [targets[i], targets[j]] = [targets[j], targets[i]];
@@ -166,9 +212,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const runPhraseCycle = () => {
           phase = "assembling";
-          assignTargets(phrases[phraseIdx]);
+          const current = phrases[phraseIdx];
+          assignTargets(current);
           introScheduleNext(1300, () => {
             phase = "holding";
+            // Arrow is the terminal state — hold it as a persistent guide
+            // to the CTA instead of dispersing and cycling back.
+            if (current === "__arrow__") return;
             introScheduleNext(3500, () => {
               phase = "dispersing";
               releaseTargets();
@@ -309,122 +359,6 @@ document.addEventListener("DOMContentLoaded", () => {
         window.addEventListener("resize", introHandleResize);
       }
 
-      // --- Particle Arrow ---
-      // Small standalone canvas above the CTA: particles drift in and hold
-      // a downward chevron shape with gentle jitter so it reads as "look here".
-      const arrowCanvas = intro.querySelector(".site-intro-arrow");
-      let arrowRafId;
-      let arrowHandleResize = null;
-      if (arrowCanvas) {
-        const actx = arrowCanvas.getContext("2d");
-        let aParticles = [];
-
-        const arrowDpr = () => window.devicePixelRatio || 1;
-
-        const resizeArrowCanvas = () => {
-          const rect = arrowCanvas.getBoundingClientRect();
-          const dpr = arrowDpr();
-          const cssW = Math.max(1, Math.floor(rect.width));
-          const cssH = Math.max(1, Math.floor(rect.height));
-          arrowCanvas.width = cssW * dpr;
-          arrowCanvas.height = cssH * dpr;
-          arrowCanvas.style.width = cssW + "px";
-          arrowCanvas.style.height = cssH + "px";
-          actx.setTransform(1, 0, 0, 1, 0, 0);
-          actx.scale(dpr, dpr);
-        };
-
-        const getArrowTargets = () => {
-          const dpr = arrowDpr();
-          const cssW = arrowCanvas.width / dpr;
-          const cssH = arrowCanvas.height / dpr;
-          if (cssW < 2 || cssH < 2) return [];
-          const physW = Math.floor(cssW * dpr);
-          const physH = Math.floor(cssH * dpr);
-          const off = document.createElement("canvas");
-          off.width = physW;
-          off.height = physH;
-          const octx = off.getContext("2d");
-          octx.scale(dpr, dpr);
-
-          const padX = cssW * 0.14;
-          const topY = cssH * 0.3;
-          const tipY = cssH * 0.82;
-          octx.strokeStyle = "white";
-          octx.lineWidth = Math.max(3, cssH * 0.18);
-          octx.lineCap = "round";
-          octx.lineJoin = "round";
-          octx.beginPath();
-          octx.moveTo(padX, topY);
-          octx.lineTo(cssW / 2, tipY);
-          octx.lineTo(cssW - padX, topY);
-          octx.stroke();
-
-          const img = octx.getImageData(0, 0, physW, physH).data;
-          const targets = [];
-          const density = 3;
-          for (let y = 0; y < physH; y += density) {
-            for (let x = 0; x < physW; x += density) {
-              if (img[(y * physW + x) * 4 + 3] > 128) {
-                targets.push({ x: x / dpr, y: y / dpr });
-              }
-            }
-          }
-          return targets;
-        };
-
-        const initArrowParticles = () => {
-          const dpr = arrowDpr();
-          const cssW = arrowCanvas.width / dpr;
-          const cssH = arrowCanvas.height / dpr;
-          const targets = getArrowTargets();
-          aParticles = targets.map((t) => ({
-            x: Math.random() * cssW,
-            y: Math.random() * cssH,
-            tx: t.x,
-            ty: t.y,
-            r: Math.random() * 0.8 + 0.7,
-            jx: Math.random() * Math.PI * 2,
-            jy: Math.random() * Math.PI * 2,
-            js: 0.9 + Math.random() * 0.6,
-          }));
-        };
-
-        const drawArrowParticles = () => {
-          if (document.hidden) {
-            arrowRafId = requestAnimationFrame(drawArrowParticles);
-            return;
-          }
-          const dpr = arrowDpr();
-          const cssW = arrowCanvas.width / dpr;
-          const cssH = arrowCanvas.height / dpr;
-          actx.clearRect(0, 0, cssW, cssH);
-          const t = performance.now() / 1000;
-          for (let i = 0; i < aParticles.length; i++) {
-            const p = aParticles[i];
-            const jxOff = Math.sin(t * p.js + p.jx) * 0.9;
-            const jyOff = Math.cos(t * p.js + p.jy) * 0.9;
-            p.x += (p.tx + jxOff - p.x) * 0.18;
-            p.y += (p.ty + jyOff - p.y) * 0.18;
-            actx.beginPath();
-            actx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-            actx.fillStyle = "rgba(255, 149, 0, 0.9)";
-            actx.fill();
-          }
-          arrowRafId = requestAnimationFrame(drawArrowParticles);
-        };
-
-        resizeArrowCanvas();
-        initArrowParticles();
-        drawArrowParticles();
-
-        arrowHandleResize = () => {
-          resizeArrowCanvas();
-          initArrowParticles();
-        };
-        window.addEventListener("resize", arrowHandleResize);
-      }
-
       if (introBtn) {
         introBtn.addEventListener("click", () => {
           intro.classList.add("dismissing");
@@ -436,15 +370,11 @@ document.addEventListener("DOMContentLoaded", () => {
       intro.addEventListener("close", () => {
         sessionStorage.setItem("senscode-intro-seen", "1");
         if (introRafId) cancelAnimationFrame(introRafId);
-        if (arrowRafId) cancelAnimationFrame(arrowRafId);
         introTimerIds.forEach((id) => clearTimeout(id));
         window.removeEventListener("wheel", introPreventScroll);
         window.removeEventListener("touchmove", introPreventScroll);
         if (introHandleResize) {
           window.removeEventListener("resize", introHandleResize);
-        }
-        if (arrowHandleResize) {
-          window.removeEventListener("resize", arrowHandleResize);
         }
         intro.remove();
       });

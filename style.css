@@ -1624,26 +1624,6 @@ body.reduce-motion .marquee-track {
   z-index: 3;
 }
 
-.site-intro-arrow {
-  display: block;
-  width: clamp(56px, 6vw, 76px);
-  height: clamp(34px, 3.6vw, 46px);
-  margin-bottom: 18px;
-  animation: intro-arrow-bounce 1.8s cubic-bezier(0.45, 0, 0.55, 1) infinite;
-  position: relative;
-  z-index: 3;
-}
-
-@keyframes intro-arrow-bounce {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(8px);
-  }
-}
-
 .site-intro.dismissing {
   opacity: 0;
   pointer-events: none;
@@ -1694,21 +1674,12 @@ body.reduce-motion .marquee-track {
   .site-intro {
     transition: none;
   }
-  .site-intro-arrow {
-    animation: none;
-    opacity: 0.7;
-  }
 }
 
 body.reduce-motion .site-intro-content {
   animation: none;
   opacity: 1;
   transform: none;
-}
-
-body.reduce-motion .site-intro-arrow {
-  animation: none;
-  opacity: 0.7;
 }
 
 /* --- Character-level Heading Reveal --- */
