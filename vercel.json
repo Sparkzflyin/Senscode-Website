@@ -1,0 +1,12 @@
+{
+  "cleanUrls": true,
+  "redirects": [
+    { "source": "/index.html", "destination": "/", "permanent": true },
+    { "source": "/products", "destination": "/services", "permanent": true },
+    {
+      "source": "/products.html",
+      "destination": "/services",
+      "permanent": true
+    }
+  ]
+}

@@ -12,13 +12,13 @@
       content="contact SensCode, hire web developer, web design project, Christian Sparks contact"
     />
     <meta name="author" content="Christian Sparks" />
-    <link rel="canonical" href="https://senscode.com/contact.html" />
+    <link rel="canonical" href="https://senscode.com/contact" />
     <meta property="og:title" content="Senscode | Contact SensCode" />
     <meta
       property="og:description"
       content="Get in touch with SensCode to start your next web design project."
     />
-    <meta property="og:url" content="https://senscode.com/contact.html" />
+    <meta property="og:url" content="https://senscode.com/contact" />
     <meta property="og:type" content="website" />
     <meta name="geo.region" content="US-AZ" />
     <meta name="geo.placename" content="Yuma" />
@@ -58,14 +58,14 @@
   <body>
     <nav class="navbar" aria-label="Primary navigation">
       <div class="logo">
-        <a href="index.html" class="logo-link">SensCode</a>
+        <a href="/" class="logo-link">SensCode</a>
       </div>
       <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="products.html">Services</a></li>
-        <li><a href="about.html">About Us</a></li>
-        <li><a href="portfolio.html">Work</a></li>
-        <li><a href="contact.html">Contact</a></li>
+        <li><a href="/">Home</a></li>
+        <li><a href="/services">Services</a></li>
+        <li><a href="/about">About Us</a></li>
+        <li><a href="/portfolio">Work</a></li>
+        <li><a href="/contact">Contact</a></li>
       </ul>
       <div class="nav-actions">
         <button class="theme-toggle">Mode</button>
@@ -77,11 +77,11 @@
       </div>
     </nav>
     <nav aria-label="Mobile Navigation" class="mobile-menu" id="mobile-menu">
-      <a href="index.html">Home</a>
-      <a href="products.html">Services</a>
-      <a href="about.html">About Us</a>
-      <a href="portfolio.html">Work</a>
-      <a href="contact.html">Contact</a>
+      <a href="/">Home</a>
+      <a href="/services">Services</a>
+      <a href="/about">About Us</a>
+      <a href="/portfolio">Work</a>
+      <a href="/contact">Contact</a>
       <button
         class="theme-toggle"
         style="margin-top: 20px; font-size: 1.2rem; padding: 10px 20px"
@@ -130,6 +130,8 @@
                 name="name"
                 maxlength="100"
                 placeholder="Name"
+                aria-label="Your name"
+                autocomplete="name"
                 required
               />
             </div>
@@ -139,6 +141,8 @@
                 type="email"
                 name="email"
                 placeholder="Email Address"
+                aria-label="Your email address"
+                autocomplete="email"
                 required
               />
             </div>
@@ -147,6 +151,7 @@
                 maxlength="2500"
                 name="message"
                 placeholder="Tell me about your project..."
+                aria-label="Your message"
                 rows="5"
                 required
               ></textarea>
@@ -175,16 +180,16 @@
       <div class="footer-content">
         <section class="footer-column">
           <h4>Explore</h4>
-          <a href="index.html">Home</a>
-          <a href="products.html">Products</a>
-          <a href="about.html">About Us</a>
+          <a href="/">Home</a>
+          <a href="/services">Services</a>
+          <a href="/about">About Us</a>
         </section>
 
         <section class="footer-column">
           <h4>Support</h4>
-          <a href="contact.html">Contact Us</a>
-          <a href="privacy.html">Privacy Policy</a>
-          <a href="terms.html">Terms of Use</a>
+          <a href="/contact">Contact Us</a>
+          <a href="/privacy">Privacy Policy</a>
+          <a href="/terms">Terms of Use</a>
         </section>
 
         <section class="footer-column">
@@ -221,6 +226,10 @@
           name of Sensormedia LLC.
         </p>
         <p>A USMC Veteran-Owned Business.</p>
+        <p class="founder-byline">
+          Designed, coded, deployed, and occasionally cursed at by one stubborn
+          Marine in Yuma, Arizona.
+        </p>
       </div>
     </footer>
   </body>

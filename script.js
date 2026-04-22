@@ -1,4 +1,337 @@
 document.addEventListener("DOMContentLoaded", () => {
+  // First-visit Intro Splash (homepage only, native <dialog>)
+  const intro = document.querySelector(".site-intro");
+  if (intro instanceof HTMLDialogElement) {
+    if (
+      typeof intro.showModal === "function" &&
+      !sessionStorage.getItem("senscode-intro-seen")
+    ) {
+      const introBtn = intro.querySelector(".site-intro-btn");
+      const introCanvas = intro.querySelector(".site-intro-particles");
+      let introRafId;
+
+      intro.showModal();
+
+      // Hard scroll-lock while intro is open (Lenis would otherwise bypass
+      // the native modal's scroll prevention via its wheel listener).
+      const introPreventScroll = (e) => e.preventDefault();
+      window.addEventListener("wheel", introPreventScroll, { passive: false });
+      window.addEventListener("touchmove", introPreventScroll, {
+        passive: false,
+      });
+
+      const introTimerIds = [];
+      const introScheduleNext = (delay, fn) => {
+        const id = setTimeout(fn, delay);
+        introTimerIds.push(id);
+        return id;
+      };
+
+      // --- Particle Text Assembly ---
+      // Orange particles drift around, then converge to form a phrase, hold
+      // it, dissolve back into drift, then reassemble into the next phrase.
+      let introHandleResize = null;
+      if (introCanvas) {
+        const ictx = introCanvas.getContext("2d");
+        let iParticles = [];
+        let phraseIdx = 0;
+        let phase = "drifting"; // drifting | assembling | holding | dispersing
+
+        const phrases = [
+          "You found it.",
+          "Your next\nbig dream.",
+          "Come to life.",
+        ];
+
+        const getDpr = () => window.devicePixelRatio || 1;
+
+        const resizeIntroCanvas = () => {
+          const rect = introCanvas.getBoundingClientRect();
+          const dpr = getDpr();
+          const cssW = Math.max(1, Math.floor(rect.width));
+          const cssH = Math.max(1, Math.floor(rect.height));
+          introCanvas.width = cssW * dpr;
+          introCanvas.height = cssH * dpr;
+          introCanvas.style.width = cssW + "px";
+          introCanvas.style.height = cssH + "px";
+          // Reset any prior transform, then scale so all subsequent drawing
+          // commands take CSS-pixel coordinates while the backing store
+          // renders at native device resolution.
+          ictx.setTransform(1, 0, 0, 1, 0, 0);
+          ictx.scale(dpr, dpr);
+        };
+
+        const getCssSize = () => {
+          const dpr = getDpr();
+          return {
+            w: introCanvas.width / dpr,
+            h: introCanvas.height / dpr,
+          };
+        };
+
+        const initIntroParticles = () => {
+          const { w, h } = getCssSize();
+          const dpr = getDpr();
+          // Density scales with DPR so 4K / Retina monitors get proportionally
+          // more particles filling the same CSS area.
+          const count = Math.min(2800, Math.floor((w * h * (1 + dpr)) / 2500));
+          iParticles = [];
+          for (let i = 0; i < count; i++) {
+            iParticles.push({
+              x: Math.random() * w,
+              y: Math.random() * h,
+              vx: (Math.random() - 0.5) * 0.4,
+              vy: (Math.random() - 0.5) * 0.4,
+              r: Math.random() * 1.5 + 1.3,
+              tx: null,
+              ty: null,
+            });
+          }
+        };
+
+        const getTextTargets = (text) => {
+          const { w: cssW, h: cssH } = getCssSize();
+          if (cssW < 2 || cssH < 2) return [];
+
+          const dpr = getDpr();
+          const physW = Math.floor(cssW * dpr);
+          const physH = Math.floor(cssH * dpr);
+
+          const off = document.createElement("canvas");
+          off.width = physW;
+          off.height = physH;
+          const octx = off.getContext("2d");
+          octx.scale(dpr, dpr);
+
+          const lines = text.split("\n");
+          const maxLen = Math.max(1, ...lines.map((l) => l.length));
+          const fontSize =
+            Math.min(cssW / (maxLen * 0.48), cssH / (lines.length * 1.6)) *
+            0.88;
+
+          octx.fillStyle = "white";
+          octx.font = `italic 600 ${fontSize}px "Playfair Display", Georgia, serif`;
+          octx.textAlign = "center";
+          octx.textBaseline = "middle";
+
+          const lineHeight = fontSize * 1.18;
+          const startY = cssH / 2 - ((lines.length - 1) * lineHeight) / 2;
+          lines.forEach((line, i) => {
+            octx.fillText(line, cssW / 2, startY + i * lineHeight);
+          });
+
+          // Sample at a step that scales with DPR — same step in physical
+          // pixels across all monitors → finer-grained sampling (more
+          // targets per letter) on high-DPR displays.
+          const img = octx.getImageData(0, 0, physW, physH).data;
+          const targets = [];
+          const density = 7;
+          for (let y = 0; y < physH; y += density) {
+            for (let x = 0; x < physW; x += density) {
+              if (img[(y * physW + x) * 4 + 3] > 128) {
+                targets.push({ x: x / dpr, y: y / dpr });
+              }
+            }
+          }
+          return targets;
+        };
+
+        const assignTargets = (phrase) => {
+          const targets = getTextTargets(phrase);
+          for (let i = targets.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [targets[i], targets[j]] = [targets[j], targets[i]];
+          }
+          iParticles.forEach((p, i) => {
+            if (i < targets.length) {
+              p.tx = targets[i].x;
+              p.ty = targets[i].y;
+            } else {
+              p.tx = null;
+              p.ty = null;
+              p.vx = (Math.random() - 0.5) * 0.3;
+              p.vy = (Math.random() - 0.5) * 0.3;
+            }
+          });
+        };
+
+        const releaseTargets = () => {
+          iParticles.forEach((p) => {
+            p.tx = null;
+            p.ty = null;
+            p.vx = (Math.random() - 0.5) * 1.2;
+            p.vy = (Math.random() - 0.5) * 1.2;
+          });
+        };
+
+        const runPhraseCycle = () => {
+          phase = "assembling";
+          assignTargets(phrases[phraseIdx]);
+          introScheduleNext(1300, () => {
+            phase = "holding";
+            introScheduleNext(3500, () => {
+              phase = "dispersing";
+              releaseTargets();
+              introScheduleNext(1100, () => {
+                phase = "drifting";
+                phraseIdx = (phraseIdx + 1) % phrases.length;
+                introScheduleNext(600, runPhraseCycle);
+              });
+            });
+          });
+        };
+
+        const drawIntroParticles = () => {
+          if (document.hidden) {
+            introRafId = requestAnimationFrame(drawIntroParticles);
+            return;
+          }
+          const { w, h } = getCssSize();
+          ictx.clearRect(0, 0, w, h);
+
+          for (let i = 0; i < iParticles.length; i++) {
+            const p = iParticles[i];
+            if (p.tx !== null && p.ty !== null) {
+              p.vx = (p.tx - p.x) * 0.11;
+              p.vy = (p.ty - p.y) * 0.11;
+            } else {
+              if (p.x < 0) {
+                p.x = 0;
+                p.vx *= -1;
+              } else if (p.x > w) {
+                p.x = w;
+                p.vx *= -1;
+              }
+              if (p.y < 0) {
+                p.y = 0;
+                p.vy *= -1;
+              } else if (p.y > h) {
+                p.y = h;
+                p.vy *= -1;
+              }
+            }
+            p.x += p.vx;
+            p.y += p.vy;
+
+            ictx.beginPath();
+            ictx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+            ictx.fillStyle = "rgba(255, 149, 0, 0.85)";
+            ictx.fill();
+          }
+
+          // Draw connection lines only during drift phases to keep the
+          // "constellation" ambience without cluttering assembled letters.
+          // Uses spatial grid + batched Path2D so cursor RAF stays smooth
+          // at high particle counts.
+          if (phase === "drifting" || phase === "dispersing") {
+            const cellSize = 100;
+            const maxDistSq = 4900; // ~70px visible threshold
+            const grid = new Map();
+            for (let i = 0; i < iParticles.length; i++) {
+              const p = iParticles[i];
+              const gx = Math.floor(p.x / cellSize);
+              const gy = Math.floor(p.y / cellSize);
+              const key = gx + "," + gy;
+              let bucket = grid.get(key);
+              if (!bucket) {
+                bucket = [];
+                grid.set(key, bucket);
+              }
+              bucket.push(p);
+            }
+
+            ictx.beginPath();
+            const halfNeighbors = [
+              [1, 0],
+              [-1, 1],
+              [0, 1],
+              [1, 1],
+            ];
+            for (const [key, bucket] of grid) {
+              const sep = key.indexOf(",");
+              const cx = +key.slice(0, sep);
+              const cy = +key.slice(sep + 1);
+
+              // Pairs within the same cell
+              for (let i = 0; i < bucket.length; i++) {
+                const p = bucket[i];
+                for (let j = i + 1; j < bucket.length; j++) {
+                  const p2 = bucket[j];
+                  const dx = p.x - p2.x;
+                  const dy = p.y - p2.y;
+                  if (dx * dx + dy * dy < maxDistSq) {
+                    ictx.moveTo(p.x, p.y);
+                    ictx.lineTo(p2.x, p2.y);
+                  }
+                }
+              }
+
+              // Pairs with half of the 8 neighbors (avoids double-counting)
+              for (let n = 0; n < 4; n++) {
+                const nk = cx + halfNeighbors[n][0] + "," + (cy + halfNeighbors[n][1]);
+                const other = grid.get(nk);
+                if (!other) continue;
+                for (let i = 0; i < bucket.length; i++) {
+                  const p = bucket[i];
+                  for (let j = 0; j < other.length; j++) {
+                    const p2 = other[j];
+                    const dx = p.x - p2.x;
+                    const dy = p.y - p2.y;
+                    if (dx * dx + dy * dy < maxDistSq) {
+                      ictx.moveTo(p.x, p.y);
+                      ictx.lineTo(p2.x, p2.y);
+                    }
+                  }
+                }
+              }
+            }
+            ictx.strokeStyle = "rgba(255, 255, 255, 0.11)";
+            ictx.lineWidth = 0.5;
+            ictx.stroke();
+          }
+
+          introRafId = requestAnimationFrame(drawIntroParticles);
+        };
+
+        resizeIntroCanvas();
+        initIntroParticles();
+        drawIntroParticles();
+        introScheduleNext(1500, runPhraseCycle);
+
+        introHandleResize = () => {
+          resizeIntroCanvas();
+          initIntroParticles();
+          if (phase === "assembling" || phase === "holding") {
+            assignTargets(phrases[phraseIdx]);
+          }
+        };
+        window.addEventListener("resize", introHandleResize);
+      }
+
+      if (introBtn) {
+        introBtn.addEventListener("click", () => {
+          intro.classList.add("dismissing");
+          setTimeout(() => intro.close(), 700);
+        });
+        setTimeout(() => introBtn.focus(), 100);
+      }
+
+      intro.addEventListener("close", () => {
+        sessionStorage.setItem("senscode-intro-seen", "1");
+        if (introRafId) cancelAnimationFrame(introRafId);
+        introTimerIds.forEach((id) => clearTimeout(id));
+        window.removeEventListener("wheel", introPreventScroll);
+        window.removeEventListener("touchmove", introPreventScroll);
+        if (introHandleResize) {
+          window.removeEventListener("resize", introHandleResize);
+        }
+        intro.remove();
+      });
+    } else {
+      intro.remove();
+    }
+  }
+
   // Lenis smooth scroll — falls back to native CSS scroll-behavior if library missing
   let lenis = null;
   if (typeof window.Lenis === "function") {
@@ -252,7 +585,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // 11. Dynamic Navigation Highlighting
   const currentPath = window.location.pathname;
-  const currentPage = currentPath.split("/").pop() || "index.html";
+  const currentPage = currentPath.endsWith("/index.html")
+    ? "/"
+    : currentPath.replace(/\.html$/, "");
 
   document.querySelectorAll(".nav-links a, .mobile-menu a").forEach((link) => {
     const linkHref = link.getAttribute("href");
@@ -334,7 +669,7 @@ document.addEventListener("DOMContentLoaded", () => {
     animatedPart.classList.add("typewriter-cursor");
     header.appendChild(animatedPart);
 
-    let actions = [];
+    const actions = [];
 
     const isIndexPage =
       window.location.pathname.endsWith("index.html") ||
@@ -406,6 +741,66 @@ document.addEventListener("DOMContentLoaded", () => {
     setTimeout(processAction, 2000);
   });
 
+  // Character-level Heading Reveal (panel h2s only; hero/founder-note use typewriter)
+  document.querySelectorAll("main h2").forEach((h) => {
+    if (h.querySelector(".typewriter-cursor")) return;
+    if (h.closest(".hero, .founder-note")) return;
+    const text = h.textContent.trim();
+    if (!text) return;
+
+    h.textContent = "";
+    h.classList.add("split-text");
+
+    const sr = document.createElement("span");
+    sr.className = "split-sr";
+    sr.textContent = text;
+    h.appendChild(sr);
+
+    const visual = document.createElement("span");
+    visual.setAttribute("aria-hidden", "true");
+
+    let charIdx = 0;
+    const words = text.split(" ");
+    words.forEach((word, wi) => {
+      const wordEl = document.createElement("span");
+      wordEl.className = "split-word";
+      [...word].forEach((ch) => {
+        const charEl = document.createElement("span");
+        charEl.className = "char";
+        charEl.style.transitionDelay = `${charIdx * 0.028}s`;
+        charEl.textContent = ch;
+        wordEl.appendChild(charEl);
+        charIdx++;
+      });
+      visual.appendChild(wordEl);
+      if (wi < words.length - 1) {
+        visual.appendChild(document.createTextNode(" "));
+      }
+    });
+    h.appendChild(visual);
+  });
+
+  if (typeof IntersectionObserver === "function") {
+    const splitObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add("active");
+            splitObserver.unobserve(e.target);
+          }
+        });
+      },
+      { threshold: 0.3 },
+    );
+    document
+      .querySelectorAll(".split-text")
+      .forEach((el) => splitObserver.observe(el));
+  } else {
+    document
+      .querySelectorAll(".split-text")
+      .forEach((el) => el.classList.add("active"));
+  }
+
   // 14. Performance Metric: Load Time
   window.addEventListener("load", () => {
     // Delay the calculation slightly to ensure the browser has finished recording the load event
@@ -433,9 +828,15 @@ document.addEventListener("DOMContentLoaded", () => {
       const mainWrapper = document.createElement("div");
       mainWrapper.classList.add("curtain-wrapper");
 
-      // Wrap everything before the footer
+      // Wrap everything before the footer (but leave dialogs at body level so
+      // they stay in the top layer / above the curtain stacking context)
       while (document.body.firstChild && document.body.firstChild !== footer) {
-        mainWrapper.appendChild(document.body.firstChild);
+        const node = document.body.firstChild;
+        if (node instanceof HTMLDialogElement) {
+          document.body.appendChild(node);
+          continue;
+        }
+        mainWrapper.appendChild(node);
       }
       document.body.insertBefore(mainWrapper, footer);
 
@@ -604,8 +1005,26 @@ document.addEventListener("DOMContentLoaded", () => {
     cursor.classList.add("custom-cursor");
     const follower = document.createElement("div");
     follower.classList.add("cursor-follower");
-    document.body.appendChild(cursor);
-    document.body.appendChild(follower);
+
+    // If the intro dialog is currently open, parent the cursor inside it so
+    // it participates in the dialog's top-layer stacking context. Otherwise
+    // a native cursor would need to be shown (since no z-index can compete
+    // with top layer). When the dialog closes, move the cursor back to body.
+    const openIntro = document.querySelector(".site-intro[open]");
+    const cursorHome = openIntro || document.body;
+    cursorHome.appendChild(cursor);
+    cursorHome.appendChild(follower);
+
+    if (openIntro) {
+      openIntro.addEventListener(
+        "close",
+        () => {
+          document.body.appendChild(cursor);
+          document.body.appendChild(follower);
+        },
+        { once: true },
+      );
+    }
 
     let mouseX = window.innerWidth / 2;
     let mouseY = window.innerHeight / 2;

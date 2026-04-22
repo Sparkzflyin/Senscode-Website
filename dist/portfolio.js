@@ -172,6 +172,10 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     const drawLocalParticles = () => {
+      if (document.hidden) {
+        requestAnimationFrame(drawLocalParticles);
+        return;
+      }
       ctx.clearRect(0, 0, width, height);
       const isLight =
         document.documentElement.getAttribute("data-theme") === "light";

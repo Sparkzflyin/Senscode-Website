@@ -59,16 +59,27 @@
     <script defer src="/_vercel/speed-insights/script.js"></script>
   </head>
   <body>
+    <dialog class="site-intro" aria-label="Welcome">
+      <canvas id="intro-particle-canvas" class="site-intro-particles"></canvas>
+      <div class="site-intro-content">
+        <p class="split-sr">
+          You found it. Your next big dream. Come to life.
+        </p>
+        <button type="button" class="cta-button site-intro-btn">
+          Come On In
+        </button>
+      </div>
+    </dialog>
     <nav class="navbar" aria-label="Navigation">
       <div class="logo">
-        <a href="index.html" class="logo-link">SensCode</a>
+        <a href="/" class="logo-link">SensCode</a>
       </div>
       <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="products.html">Services</a></li>
-        <li><a href="about.html">About Us</a></li>
-        <li><a href="portfolio.html">Work</a></li>
-        <li><a href="contact.html">Contact</a></li>
+        <li><a href="/">Home</a></li>
+        <li><a href="/services">Services</a></li>
+        <li><a href="/about">About Us</a></li>
+        <li><a href="/portfolio">Work</a></li>
+        <li><a href="/contact">Contact</a></li>
       </ul>
       <div class="nav-actions">
         <button class="theme-toggle">Mode</button>
@@ -80,11 +91,11 @@
       </div>
     </nav>
     <nav aria-label="Mobile Navigation" class="mobile-menu" id="mobile-menu">
-      <a href="index.html">Home</a>
-      <a href="products.html">Services</a>
-      <a href="about.html">About Us</a>
-      <a href="portfolio.html">Work</a>
-      <a href="contact.html">Contact</a>
+      <a href="/">Home</a>
+      <a href="/services">Services</a>
+      <a href="/about">About Us</a>
+      <a href="/portfolio">Work</a>
+      <a href="/contact">Contact</a>
       <button
         class="theme-toggle"
         style="margin-top: 20px; font-size: 1.2rem; padding: 10px 20px"
@@ -97,10 +108,14 @@
       <div class="hero-content reveal" style="position: relative; z-index: 2">
         <div class="greeting-container">
           <p id="time-greeting"></p>
+          <div class="status-pill" aria-label="Current availability">
+            <span class="status-dot" aria-hidden="true"></span>
+            <span>Currently booking for June</span>
+          </div>
         </div>
         <h1>Website Design.</h1>
         <p>Experience the next generation of beauty in web-design.</p>
-        <a href="products.html" class="cta-button">Explore Now</a>
+        <a href="/services" class="cta-button">Explore Now</a>
       </div>
     </header>
 
@@ -149,6 +164,43 @@
         <p class="story-text">Precision in every pixel.</p>
         <p class="story-text">Your vision, realized.</p>
       </section>
+
+      <section class="marquee-band" aria-label="Brand values">
+        <div class="marquee-track">
+          <div class="marquee-group">
+            <span>Hand-Coded From Scratch</span>
+            <span class="dot">◆</span>
+            <span>Zero Frameworks Were Harmed</span>
+            <span class="dot">◆</span>
+            <span>Powered By Coffee &amp; Broken Keyboards</span>
+            <span class="dot">◆</span>
+            <span>One Marine, No Middlemen</span>
+            <span class="dot">◆</span>
+            <span>Who Knew Ideas Could Look So Dope, I Did</span>
+            <span class="dot">◆</span>
+            <span>Let&rsquo;s Build Something...Or Not</span>
+            <span class="dot">◆</span>
+            <span>I Just Work Here...But I'm Pretty Good At My Job, So</span>
+            <span class="dot">◆</span>
+          </div>
+          <div class="marquee-group" aria-hidden="true">
+            <span>Hand-Coded From Scratch</span>
+            <span class="dot">◆</span>
+            <span>Zero Frameworks Were Harmed</span>
+            <span class="dot">◆</span>
+            <span>Powered By Coffee &amp; Broken Keyboards</span>
+            <span class="dot">◆</span>
+            <span>One Marine, No Middlemen</span>
+            <span class="dot">◆</span>
+            <span>Who Knew Ideas Could Look So Dope, I Did</span>
+            <span class="dot">◆</span>
+            <span>Let&rsquo;s Build Something...Or Not</span>
+            <span class="dot">◆</span>
+            <span>I Just Work Here...But I'm Pretty Good At My Job, So</span>
+            <span class="dot">◆</span>
+          </div>
+        </div>
+      </section>
     </main>
 
     <button id="back-to-top">↑</button>
@@ -157,15 +209,15 @@
       <div class="footer-content">
         <section class="footer-column">
           <h4>Explore</h4>
-          <a href="index.html">Home</a>
-          <a href="products.html">Products</a>
-          <a href="about.html">About Us</a>
+          <a href="/">Home</a>
+          <a href="/services">Services</a>
+          <a href="/about">About Us</a>
         </section>
         <section class="footer-column">
           <h4>Support</h4>
-          <a href="contact.html">Contact Us</a>
-          <a href="privacy.html">Privacy Policy</a>
-          <a href="terms.html">Terms of Use</a>
+          <a href="/contact">Contact Us</a>
+          <a href="/privacy">Privacy Policy</a>
+          <a href="/terms">Terms of Use</a>
         </section>
         <section class="footer-column">
           <h4>Connect</h4>
@@ -201,6 +253,10 @@
           name of Sensormedia LLC.
         </p>
         <p>A USMC Veteran-Owned Business.</p>
+        <p class="founder-byline">
+          Designed, coded, deployed, and occasionally cursed at by one stubborn
+          Marine in Yuma, Arizona.
+        </p>
       </div>
     </footer>
 
