@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const phrases = [
           "You found it.",
-          "Your next\nbig dream.",
+          "Your next\nbig idea.",
           "Come to life.",
         ];
 
