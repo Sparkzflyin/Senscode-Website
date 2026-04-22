@@ -268,7 +268,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
               // Pairs with half of the 8 neighbors (avoids double-counting)
               for (let n = 0; n < 4; n++) {
-                const nk = cx + halfNeighbors[n][0] + "," + (cy + halfNeighbors[n][1]);
+                const nk =
+                  cx + halfNeighbors[n][0] + "," + (cy + halfNeighbors[n][1]);
                 const other = grid.get(nk);
                 if (!other) continue;
                 for (let i = 0; i < bucket.length; i++) {
@@ -407,7 +408,7 @@ document.addEventListener("DOMContentLoaded", () => {
           }
         });
       },
-      { threshold: 0.2 },
+      { threshold: 0.2 }
     );
     revealEls.forEach((el) => observer.observe(el));
   } else {
@@ -417,7 +418,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // 5. Advanced Card Tilt & Spotlight Effect
   document
     .querySelectorAll(
-      ".glass-panel:not(.no-spotlight), .card:not(.no-spotlight), .process-step:not(.no-spotlight)",
+      ".glass-panel:not(.no-spotlight), .card:not(.no-spotlight), .process-step:not(.no-spotlight)"
     )
     .forEach((card) => {
       if (!card.querySelector(".spotlight")) {
@@ -517,20 +518,33 @@ document.addEventListener("DOMContentLoaded", () => {
   const mobileMenu = document.getElementById("mobile-menu");
 
   if (hamburger && mobileMenu) {
-    hamburger.addEventListener("click", () => {
-      hamburger.classList.toggle("active");
-      mobileMenu.classList.toggle("active");
-      document.body.style.overflow = mobileMenu.classList.contains("active")
-        ? "hidden"
-        : "";
+    const setMenuState = (open) => {
+      hamburger.classList.toggle("active", open);
+      mobileMenu.classList.toggle("active", open);
+      hamburger.setAttribute("aria-expanded", open ? "true" : "false");
+      document.body.style.overflow = open ? "hidden" : "";
+    };
+    const toggleMenu = () => {
+      setMenuState(!mobileMenu.classList.contains("active"));
+    };
+
+    hamburger.addEventListener("click", toggleMenu);
+    hamburger.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        toggleMenu();
+      }
     });
 
     document.querySelectorAll(".mobile-menu a").forEach((link) => {
-      link.addEventListener("click", () => {
-        hamburger.classList.remove("active");
-        mobileMenu.classList.remove("active");
-        document.body.style.overflow = "";
-      });
+      link.addEventListener("click", () => setMenuState(false));
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && mobileMenu.classList.contains("active")) {
+        setMenuState(false);
+        hamburger.focus();
+      }
     });
   }
 
@@ -570,7 +584,7 @@ document.addEventListener("DOMContentLoaded", () => {
         scrollTicking = true;
       }
     },
-    { passive: true },
+    { passive: true }
   );
 
   // 9. Time Greeting Logic
@@ -604,6 +618,7 @@ document.addEventListener("DOMContentLoaded", () => {
     contactForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       const submitBtn = document.getElementById("submit-btn");
+      if (!submitBtn) return;
       const originalText = submitBtn.innerText;
       submitBtn.innerText = "Sending...";
       submitBtn.disabled = true;
@@ -632,7 +647,8 @@ document.addEventListener("DOMContentLoaded", () => {
             submitBtn.disabled = false;
           }, 3000);
         }
-      } catch {
+      } catch (err) {
+        console.error("Contact form submission failed:", err);
         submitBtn.innerText = "Error. Try again.";
         setTimeout(() => {
           submitBtn.innerText = originalText;
@@ -644,7 +660,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // 13. Typewriter Effect for Hero Headers
   const heroHeaders = document.querySelectorAll(
-    ".hero-content h1, .founder-note h1, .founder-note h2",
+    ".hero-content h1, .founder-note h1, .founder-note h2"
   );
   heroHeaders.forEach((header) => {
     const text = header.textContent;
@@ -683,7 +699,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const restOfText = text.substring(
         text.indexOf(firstWordAndSpace) +
           firstWordAndSpace.length +
-          secondWord.length,
+          secondWord.length
       );
 
       // Generate a realistic transposition typo for the second word
@@ -701,16 +717,17 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       // Action queue: type prefix -> type typo -> pause -> delete typo -> pause -> type correctly
-      for (let c of firstWordAndSpace) actions.push({ type: "type", char: c });
-      for (let c of typoWord) actions.push({ type: "type", char: c });
+      for (const c of firstWordAndSpace)
+        actions.push({ type: "type", char: c });
+      for (const c of typoWord) actions.push({ type: "type", char: c });
       actions.push({ type: "pause", ms: 400 });
       for (let i = 0; i < typoWord.length; i++)
         actions.push({ type: "delete" });
       actions.push({ type: "pause", ms: 200 });
-      for (let c of secondWord + restOfText)
+      for (const c of secondWord + restOfText)
         actions.push({ type: "type", char: c });
     } else {
-      for (let c of text) actions.push({ type: "type", char: c });
+      for (const c of text) actions.push({ type: "type", char: c });
     }
 
     let actionIndex = 0;
@@ -790,7 +807,7 @@ document.addEventListener("DOMContentLoaded", () => {
           }
         });
       },
-      { threshold: 0.3 },
+      { threshold: 0.3 }
     );
     document
       .querySelectorAll(".split-text")
@@ -873,7 +890,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const revealAmount = Math.max(
           0,
-          scrollPos - (docHeight - footerHeight),
+          scrollPos - (docHeight - footerHeight)
         );
 
         if (revealAmount > 0 && revealAmount < footerHeight) {
@@ -940,7 +957,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const isOrange = Math.random() > 0.5;
             orb.style.setProperty(
               "--orb-color",
-              isOrange ? "#ff9500" : "var(--link)",
+              isOrange ? "#ff9500" : "var(--link)"
             );
 
             orb.style.width = `${size}px`;
@@ -961,7 +978,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
           // Implode existing orbs
           const activeOrbs = document.querySelectorAll(
-            ".exploding-orb:not(.implode)",
+            ".exploding-orb:not(.implode)"
           );
           activeOrbs.forEach((orb) => {
             orb.classList.add("implode");
@@ -1022,7 +1039,7 @@ document.addEventListener("DOMContentLoaded", () => {
           document.body.appendChild(cursor);
           document.body.appendChild(follower);
         },
-        { once: true },
+        { once: true }
       );
     }
 
@@ -1048,7 +1065,7 @@ document.addEventListener("DOMContentLoaded", () => {
     animateCursor();
 
     const hoverTargets = document.querySelectorAll(
-      "a, button, .card, .interactive-orb, .theme-toggle, .process-step, .blow-up-btn",
+      "a, button, .card, .interactive-orb, .theme-toggle, .process-step, .blow-up-btn"
     );
     hoverTargets.forEach((el) => {
       el.addEventListener("mouseenter", () => {
@@ -1284,7 +1301,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Check OS preference
       const prefersReduced = window.matchMedia(
-        "(prefers-reduced-motion: reduce)",
+        "(prefers-reduced-motion: reduce)"
       ).matches;
       const savedMotion = localStorage.getItem("reduce-motion");
 
@@ -1317,7 +1334,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const estimatorPanel = document.getElementById("estimator-panel");
   if (estimatorPanel) {
     const checkboxes = estimatorPanel.querySelectorAll(
-      "input[type='checkbox']",
+      "input[type='checkbox']"
     );
     const totalPriceEl = document.getElementById("est-total-price");
     const basePrice = 300;
@@ -1353,7 +1370,7 @@ document.addEventListener("DOMContentLoaded", () => {
         totalPriceEl,
         parseInt(totalPriceEl.innerText.replace("$", ""), 10),
         currentTotal,
-        500,
+        500
       );
     };
 

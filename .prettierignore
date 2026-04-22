@@ -1,0 +1,4 @@
+.vercel
+.claude
+dist
+node_modules

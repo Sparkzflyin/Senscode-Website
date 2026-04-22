@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Learn about Christian Sparks, Founder & Lead Engineer at SensCode. Discover our core principles of aesthetic precision and performance."
+      content="Learn about Christian Sparks, Founder &amp; Lead Engineer at SensCode. Discover our core principles of aesthetic precision and performance."
     />
     <meta
       name="keywords"
@@ -19,7 +19,7 @@
     />
     <meta
       property="og:description"
-      content="Learn about Christian Sparks, Founder & Lead Engineer at SensCode. Discover our core principles of aesthetic precision."
+      content="Learn about Christian Sparks, Founder &amp; Lead Engineer at SensCode. Discover our core principles of aesthetic precision."
     />
     <meta property="og:url" content="https://senscode.com/about" />
     <meta property="og:type" content="website" />
@@ -71,13 +71,26 @@
         <li><a href="/contact">Contact</a></li>
       </ul>
       <div class="nav-actions">
-        <button class="theme-toggle">Mode</button>
+        <button
+          class="theme-toggle"
+          type="button"
+          aria-label="Toggle color theme"
+        >
+          Mode
+        </button>
       </div>
-      <div class="hamburger" id="hamburger">
+      <button
+        class="hamburger"
+        id="hamburger"
+        type="button"
+        aria-label="Toggle menu"
+        aria-controls="mobile-menu"
+        aria-expanded="false"
+      >
         <span></span>
         <span></span>
         <span></span>
-      </div>
+      </button>
     </nav>
     <nav aria-label="Mobile Navigation" class="mobile-menu" id="mobile-menu">
       <a href="/">Home</a>
@@ -87,6 +100,8 @@
       <a href="/contact">Contact</a>
       <button
         class="theme-toggle"
+        type="button"
+        aria-label="Toggle color theme"
         style="margin-top: 20px; font-size: 1.2rem; padding: 10px 20px"
       >
         Mode
@@ -137,7 +152,7 @@
               loading="lazy"
               decoding="async"
             />
-            <span class="founder-title">Founder & Lead Engineer</span>
+            <span class="founder-title">Founder &amp; Lead Engineer</span>
           </div>
         </div>
       </section>
@@ -232,7 +247,7 @@
           </div>
           <div class="sticky-skill-card">
             <h3>HTML5/CSS3</h3>
-            <p>Semantic & Responsive</p>
+            <p>Semantic &amp; Responsive</p>
           </div>
           <div class="sticky-skill-card">
             <h3>Git / GitHub</h3>
@@ -240,7 +255,7 @@
           </div>
           <div class="sticky-skill-card">
             <h3>Python</h3>
-            <p>Data & Automation</p>
+            <p>Data &amp; Automation</p>
           </div>
           <div class="sticky-skill-card">
             <h3>SEO</h3>
@@ -287,7 +302,14 @@
         </div>
       </section>
     </main>
-    <button id="back-to-top">↑</button>
+    <button
+      id="back-to-top"
+      type="button"
+      aria-label="Back to top"
+      title="Back to top"
+    >
+      ↑
+    </button>
     <script defer src="script.js"></script>
 
     <footer class="footer-panel">

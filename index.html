@@ -60,11 +60,14 @@
   </head>
   <body>
     <dialog class="site-intro" aria-label="Welcome">
-      <canvas id="intro-particle-canvas" class="site-intro-particles"></canvas>
+      <canvas
+        id="intro-particle-canvas"
+        class="site-intro-particles"
+        aria-hidden="true"
+        tabindex="-1"
+      ></canvas>
       <div class="site-intro-content">
-        <p class="split-sr">
-          You found it. Your next big dream. Come to life.
-        </p>
+        <p class="split-sr">You found it. Your next big dream. Come to life.</p>
         <button type="button" class="cta-button site-intro-btn">
           Come On In
         </button>
@@ -82,13 +85,26 @@
         <li><a href="/contact">Contact</a></li>
       </ul>
       <div class="nav-actions">
-        <button class="theme-toggle">Mode</button>
+        <button
+          class="theme-toggle"
+          type="button"
+          aria-label="Toggle color theme"
+        >
+          Mode
+        </button>
       </div>
-      <div class="hamburger" id="hamburger">
+      <button
+        class="hamburger"
+        id="hamburger"
+        type="button"
+        aria-label="Toggle menu"
+        aria-controls="mobile-menu"
+        aria-expanded="false"
+      >
         <span></span>
         <span></span>
         <span></span>
-      </div>
+      </button>
     </nav>
     <nav aria-label="Mobile Navigation" class="mobile-menu" id="mobile-menu">
       <a href="/">Home</a>
@@ -98,6 +114,8 @@
       <a href="/contact">Contact</a>
       <button
         class="theme-toggle"
+        type="button"
+        aria-label="Toggle color theme"
         style="margin-top: 20px; font-size: 1.2rem; padding: 10px 20px"
       >
         Mode
@@ -108,10 +126,10 @@
       <div class="hero-content reveal" style="position: relative; z-index: 2">
         <div class="greeting-container">
           <p id="time-greeting"></p>
-          <div class="status-pill" aria-label="Current availability">
+          <output class="status-pill" aria-label="Current availability">
             <span class="status-dot" aria-hidden="true"></span>
-            <span>Currently booking for June</span>
-          </div>
+            <span>Accepting Booking Until June</span>
+          </output>
         </div>
         <h1>Website Design.</h1>
         <p>Experience the next generation of beauty in web-design.</p>
@@ -203,7 +221,14 @@
       </section>
     </main>
 
-    <button id="back-to-top">↑</button>
+    <button
+      id="back-to-top"
+      type="button"
+      aria-label="Back to top"
+      title="Back to top"
+    >
+      ↑
+    </button>
 
     <footer class="footer-panel">
       <div class="footer-content">

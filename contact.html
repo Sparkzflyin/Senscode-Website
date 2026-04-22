@@ -68,13 +68,26 @@
         <li><a href="/contact">Contact</a></li>
       </ul>
       <div class="nav-actions">
-        <button class="theme-toggle">Mode</button>
+        <button
+          class="theme-toggle"
+          type="button"
+          aria-label="Toggle color theme"
+        >
+          Mode
+        </button>
       </div>
-      <div class="hamburger" id="hamburger">
+      <button
+        class="hamburger"
+        id="hamburger"
+        type="button"
+        aria-label="Toggle menu"
+        aria-controls="mobile-menu"
+        aria-expanded="false"
+      >
         <span></span>
         <span></span>
         <span></span>
-      </div>
+      </button>
     </nav>
     <nav aria-label="Mobile Navigation" class="mobile-menu" id="mobile-menu">
       <a href="/">Home</a>
@@ -84,6 +97,8 @@
       <a href="/contact">Contact</a>
       <button
         class="theme-toggle"
+        type="button"
+        aria-label="Toggle color theme"
         style="margin-top: 20px; font-size: 1.2rem; padding: 10px 20px"
       >
         Mode
@@ -111,7 +126,6 @@
             style="min-width: 320px; height: 550px"
           ></div>
           <script
-            type="text/javascript"
             src="https://assets.calendly.com/assets/external/widget.js"
             async
           ></script>
@@ -174,7 +188,14 @@
         </div>
       </section>
     </main>
-    <button id="back-to-top">↑</button>
+    <button
+      id="back-to-top"
+      type="button"
+      aria-label="Back to top"
+      title="Back to top"
+    >
+      ↑
+    </button>
     <script defer src="script.js"></script>
     <footer class="footer-panel">
       <div class="footer-content">

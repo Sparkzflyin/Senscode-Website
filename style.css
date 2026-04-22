@@ -7,8 +7,8 @@
   --hover-border: #ff9500;
   --link: #2997ff;
   --transition: 0.6s cubic-bezier(0.28, 0.11, 0.32, 1);
-  --font-body:
-    "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif;
   --font-heading: "Playfair Display", serif;
 }
 
@@ -49,6 +49,17 @@ button,
 input,
 textarea {
   -webkit-tap-highlight-color: transparent;
+}
+
+/* Keyboard focus ring — visible for keyboard users only */
+:focus-visible {
+  outline: 2px solid var(--hover-border);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+/* Suppress default focus ring for mouse/touch users */
+:focus:not(:focus-visible) {
+  outline: none;
 }
 
 * {
@@ -181,9 +192,10 @@ main {
 .theme-toggle {
   border: 1px solid var(--border);
   cursor: pointer;
-  padding: 6px 14px;
-  border-radius: 20px;
-  font-size: 0.7rem;
+  padding: 10px 18px;
+  min-height: 44px;
+  border-radius: 22px;
+  font-size: 0.72rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -642,10 +654,23 @@ main {
 .hamburger {
   display: none; /* Hidden on desktop */
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   gap: 6px;
   cursor: pointer;
   z-index: 3000;
-  padding: 5px; /* Increase clickable area */
+  padding: 10px;
+  min-width: 44px;
+  min-height: 44px;
+  background: transparent;
+  border: 0;
+  color: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+.hamburger:focus-visible {
+  outline: 2px solid var(--hover-border);
+  outline-offset: 2px;
+  border-radius: 6px;
 }
 
 .hamburger span {
@@ -700,6 +725,11 @@ main {
   font-weight: 600;
   opacity: 0.6;
   transition: opacity 0.3s;
+  padding: 8px 16px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .mobile-menu a.active {
@@ -919,11 +949,18 @@ main {
 .sticky-skill-card h3 {
   font-size: 2.5rem;
   margin-bottom: 10px;
+  color: var(--text); /* Fallback for browsers without background-clip: text */
   background: linear-gradient(90deg, var(--text), var(--link));
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
   text-align: center;
+}
+@supports not (background-clip: text) {
+  .sticky-skill-card h3 {
+    background: none;
+    -webkit-text-fill-color: currentColor;
+  }
 }
 
 .sticky-skill-card p {
@@ -1094,7 +1131,7 @@ main {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   height: 100dvh;
   z-index: 1; /* Keep it above the background to be visible */
@@ -1529,10 +1566,12 @@ body.reduce-motion .marquee-track {
 .site-intro {
   position: fixed;
   inset: 0;
-  width: 100vw;
+  width: 100%;
   height: 100vh;
-  max-width: 100vw;
+  height: 100dvh;
+  max-width: 100%;
   max-height: 100vh;
+  max-height: 100dvh;
   margin: 0;
   padding: 20px;
   padding-bottom: calc(20px + env(safe-area-inset-bottom));
@@ -1562,19 +1601,22 @@ body.reduce-motion .marquee-track {
   pointer-events: none;
 }
 
+/* Intro content centers the dismiss button over the particle canvas. */
 .site-intro-content {
   position: relative;
   z-index: 2;
-}
-
-/* Intro content centers the dismiss button over the particle canvas. */
-.site-intro-content {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   align-items: center;
   padding-bottom: clamp(40px, 8vh, 90px);
   min-height: 100%;
+  max-width: 640px;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: intro-content-enter 1s cubic-bezier(0.22, 0.61, 0.36, 1) 0.25s
+    forwards;
 }
 
 .site-intro .site-intro-btn {
@@ -1585,15 +1627,6 @@ body.reduce-motion .marquee-track {
 .site-intro.dismissing {
   opacity: 0;
   pointer-events: none;
-}
-
-.site-intro-content {
-  max-width: 640px;
-  text-align: center;
-  opacity: 0;
-  transform: translateY(20px);
-  animation: intro-content-enter 1s cubic-bezier(0.22, 0.61, 0.36, 1) 0.25s
-    forwards;
 }
 
 .site-intro-title {

@@ -127,7 +127,7 @@ document.addEventListener("DOMContentLoaded", () => {
           localMouseY = e.touches[0].clientY - rect.top;
         }
       },
-      { passive: false },
+      { passive: false }
     );
 
     localCanvas.addEventListener("touchend", () => {

@@ -71,13 +71,26 @@
         <li><a href="/contact">Contact</a></li>
       </ul>
       <div class="nav-actions">
-        <button class="theme-toggle">Mode</button>
+        <button
+          class="theme-toggle"
+          type="button"
+          aria-label="Toggle color theme"
+        >
+          Mode
+        </button>
       </div>
-      <div class="hamburger" id="hamburger">
+      <button
+        class="hamburger"
+        id="hamburger"
+        type="button"
+        aria-label="Toggle menu"
+        aria-controls="mobile-menu"
+        aria-expanded="false"
+      >
         <span></span>
         <span></span>
         <span></span>
-      </div>
+      </button>
     </nav>
     <nav aria-label="Mobile Navigation" class="mobile-menu" id="mobile-menu">
       <a href="/">Home</a>
@@ -87,6 +100,8 @@
       <a href="/contact">Contact</a>
       <button
         class="theme-toggle"
+        type="button"
+        aria-label="Toggle color theme"
         style="margin-top: 20px; font-size: 1.2rem; padding: 10px 20px"
       >
         Mode
@@ -112,7 +127,7 @@
               <li>Custom UI/UX Design</li>
               <li>Full-Stack Development</li>
               <li>Responsive Mobile Design</li>
-              <li>SEO & Performance Tuning</li>
+              <li>SEO &amp; Performance Tuning</li>
             </ul>
             <div class="card-footer">
               <span class="price-hint">Starting at $1000</span>
@@ -129,7 +144,7 @@
             <ul class="service-list">
               <li>Architecture Planning</li>
               <li>Technology Stack Selection</li>
-              <li>Code Review & Audits</li>
+              <li>Code Review &amp; Audits</li>
               <li>Scalability Strategy</li>
             </ul>
             <div class="card-footer">
@@ -146,7 +161,7 @@
             </p>
             <ul class="service-list">
               <li>Performance Optimization</li>
-              <li>Bug Squashing & Refactoring</li>
+              <li>Bug Squashing &amp; Refactoring</li>
               <li>Design Modernization</li>
               <li>Accessibility Compliance</li>
             </ul>
@@ -231,13 +246,13 @@
             <div class="estimator-option">
               <label
                 class="toggle-switch"
-                aria-label="Full Scope Design & UI/UX"
+                aria-label="Full Scope Design &amp; UI/UX"
               >
                 <input type="checkbox" id="est-fullscope" value="1000" />
                 <span class="slider"></span>
               </label>
               <div class="option-text">
-                <strong>Full Scope Design & UI/UX</strong>
+                <strong>Full Scope Design &amp; UI/UX</strong>
                 <span
                   >Complete custom design and responsive front-end build.</span
                 >
@@ -256,12 +271,15 @@
             </div>
 
             <div class="estimator-option">
-              <label class="toggle-switch" aria-label="Kinetic & 3D Animations">
+              <label
+                class="toggle-switch"
+                aria-label="Kinetic &amp; 3D Animations"
+              >
                 <input type="checkbox" id="est-animations" value="800" />
                 <span class="slider"></span>
               </label>
               <div class="option-text">
-                <strong>Kinetic & 3D Animations</strong>
+                <strong>Kinetic &amp; 3D Animations</strong>
                 <span
                   >WebGL, custom physics, and interactive particle
                   canvases.</span
@@ -283,13 +301,13 @@
             <div class="estimator-option">
               <label
                 class="toggle-switch"
-                aria-label="Advanced SEO & Analytics"
+                aria-label="Advanced SEO &amp; Analytics"
               >
                 <input type="checkbox" id="est-seo" value="400" />
                 <span class="slider"></span>
               </label>
               <div class="option-text">
-                <strong>Advanced SEO & Analytics</strong>
+                <strong>Advanced SEO &amp; Analytics</strong>
                 <span
                   >Deep structural optimization and tracking integration.</span
                 >
@@ -375,7 +393,14 @@
         <a href="/contact" class="cta-button">Start Your Project</a>
       </section>
     </main>
-    <button id="back-to-top">↑</button>
+    <button
+      id="back-to-top"
+      type="button"
+      aria-label="Back to top"
+      title="Back to top"
+    >
+      ↑
+    </button>
     <script defer src="script.js"></script>
     <footer class="footer-panel">
       <div class="footer-content">
