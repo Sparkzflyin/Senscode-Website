@@ -53,11 +53,14 @@
     <style>
       .bento-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
-        gap: 20px;
-        max-width: 1200px;
+        grid-template-columns: repeat(
+          auto-fit,
+          minmax(min(100%, clamp(280px, 24vw, 420px)), 1fr)
+        );
+        gap: clamp(16px, 1.8vw, 36px);
+        max-width: min(92vw, 1600px);
         margin: 0 auto;
-        padding: 20px;
+        padding: clamp(16px, 1.6vw, 32px);
         grid-auto-flow: dense;
         transition:
           gap 0.5s ease,
@@ -65,8 +68,8 @@
       }
 
       .bento-grid.blown-up {
-        gap: 40px;
-        padding: 40px 20px;
+        gap: clamp(28px, 3vw, 56px);
+        padding: clamp(28px, 3vw, 56px) clamp(16px, 1.6vw, 32px);
       }
 
       .bento-item {
@@ -75,8 +78,8 @@
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
-        padding: 30px;
-        min-height: 250px;
+        padding: clamp(24px, 2.4vw, 48px);
+        min-height: clamp(240px, 22vw, 360px);
       }
 
       .bento-large {
