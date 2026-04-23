@@ -112,7 +112,30 @@ document.addEventListener("DOMContentLoaded", () => {
     ) {
       const introBtn = intro.querySelector(".site-intro-btn");
       const introCanvas = intro.querySelector(".site-intro-particles");
+      const introCaption = intro.querySelector(".site-intro-caption");
       let introRafId;
+
+      // Plain-text fallback that mirrors the current particle phrase.
+      // Shown as the particles assemble, hidden as they disperse, so users
+      // who can't parse the particle letters still see the words.
+      const captionForPhrase = (phrase) => {
+        if (!phrase || phrase === "__arrow__") return "";
+        return phrase.replace(/\n/g, " ");
+      };
+      const showIntroCaption = (phrase) => {
+        if (!introCaption) return;
+        const text = captionForPhrase(phrase);
+        if (!text) {
+          introCaption.classList.remove("visible");
+          return;
+        }
+        introCaption.textContent = text;
+        introCaption.classList.add("visible");
+      };
+      const hideIntroCaption = () => {
+        if (!introCaption) return;
+        introCaption.classList.remove("visible");
+      };
 
       intro.showModal();
 
@@ -329,6 +352,7 @@ document.addEventListener("DOMContentLoaded", () => {
           phase = "assembling";
           const current = phrases[phraseIdx];
           assignTargets(current);
+          showIntroCaption(current);
           introScheduleNext(1300, () => {
             phase = "holding";
             // Arrow is the terminal state — hold it as a persistent guide
@@ -336,6 +360,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (current === "__arrow__") return;
             introScheduleNext(3500, () => {
               phase = "dispersing";
+              hideIntroCaption();
               releaseTargets();
               introScheduleNext(1100, () => {
                 phase = "drifting";
@@ -1387,7 +1412,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(${baseColor}, 0.5)`;
+      ctx.fillStyle = `rgba(${baseColor}, 0.75)`;
       ctx.fill();
 
       if (SITE_SETTINGS.cursorConnections) {
