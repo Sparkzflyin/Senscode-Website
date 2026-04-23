@@ -621,34 +621,7 @@ main {
   opacity: 0.6;
 }
 
-.calendly-inline-widget {
-  margin-bottom: -125px; /* Pull the form up closer */
-}
-
 /* --- Form Elements --- */
-.contact-separator {
-  text-align: center;
-  margin: 20px 0;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 15px;
-  color: var(--text);
-  opacity: 0.4;
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-}
-
-.contact-separator::before,
-.contact-separator::after {
-  content: "";
-  height: 1px;
-  flex: 1;
-  background: var(--border);
-}
-
 #contact-form {
   display: flex;
   flex-direction: column;
