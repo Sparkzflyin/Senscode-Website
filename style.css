@@ -1953,3 +1953,27 @@ body.reduce-motion .status-dot {
     padding: 16px 20px;
   }
 }
+
+/* --- Gecko-only perf overrides ---
+   Firefox's backdrop-filter is CPU-expensive relative to Blink/WebKit,
+   especially on elements that also create 3D contexts (the cards). These
+   rules fire only when script.js tags <html> with .engine-gecko, so
+   Chrome / Safari / other Chromium-based browsers keep the full-fidelity
+   look. Cards lose a bit of background blur depth on Firefox; paint time
+   drops enough to eliminate the on-load lag. */
+.engine-gecko .glass-panel,
+.engine-gecko .navbar,
+.engine-gecko .process-step,
+.engine-gecko .metrics-banner,
+.engine-gecko .marquee-band,
+.engine-gecko .faq-item {
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+/* Don't promote every card to its own compositor layer up front — Firefox
+   pays the layer cost even when the card is static. The JS tilt handler
+   still applies a transform on hover, which promotes on demand. */
+.engine-gecko .card {
+  will-change: auto;
+}

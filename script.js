@@ -104,6 +104,12 @@ const SITE_SETTINGS = (() => {
 window.SITE_BROWSER = SITE_BROWSER;
 window.SITE_SETTINGS = SITE_SETTINGS;
 
+// Tag the root so CSS can apply per-engine overrides without a media
+// query hack. Runs before DOMContentLoaded (script is deferred, html
+// element exists from parse time), so the class lands before first paint
+// on most page loads.
+document.documentElement.classList.add("engine-" + SITE_BROWSER.engine);
+
 document.addEventListener("DOMContentLoaded", () => {
   // First-visit Intro Splash (homepage only, native <dialog>)
   const intro = document.querySelector(".site-intro");
