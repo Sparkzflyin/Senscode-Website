@@ -274,10 +274,58 @@ main {
 }
 
 .card h3,
-.card p {
+.card p,
+.card .card-icon,
+.card .card-bullets {
   transform: translateZ(30px);
   position: relative;
   z-index: 2;
+}
+
+/* Thin line-icon atop the principle/feature cards — gives the spotlight
+   something to sweep across and anchors the eye before the title. */
+.card-icon {
+  width: 36px;
+  height: 36px;
+  margin-bottom: 22px;
+  color: var(--link);
+  opacity: 0.9;
+}
+
+.card-icon svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Concise feature bullets under the description. Different from the
+   services .service-list pattern so the two don't read as the same list. */
+.card-bullets {
+  list-style: none;
+  padding: 0;
+  margin: 22px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.card-bullets li {
+  font-size: 0.88rem;
+  line-height: 1.5;
+  opacity: 0.78;
+  padding-left: 20px;
+  position: relative;
+}
+
+.card-bullets li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.7em;
+  width: 10px;
+  height: 1px;
+  background: var(--link);
+  opacity: 0.85;
 }
 
 .glass-panel {
