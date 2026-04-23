@@ -1,3 +1,5 @@
+"use strict";
+
 // Browser + per-engine performance settings.
 // Detection is engine-based because perf characteristics track the engine
 // (Blink/Gecko/WebKit), not the brand name. Brave/Edge/Opera/Arc all ride
@@ -288,8 +290,7 @@ document.addEventListener("DOMContentLoaded", () => {
           // Match "Come to life." size so the arrow reads at the same visual
           // weight as the phrase that preceded it.
           const refLen = "Come to life.".length;
-          const fontSize =
-            Math.min(cssW / (refLen * 0.48), cssH / 1.6) * 0.88;
+          const fontSize = Math.min(cssW / (refLen * 0.48), cssH / 1.6) * 0.88;
           const arrowH = fontSize;
           const arrowW = arrowH * 1.8;
           const cx = cssW / 2;

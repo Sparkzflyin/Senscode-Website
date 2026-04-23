@@ -61,9 +61,19 @@
       // local dev hosts so the dev server doesn't 404 on the paths.
       (() => {
         const h = location.hostname;
-        if (h === 'localhost' || h === '127.0.0.1' || h === '0.0.0.0' || h === '' || h === '::1') return;
-        for (const src of ['/_vercel/insights/script.js', '/_vercel/speed-insights/script.js']) {
-          const el = document.createElement('script');
+        if (
+          h === "localhost" ||
+          h === "127.0.0.1" ||
+          h === "0.0.0.0" ||
+          h === "" ||
+          h === "::1"
+        )
+          return;
+        for (const src of [
+          "/_vercel/insights/script.js",
+          "/_vercel/speed-insights/script.js",
+        ]) {
+          const el = document.createElement("script");
           el.defer = true;
           el.src = src;
           document.head.appendChild(el);
@@ -175,7 +185,13 @@
         <div class="grid-3">
           <article class="card glass-panel">
             <div class="card-icon" aria-hidden="true">
-              <svg viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+              <svg
+                viewBox="0 0 30 30"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+              >
                 <circle cx="15" cy="15" r="10" />
                 <circle cx="15" cy="15" r="3.5" />
                 <line x1="15" y1="2.5" x2="15" y2="7" />
@@ -187,9 +203,9 @@
             <h3>Aesthetic Precision</h3>
             <p>
               Every pixel is purposefully placed to create an experience that
-              feels intuitively beautiful. Whitespace, rhythm, and hierarchy
-              are treated as load-bearing — not garnish. The result is a site
-              that looks effortless because the effort was hidden.
+              feels intuitively beautiful. Whitespace, rhythm, and hierarchy are
+              treated as load-bearing — not garnish. The result is a site that
+              looks effortless because the effort was hidden.
             </p>
             <ul class="card-bullets">
               <li>Layouts built on a baseline grid, not eyeballed spacing</li>
@@ -199,7 +215,14 @@
           </article>
           <article class="card glass-panel">
             <div class="card-icon" aria-hidden="true">
-              <svg viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <svg
+                viewBox="0 0 30 30"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
                 <path d="M17 3 L6 17 L13.5 17 L12.5 27 L24 13 L16 13 Z" />
               </svg>
             </div>
@@ -218,7 +241,14 @@
           </article>
           <article class="card glass-panel">
             <div class="card-icon" aria-hidden="true">
-              <svg viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <svg
+                viewBox="0 0 30 30"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
                 <path d="M3 15 Q 15 5, 27 15 Q 15 25, 3 15 Z" />
                 <circle cx="15" cy="15" r="3.2" />
               </svg>
