@@ -1977,3 +1977,22 @@ body.reduce-motion .status-dot {
 .engine-gecko .card {
   will-change: auto;
 }
+
+/* Firefox (especially on Linux) falls back to CPU raster for animated
+   filter: blur(), which is visible as stutter when a refresh restores
+   scroll position and triggers a batch of .reveal elements at once.
+   Drop the blur half of the reveal on Gecko — opacity + transform both
+   run on the compositor and carry no paint cost. Visual delta is minor;
+   the elements still fade and slide in. */
+.engine-gecko .reveal,
+.engine-gecko .story-text {
+  filter: none;
+  transition:
+    opacity 1.5s cubic-bezier(0.2, 0.6, 0.3, 1),
+    transform 1.5s cubic-bezier(0.2, 0.6, 0.3, 1);
+}
+
+.engine-gecko .reveal.active,
+.engine-gecko .story-text.active {
+  filter: none;
+}
