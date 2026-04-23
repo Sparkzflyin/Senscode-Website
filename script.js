@@ -83,8 +83,11 @@ const SITE_SETTINGS = (() => {
   if (SITE_BROWSER.mobile) {
     return {
       ...base,
-      introMaxParticles: Math.floor(base.introMaxParticles * 0.5),
-      introDensityDivisor: base.introDensityDivisor * 1.5,
+      // Cap stays as a safety ceiling; the real driver is the divisor.
+      introMaxParticles: Math.floor(base.introMaxParticles * 0.75),
+      // Tighten the divisor (more particles per CSS area) so smaller phone
+      // letters still get enough coverage to read as words, not dots.
+      introDensityDivisor: base.introDensityDivisor * 0.6,
       introDprCap: Math.min(base.introDprCap, 1.5),
       cursorMaxParticles: Math.floor(base.cursorMaxParticles * 0.6),
       // Smaller particle radius on mobile so adjacent particles don't
