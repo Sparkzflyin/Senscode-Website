@@ -1,3 +1,104 @@
+// Browser + per-engine performance settings.
+// Detection is engine-based because perf characteristics track the engine
+// (Blink/Gecko/WebKit), not the brand name. Brave/Edge/Opera/Arc all ride
+// on Blink; Floorp/LibreWolf/Waterfox all ride on Gecko; every iOS browser
+// is forced onto WebKit. Settings are read by the intro particle canvas
+// and the global cursor constellation to pick particle counts, DPR ceiling,
+// and whether to draw the expensive connection-line pass.
+const SITE_BROWSER = (() => {
+  const ua = navigator.userAgent || "";
+  const vendor = navigator.vendor || "";
+  const mobile = /Android|iPhone|iPad|iPod|Mobile/i.test(ua);
+
+  let engine = "unknown";
+  let name = "unknown";
+
+  if (/Firefox\/|FxiOS\//.test(ua)) {
+    engine = "gecko";
+    name = "firefox";
+  } else if (/Edg\//.test(ua)) {
+    engine = "blink";
+    name = "edge";
+  } else if (/OPR\/|Opera\//.test(ua)) {
+    engine = "blink";
+    name = "opera";
+  } else if (/Chrome\//.test(ua) && vendor.includes("Google")) {
+    engine = "blink";
+    name = "chrome";
+  } else if (/Safari\//.test(ua) && vendor.includes("Apple")) {
+    engine = "webkit";
+    name = "safari";
+  } else if (/AppleWebKit\//.test(ua)) {
+    engine = "webkit";
+    name = "webkit-other";
+  }
+
+  return { engine, name, mobile, ua };
+})();
+
+const SITE_SETTINGS = (() => {
+  const presets = {
+    blink: {
+      introMaxParticles: 2800,
+      introDensityDivisor: 2500,
+      introConnections: true,
+      introDprCap: 3,
+      cursorMaxParticles: 120,
+      cursorDivisor: 18,
+      cursorConnections: true,
+    },
+    gecko: {
+      // Firefox's Canvas2D pays a higher cost per state change and per
+      // line segment, so halve the count and cap DPR to keep 60fps.
+      introMaxParticles: 1100,
+      introDensityDivisor: 5000,
+      introConnections: true,
+      introDprCap: 1.5,
+      cursorMaxParticles: 70,
+      cursorDivisor: 28,
+      cursorConnections: true,
+    },
+    webkit: {
+      introMaxParticles: 1800,
+      introDensityDivisor: 3200,
+      introConnections: true,
+      introDprCap: 2,
+      cursorMaxParticles: 90,
+      cursorDivisor: 22,
+      cursorConnections: true,
+    },
+    unknown: {
+      introMaxParticles: 1100,
+      introDensityDivisor: 5000,
+      introConnections: true,
+      introDprCap: 1.5,
+      cursorMaxParticles: 70,
+      cursorDivisor: 28,
+      cursorConnections: true,
+    },
+  };
+
+  const base = presets[SITE_BROWSER.engine] || presets.unknown;
+
+  if (SITE_BROWSER.mobile) {
+    return {
+      ...base,
+      introMaxParticles: Math.floor(base.introMaxParticles * 0.5),
+      introDensityDivisor: base.introDensityDivisor * 1.5,
+      introDprCap: Math.min(base.introDprCap, 1.5),
+      cursorMaxParticles: Math.floor(base.cursorMaxParticles * 0.6),
+      // Smaller particle radius on mobile so adjacent particles don't
+      // overlap when they land on letter targets — keeps formed text crisp.
+      introParticleRadiusMin: 0.9,
+      introParticleRadiusMax: 1.6,
+    };
+  }
+  return base;
+})();
+
+window.SITE_BROWSER = SITE_BROWSER;
+window.SITE_SETTINGS = SITE_SETTINGS;
+
 document.addEventListener("DOMContentLoaded", () => {
   // First-visit Intro Splash (homepage only, native <dialog>)
   const intro = document.querySelector(".site-intro");
@@ -44,7 +145,8 @@ document.addEventListener("DOMContentLoaded", () => {
           "__arrow__",
         ];
 
-        const getDpr = () => window.devicePixelRatio || 1;
+        const getDpr = () =>
+          Math.min(window.devicePixelRatio || 1, SITE_SETTINGS.introDprCap);
 
         const resizeIntroCanvas = () => {
           const rect = introCanvas.getBoundingClientRect();
@@ -74,8 +176,15 @@ document.addEventListener("DOMContentLoaded", () => {
           const { w, h } = getCssSize();
           const dpr = getDpr();
           // Density scales with DPR so 4K / Retina monitors get proportionally
-          // more particles filling the same CSS area.
-          const count = Math.min(2800, Math.floor((w * h * (1 + dpr)) / 2500));
+          // more particles filling the same CSS area. Cap + divisor come from
+          // SITE_SETTINGS so each engine gets a count it can actually render.
+          const count = Math.min(
+            SITE_SETTINGS.introMaxParticles,
+            Math.floor((w * h * (1 + dpr)) / SITE_SETTINGS.introDensityDivisor)
+          );
+          const rMin = SITE_SETTINGS.introParticleRadiusMin ?? 1.3;
+          const rMax = SITE_SETTINGS.introParticleRadiusMax ?? 2.8;
+          const rRange = rMax - rMin;
           iParticles = [];
           for (let i = 0; i < count; i++) {
             iParticles.push({
@@ -83,7 +192,7 @@ document.addEventListener("DOMContentLoaded", () => {
               y: Math.random() * h,
               vx: (Math.random() - 0.5) * 0.4,
               vy: (Math.random() - 0.5) * 0.4,
-              r: Math.random() * 1.5 + 1.3,
+              r: Math.random() * rRange + rMin,
               tx: null,
               ty: null,
             });
@@ -121,12 +230,13 @@ document.addEventListener("DOMContentLoaded", () => {
             octx.fillText(line, cssW / 2, startY + i * lineHeight);
           });
 
-          // Sample at a step that scales with DPR — same step in physical
-          // pixels across all monitors → finer-grained sampling (more
-          // targets per letter) on high-DPR displays.
+          // Scale the sample step with DPR so target spacing stays roughly
+          // constant in CSS pixels (~3.5px). A fixed physical step packs
+          // targets tighter on high-DPR screens, which causes particles to
+          // overlap and gives formed letters a chunky look on mobile.
           const img = octx.getImageData(0, 0, physW, physH).data;
           const targets = [];
-          const density = 7;
+          const density = Math.max(7, Math.round(3.5 * dpr));
           for (let y = 0; y < physH; y += density) {
             for (let x = 0; x < physW; x += density) {
               if (img[(y * physW + x) * 4 + 3] > 128) {
@@ -168,9 +278,11 @@ document.addEventListener("DOMContentLoaded", () => {
           octx.lineTo(cx + arrowW / 2, cy - arrowH / 2);
           octx.stroke();
 
+          // Same DPR-aware step as getTextTargets — keeps the arrow's
+          // target density matched to the phrase targets it replaces.
           const img = octx.getImageData(0, 0, physW, physH).data;
           const targets = [];
-          const density = 7;
+          const density = Math.max(7, Math.round(3.5 * dpr));
           for (let y = 0; y < physH; y += density) {
             for (let x = 0; x < physW; x += density) {
               if (img[(y * physW + x) * 4 + 3] > 128) {
@@ -272,8 +384,12 @@ document.addEventListener("DOMContentLoaded", () => {
           // Draw connection lines only during drift phases to keep the
           // "constellation" ambience without cluttering assembled letters.
           // Uses spatial grid + batched Path2D so cursor RAF stays smooth
-          // at high particle counts.
-          if (phase === "drifting" || phase === "dispersing") {
+          // at high particle counts. Skipped entirely on engines where the
+          // line pass dominates the frame budget.
+          if (
+            SITE_SETTINGS.introConnections &&
+            (phase === "drifting" || phase === "dispersing")
+          ) {
             const cellSize = 100;
             const maxDistSq = 4900; // ~70px visible threshold
             const grid = new Map();
@@ -1172,7 +1288,10 @@ document.addEventListener("DOMContentLoaded", () => {
     width = canvas.width = window.innerWidth;
     height = canvas.height = window.innerHeight;
     particles = [];
-    const numParticles = Math.min(120, Math.floor(window.innerWidth / 18));
+    const numParticles = Math.min(
+      SITE_SETTINGS.cursorMaxParticles,
+      Math.floor(window.innerWidth / SITE_SETTINGS.cursorDivisor)
+    );
     for (let i = 0; i < numParticles; i++) {
       particles.push({
         x: Math.random() * width,
@@ -1268,18 +1387,20 @@ document.addEventListener("DOMContentLoaded", () => {
       ctx.fillStyle = `rgba(${baseColor}, 0.5)`;
       ctx.fill();
 
-      for (let j = i + 1; j < particles.length; j++) {
-        const p2 = particles[j];
-        const dx2 = p.x - p2.x;
-        const dy2 = p.y - p2.y;
-        const dist2 = Math.sqrt(dx2 * dx2 + dy2 * dy2);
-        if (dist2 < 120) {
-          ctx.beginPath();
-          ctx.moveTo(p.x, p.y);
-          ctx.lineTo(p2.x, p2.y);
-          ctx.strokeStyle = `rgba(${lineColor}, ${0.15 - dist2 / 800})`;
-          ctx.lineWidth = 0.5;
-          ctx.stroke();
+      if (SITE_SETTINGS.cursorConnections) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const p2 = particles[j];
+          const dx2 = p.x - p2.x;
+          const dy2 = p.y - p2.y;
+          const dist2 = Math.sqrt(dx2 * dx2 + dy2 * dy2);
+          if (dist2 < 120) {
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.strokeStyle = `rgba(${lineColor}, ${0.15 - dist2 / 800})`;
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
+          }
         }
       }
     });
