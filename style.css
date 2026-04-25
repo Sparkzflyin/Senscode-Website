@@ -631,7 +631,8 @@ main {
 }
 
 .input-group input,
-.input-group textarea {
+.input-group textarea,
+.input-group select {
   width: 100%;
   padding: 14px 18px;
   background: var(--bg);
@@ -641,13 +642,48 @@ main {
   font-size: 1rem;
   outline: none;
   transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.input-group select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 16px;
+  padding-right: 42px;
+  cursor: pointer;
+}
+
+.input-group select:invalid {
+  color: #999;
+}
+
+.input-group select option {
+  background: var(--bg);
+  color: var(--text);
 }
 
 /* Focus state: creates a subtle blue glow */
 .input-group input:focus,
-.input-group textarea:focus {
+.input-group textarea:focus,
+.input-group select:focus {
   border-color: var(--link);
   box-shadow: 0 0 0 4px rgba(41, 151, 255, 0.15);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+}
+
+@media (max-width: 640px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
 }
 
 #submit-btn {
@@ -1168,6 +1204,7 @@ main {
   button,
   input,
   textarea,
+  select,
   .card,
   .process-step,
   .interactive-orb,
@@ -1321,6 +1358,7 @@ body.reduce-motion a,
 body.reduce-motion button,
 body.reduce-motion input,
 body.reduce-motion textarea,
+body.reduce-motion select,
 body.reduce-motion .card,
 body.reduce-motion .process-step,
 body.reduce-motion .interactive-orb,

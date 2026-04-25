@@ -152,8 +152,8 @@
                 type="text"
                 name="name"
                 maxlength="100"
-                placeholder="Name"
-                aria-label="Your name"
+                placeholder="Name / Business Name"
+                aria-label="Your name or business name"
                 autocomplete="name"
                 required
               />
@@ -168,6 +168,79 @@
                 autocomplete="email"
                 required
               />
+            </div>
+            <div class="input-group">
+              <input
+                type="url"
+                name="existing-website"
+                maxlength="250"
+                placeholder="Existing website URL (optional)"
+                aria-label="Your existing website URL"
+                autocomplete="url"
+              />
+            </div>
+            <div class="form-row">
+              <div class="input-group">
+                <select
+                  name="project-type"
+                  aria-label="Project type"
+                  required
+                >
+                  <option value="" disabled selected hidden>Project type</option>
+                  <option value="New website">New website</option>
+                  <option value="Website redesign">Website redesign</option>
+                  <option value="Landing page">Landing page</option>
+                  <option value="E-commerce">E-commerce</option>
+                  <option value="Web app">Web app</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              <div class="input-group">
+                <select
+                  name="budget"
+                  aria-label="Budget range"
+                  required
+                >
+                  <option value="" disabled selected hidden>Budget range</option>
+                  <option value="Under $1,000">Under $1,000</option>
+                  <option value="$1,000 – $3,000">$1,000 – $3,000</option>
+                  <option value="$3,000 – $5,000">$3,000 – $5,000</option>
+                  <option value="$5,000 – $10,000">$5,000 – $10,000</option>
+                  <option value="$10,000+">$10,000+</option>
+                  <option value="Not sure yet">Not sure yet</option>
+                </select>
+              </div>
+              <div class="input-group">
+                <select
+                  name="timeline"
+                  aria-label="Project timeline"
+                  required
+                >
+                  <option value="" disabled selected hidden>Timeline</option>
+                  <option value="ASAP">ASAP</option>
+                  <option value="Within 1 month">Within 1 month</option>
+                  <option value="1–3 months">1–3 months</option>
+                  <option value="Flexible">Flexible</option>
+                </select>
+              </div>
+            </div>
+            <div class="input-group">
+              <select
+                name="referral-source"
+                aria-label="How did you hear about us (optional)"
+              >
+                <option value="" disabled selected hidden>
+                  How did you hear about us? (optional)
+                </option>
+                <option value="Google / search">Google / search</option>
+                <option value="Referral / word of mouth">
+                  Referral / word of mouth
+                </option>
+                <option value="Instagram">Instagram</option>
+                <option value="LinkedIn">LinkedIn</option>
+                <option value="GitHub">GitHub</option>
+                <option value="Other">Other</option>
+              </select>
             </div>
             <div class="input-group">
               <textarea
