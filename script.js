@@ -1,5 +1,16 @@
 "use strict";
 
+// Global error safety net. Catches anything that escapes a feature's local
+// try/catch — including async callbacks fired after init — so failures show
+// up in the console instead of vanishing silently. Console-only for now;
+// swap the body for a real reporting endpoint when one exists.
+window.addEventListener("error", (e) => {
+  console.warn("[senscode] uncaught error:", e.message || e, e.error);
+});
+window.addEventListener("unhandledrejection", (e) => {
+  console.warn("[senscode] unhandled rejection:", e.reason);
+});
+
 // Browser + per-engine performance settings.
 // Detection is engine-based because perf characteristics track the engine
 // (Blink/Gecko/WebKit), not the brand name. Brave/Edge/Opera/Arc all ride
@@ -111,8 +122,33 @@ window.SITE_SETTINGS = SITE_SETTINGS;
 document.documentElement.classList.add("engine-" + SITE_BROWSER.engine);
 
 document.addEventListener("DOMContentLoaded", () => {
+  // Per-feature error isolation. If one block throws while initializing,
+  // downstream features still get a chance to run. Errors are logged with
+  // the feature name so they're easy to find in dev tools.
+  const safe = (name, fn) => {
+    try {
+      fn();
+    } catch (err) {
+      console.warn("[senscode] feature failed:", name, err);
+    }
+  };
+
+  // Cross-feature shared state. Hoisted to function scope so individual
+  // feature blocks can be wrapped in safe() without losing access. Function
+  // slots default to no-ops so consumers don't crash if init failed.
+  let lenis = null;
+  let syncLenisMotion = () => {};
+  let btt = null;
+  let navbar = null;
+  let lastScrollY = window.scrollY;
+  let scrollTicking = false;
+  const scrollTasks = [];
+  let attachMagnetic = (_el) => {};
+  let updateParallax = () => {};
+
   // First-visit Intro Splash (homepage only, native <dialog>)
   const intro = document.querySelector(".site-intro");
+  safe("intro-splash", () => {
   if (intro instanceof HTMLDialogElement) {
     if (
       typeof intro.showModal === "function" &&
@@ -533,29 +569,32 @@ document.addEventListener("DOMContentLoaded", () => {
       intro.remove();
     }
   }
+  });
 
   // Lenis smooth scroll — falls back to native CSS scroll-behavior if library missing
-  let lenis = null;
-  if (typeof window.Lenis === "function") {
-    lenis = new window.Lenis({
-      duration: 1.1,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      smoothWheel: true,
-      touchMultiplier: 1,
-    });
-    const lenisRaf = (time) => {
-      if (!document.hidden) lenis.raf(time);
+  safe("lenis-scroll", () => {
+    if (typeof window.Lenis === "function") {
+      lenis = new window.Lenis({
+        duration: 1.1,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        smoothWheel: true,
+        touchMultiplier: 1,
+      });
+      const lenisRaf = (time) => {
+        if (!document.hidden) lenis.raf(time);
+        requestAnimationFrame(lenisRaf);
+      };
       requestAnimationFrame(lenisRaf);
+    }
+    syncLenisMotion = () => {
+      if (!lenis) return;
+      if (document.body.classList.contains("reduce-motion")) lenis.stop();
+      else lenis.start();
     };
-    requestAnimationFrame(lenisRaf);
-  }
-  const syncLenisMotion = () => {
-    if (!lenis) return;
-    if (document.body.classList.contains("reduce-motion")) lenis.stop();
-    else lenis.start();
-  };
+  });
 
   // 1. Theme Logic
+  safe("theme-toggle", () => {
   const toggles = document.querySelectorAll(".theme-toggle");
   const html = document.documentElement;
 
@@ -595,8 +634,10 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
   });
+  });
 
   // Scroll Reveal & Story Text
+  safe("scroll-reveal", () => {
   const revealEls = document.querySelectorAll(".reveal, .story-text");
   if (typeof IntersectionObserver === "function") {
     const observer = new IntersectionObserver(
@@ -615,8 +656,10 @@ document.addEventListener("DOMContentLoaded", () => {
   } else {
     revealEls.forEach((el) => el.classList.add("active"));
   }
+  });
 
   // 5. Advanced Card Tilt & Spotlight Effect
+  safe("card-tilt", () => {
   document
     .querySelectorAll(
       ".glass-panel:not(.no-spotlight), .card:not(.no-spotlight), .process-step:not(.no-spotlight)"
@@ -704,17 +747,21 @@ document.addEventListener("DOMContentLoaded", () => {
       card.addEventListener("touchend", handleLeave);
       card.addEventListener("touchcancel", handleLeave);
     });
+  });
 
   // 6. Back to Top
-  const btt = document.getElementById("back-to-top");
-  if (btt) {
-    btt.addEventListener("click", () => {
-      if (lenis) lenis.scrollTo(0);
-      else window.scrollTo({ top: 0, behavior: "smooth" });
-    });
-  }
+  safe("back-to-top", () => {
+    btt = document.getElementById("back-to-top");
+    if (btt) {
+      btt.addEventListener("click", () => {
+        if (lenis) lenis.scrollTo(0);
+        else window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+    }
+  });
 
   // 7. Mobile Menu Toggle
+  safe("mobile-menu", () => {
   const hamburger = document.getElementById("hamburger");
   const mobileMenu = document.getElementById("mobile-menu");
 
@@ -748,47 +795,56 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
-
-  // 8. Mobile Navbar Auto-Hide & Back to Top on Scroll
-  let lastScrollY = window.scrollY;
-  const navbar = document.querySelector(".navbar");
-  const scrollTasks = [];
-  let scrollTicking = false;
-
-  scrollTasks.push(() => {
-    if (btt) {
-      if (window.scrollY > 400) {
-        btt.classList.add("visible");
-      } else {
-        btt.classList.remove("visible");
-      }
-    }
-
-    if (navbar && window.innerWidth <= 768) {
-      if (lastScrollY < window.scrollY && window.scrollY > 50) {
-        navbar.classList.add("navbar--hidden");
-      } else {
-        navbar.classList.remove("navbar--hidden");
-      }
-    }
-    lastScrollY = window.scrollY;
   });
 
-  window.addEventListener(
-    "scroll",
-    () => {
-      if (!scrollTicking) {
-        window.requestAnimationFrame(() => {
-          for (const task of scrollTasks) task();
-          scrollTicking = false;
-        });
-        scrollTicking = true;
+  // 8. Mobile Navbar Auto-Hide & Back to Top on Scroll
+  safe("scroll-pump", () => {
+    navbar = document.querySelector(".navbar");
+
+    scrollTasks.push(() => {
+      if (btt) {
+        if (window.scrollY > 400) {
+          btt.classList.add("visible");
+        } else {
+          btt.classList.remove("visible");
+        }
       }
-    },
-    { passive: true }
-  );
+
+      if (navbar && window.innerWidth <= 768) {
+        if (lastScrollY < window.scrollY && window.scrollY > 50) {
+          navbar.classList.add("navbar--hidden");
+        } else {
+          navbar.classList.remove("navbar--hidden");
+        }
+      }
+      lastScrollY = window.scrollY;
+    });
+
+    window.addEventListener(
+      "scroll",
+      () => {
+        if (!scrollTicking) {
+          window.requestAnimationFrame(() => {
+            // Run each scroll task in isolation — a single bad task should
+            // never poison the rest of the pump for that frame or future ones.
+            for (const task of scrollTasks) {
+              try {
+                task();
+              } catch (err) {
+                console.warn("[senscode] scroll task failed:", err);
+              }
+            }
+            scrollTicking = false;
+          });
+          scrollTicking = true;
+        }
+      },
+      { passive: true }
+    );
+  });
 
   // 9. Time Greeting Logic
+  safe("time-greeting", () => {
   const greetingEl = document.getElementById("time-greeting");
   if (greetingEl) {
     const hour = new Date().getHours();
@@ -797,8 +853,10 @@ document.addEventListener("DOMContentLoaded", () => {
     else if (hour < 18) greeting = "Good afternoon.";
     greetingEl.innerText = greeting;
   }
+  });
 
   // 11. Dynamic Navigation Highlighting
+  safe("nav-highlight", () => {
   const currentPath = window.location.pathname;
   const currentPage = currentPath.endsWith("/index.html")
     ? "/"
@@ -812,8 +870,10 @@ document.addEventListener("DOMContentLoaded", () => {
       link.classList.remove("active");
     }
   });
+  });
 
   // 12. Contact Form AJAX Submission
+  safe("contact-form", () => {
   const contactForm = document.getElementById("contact-form");
   if (contactForm) {
     contactForm.addEventListener("submit", async (e) => {
@@ -858,8 +918,10 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
+  });
 
   // 13. Typewriter Effect for Hero Headers
+  safe("typewriter", () => {
   const heroHeaders = document.querySelectorAll(
     ".hero-content h1, .founder-note h1, .founder-note h2"
   );
@@ -958,8 +1020,10 @@ document.addEventListener("DOMContentLoaded", () => {
     // Wait for 2 seconds (with the flashing cursor) before starting to type
     setTimeout(processAction, 2000);
   });
+  });
 
   // Character-level Heading Reveal (panel h2s only; hero/founder-note use typewriter)
+  safe("split-text-headings", () => {
   document.querySelectorAll("main h2").forEach((h) => {
     if (h.querySelector(".typewriter-cursor")) return;
     if (h.closest(".hero, .founder-note")) return;
@@ -1018,8 +1082,10 @@ document.addEventListener("DOMContentLoaded", () => {
       .querySelectorAll(".split-text")
       .forEach((el) => el.classList.add("active"));
   }
+  });
 
   // 14. Performance Metric: Load Time
+  safe("perf-metric", () => {
   window.addEventListener("load", () => {
     // Delay the calculation slightly to ensure the browser has finished recording the load event
     setTimeout(() => {
@@ -1038,8 +1104,10 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }, 0);
   });
+  });
 
   // 15. Sticky Footer Reveal (Curtain Effect)
+  safe("footer-curtain", () => {
   const footer = document.querySelector(".footer-panel");
   if (footer) {
     if (!document.querySelector(".curtain-wrapper")) {
@@ -1106,9 +1174,11 @@ document.addEventListener("DOMContentLoaded", () => {
       window.dispatchEvent(new Event("scroll"));
     }
   }
+  });
 
   // 16. Luminous Orbs Parallax Effect
-  const updateParallax = () => {
+  safe("orbs-parallax", () => {
+  updateParallax = () => {
     const scrolled = window.scrollY;
     // Standard background orbs
     document.querySelectorAll(".orb").forEach((orb, index) => {
@@ -1127,8 +1197,10 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   scrollTasks.push(updateParallax);
+  });
 
   // 17. Blow Up Bento Grid
+  safe("blow-up-grid", () => {
   const blowUpBtn = document.getElementById("blowUpBtn");
   if (blowUpBtn) {
     blowUpBtn.addEventListener("click", () => {
@@ -1191,9 +1263,11 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
+  });
 
   // 18. Magnetic Elements
-  const attachMagnetic = (el) => {
+  safe("magnetic", () => {
+  attachMagnetic = (el) => {
     let rect;
     el.addEventListener("mouseenter", () => {
       rect = el.getBoundingClientRect();
@@ -1216,8 +1290,10 @@ document.addEventListener("DOMContentLoaded", () => {
   document
     .querySelectorAll(".cta-button, .theme-toggle, .small-btn, .blow-up-btn")
     .forEach(attachMagnetic);
+  });
 
   // 19. Custom Reactive Cursor
+  safe("custom-cursor", () => {
   if (window.matchMedia("(pointer: fine)").matches) {
     const cursor = document.createElement("div");
     cursor.classList.add("custom-cursor");
@@ -1306,8 +1382,10 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
   }
+  });
 
   // 20. Interactive Particle Canvas
+  safe("particle-canvas", () => {
   const canvas = document.createElement("canvas");
   canvas.id = "particle-canvas";
   const curtainWrapper = document.querySelector(".curtain-wrapper");
@@ -1445,8 +1523,10 @@ document.addEventListener("DOMContentLoaded", () => {
   initParticles();
   drawParticles();
   window.addEventListener("resize", initParticles);
+  });
 
   // Matrix Konami Code
+  safe("konami-code", () => {
   const konamiCode = [
     "ArrowUp",
     "ArrowUp",
@@ -1491,8 +1571,10 @@ document.addEventListener("DOMContentLoaded", () => {
       konamiIndex = 0;
     }
   });
+  });
 
   // Reduced Motion Toggle
+  safe("reduce-motion", () => {
   const createA11yToggle = () => {
     const navActions = document.querySelectorAll(".nav-actions, .mobile-menu");
     navActions.forEach((container) => {
@@ -1535,8 +1617,10 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   };
   createA11yToggle();
+  });
 
   // Interactive Estimator Logic
+  safe("estimator", () => {
   const estimatorPanel = document.getElementById("estimator-panel");
   if (estimatorPanel) {
     const checkboxes = estimatorPanel.querySelectorAll(
@@ -1584,4 +1668,5 @@ document.addEventListener("DOMContentLoaded", () => {
       cb.addEventListener("change", calculateTotal);
     });
   }
+  });
 });

@@ -2034,3 +2034,266 @@ body.reduce-motion .status-dot {
 .engine-gecko .story-text.active {
   filter: none;
 }
+
+/* --- Comparison panel (services page) ---
+   Hand-coded vs drag-and-drop vs theme marketplaces. Renders as a 4-column
+   grid on desktop (label + 3 contenders), collapses into stacked cards on
+   mobile so the rows stay readable on small screens. */
+.compare-grid {
+  display: grid;
+  grid-template-columns: 1.1fr repeat(3, 1.4fr);
+  text-align: left;
+  padding: 0;
+  overflow: hidden;
+}
+
+.compare-row {
+  display: contents;
+}
+
+.compare-cell {
+  padding: clamp(18px, 1.6vw, 28px);
+  border-top: 1px solid var(--border);
+  border-left: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+/* Strip the outer borders so the rounded card edge isn't double-stamped. */
+.compare-row:first-child .compare-cell {
+  border-top: none;
+}
+.compare-row .compare-cell:first-child {
+  border-left: none;
+}
+
+.compare-head .compare-cell {
+  background: rgba(255, 255, 255, 0.02);
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+}
+
+[data-theme="light"] .compare-head .compare-cell {
+  background: rgba(0, 0, 0, 0.025);
+}
+
+.compare-head strong {
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.compare-sub {
+  font-size: 0.78rem;
+  font-family: var(--font-body);
+  opacity: 0.6;
+  letter-spacing: 0.02em;
+}
+
+.compare-label {
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  opacity: 0.85;
+  justify-content: center;
+  letter-spacing: 0.01em;
+}
+
+.compare-us {
+  background: linear-gradient(
+    180deg,
+    rgba(41, 151, 255, 0.07),
+    rgba(41, 151, 255, 0.02)
+  );
+}
+
+.compare-head.compare-row .compare-us,
+.compare-row .compare-us {
+  position: relative;
+}
+
+.compare-row .compare-us::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--link);
+  opacity: 0.5;
+}
+
+.compare-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  font-size: 0.78rem;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.compare-cell[data-state="yes"] .compare-mark {
+  background: rgba(48, 209, 88, 0.15);
+  color: #30d158;
+}
+
+.compare-cell[data-state="no"] .compare-mark {
+  background: rgba(255, 69, 58, 0.15);
+  color: #ff453a;
+}
+
+.compare-cell[data-state="meh"] .compare-mark {
+  background: rgba(255, 149, 0, 0.15);
+  color: #ff9500;
+}
+
+@media (max-width: 900px) {
+  .compare-grid {
+    display: flex;
+    flex-direction: column;
+    grid-template-columns: none;
+  }
+
+  .compare-row {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid var(--border);
+    padding: 14px 0 18px;
+  }
+
+  .compare-head {
+    display: none;
+  }
+
+  .compare-cell {
+    border: none;
+    padding: 6px clamp(16px, 4vw, 22px);
+  }
+
+  .compare-row .compare-cell.compare-label {
+    font-size: 1.05rem;
+    font-family: var(--font-heading);
+    opacity: 1;
+    padding-top: 6px;
+    padding-bottom: 10px;
+    align-self: flex-start;
+  }
+
+  .compare-row .compare-us {
+    background: linear-gradient(
+      90deg,
+      rgba(41, 151, 255, 0.08),
+      rgba(41, 151, 255, 0)
+    );
+  }
+
+  .compare-row .compare-us::before {
+    position: static;
+    width: auto;
+    background: transparent;
+    opacity: 1;
+    content: "SensCode";
+    color: var(--link);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .compare-row .compare-cell:nth-child(3)::before,
+  .compare-row .compare-cell:nth-child(4)::before {
+    display: block;
+    font-size: 0.7rem;
+    opacity: 0.55;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .compare-row .compare-cell:nth-child(3)::before {
+    content: "Drag & Drop";
+  }
+
+  .compare-row .compare-cell:nth-child(4)::before {
+    content: "Theme Marketplaces";
+  }
+}
+
+/* --- 404 intel readout & waypoints --- */
+.hero-404 .hero-content {
+  max-width: 720px;
+}
+
+.intel-log {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 32px auto 0;
+  padding: 18px 22px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--glass);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 0.82rem;
+  text-align: left;
+  max-width: 460px;
+}
+
+.intel-line {
+  display: flex;
+  gap: 14px;
+  align-items: baseline;
+}
+
+.intel-tag {
+  color: var(--link);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  flex-shrink: 0;
+  width: 92px;
+}
+
+.intel-val {
+  opacity: 0.78;
+}
+
+.waypoints-label {
+  margin-top: 32px;
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.55;
+}
+
+.waypoints {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.waypoint {
+  padding: 8px 18px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: 0.88rem;
+  text-decoration: none;
+  color: var(--text);
+  transition:
+    border-color var(--transition),
+    color var(--transition),
+    background var(--transition);
+}
+
+.waypoint:hover {
+  border-color: var(--hover-border);
+  color: var(--hover-border);
+}

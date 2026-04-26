@@ -113,12 +113,39 @@
       </button>
     </nav>
 
-    <header class="hero">
+    <header class="hero hero-404">
       <div class="hero-content reveal">
-        <span class="tag">Error 404</span>
+        <span class="tag">Transmission Interrupted &mdash; 404</span>
         <h1 style="margin-top: 10px">Signal Lost.</h1>
-        <p>The page you are looking for has been moved or no longer exists.</p>
-        <a href="/" class="cta-button">Return to Base</a>
+        <p>
+          We swept the grid. The page you were lookin' for ain't on the map.
+          Could've been moved, decommissioned, or never existed in the first place.
+        </p>
+
+        <div class="intel-log" aria-label="Diagnostic log" role="log">
+          <div class="intel-line">
+            <span class="intel-tag">LAST PING</span>
+            <span class="intel-val">no response</span>
+          </div>
+          <div class="intel-line">
+            <span class="intel-tag">ORIGIN</span>
+            <span class="intel-val">32.6927&deg; N, 114.6277&deg; W &mdash; Yuma, AZ</span>
+          </div>
+          <div class="intel-line">
+            <span class="intel-tag">STATUS</span>
+            <span class="intel-val">awaiting your next move</span>
+          </div>
+        </div>
+
+        <p class="waypoints-label">Known waypoints:</p>
+        <div class="waypoints">
+          <a href="/" class="waypoint">Home</a>
+          <a href="/services" class="waypoint">Services</a>
+          <a href="/portfolio" class="waypoint">Work</a>
+          <a href="/contact" class="waypoint">Contact</a>
+        </div>
+
+        <a href="/" class="cta-button" style="margin-top: 28px">Return to Base</a>
       </div>
     </header>
 
