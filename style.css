@@ -188,6 +188,19 @@ main {
   opacity: 1;
 }
 
+/* Top-right action pills (Search + Mode + Motion). Flex layout + a shared
+   min-width keeps all three the same size regardless of label length. */
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-actions > button {
+  min-width: 150px;
+  margin: 0;
+}
+
 /* --- Theme Toggle Fix --- */
 .theme-toggle {
   border: 1px solid var(--border);
@@ -2045,6 +2058,13 @@ body.reduce-motion .status-dot {
   text-align: left;
   padding: 0;
   overflow: hidden;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.compare-grid > thead,
+.compare-grid > tbody {
+  display: contents;
 }
 
 .compare-row {
@@ -2060,6 +2080,21 @@ body.reduce-motion .status-dot {
   gap: 8px;
   font-size: 0.92rem;
   line-height: 1.5;
+  text-align: left;
+  font-weight: inherit;
+  vertical-align: top;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 /* Strip the outer borders so the rounded card edge isn't double-stamped. */
@@ -2136,19 +2171,37 @@ body.reduce-motion .status-dot {
   flex-shrink: 0;
 }
 
+/* Opaque mark colors so contrast checkers can compute unambiguously.
+   Light text on dark-tinted circles in dark mode; dark text on light-tinted
+   circles in light mode. All pairs clear WCAG AA (≥4.5:1) comfortably. */
 .compare-cell[data-state="yes"] .compare-mark {
-  background: rgba(48, 209, 88, 0.15);
-  color: #30d158;
+  background: #14532d;
+  color: #86efac;
 }
 
 .compare-cell[data-state="no"] .compare-mark {
-  background: rgba(255, 69, 58, 0.15);
-  color: #ff453a;
+  background: #5b1414;
+  color: #fca5a5;
 }
 
 .compare-cell[data-state="meh"] .compare-mark {
-  background: rgba(255, 149, 0, 0.15);
-  color: #ff9500;
+  background: #5b3a14;
+  color: #fcd34d;
+}
+
+[data-theme="light"] .compare-cell[data-state="yes"] .compare-mark {
+  background: #dcfce7;
+  color: #14532d;
+}
+
+[data-theme="light"] .compare-cell[data-state="no"] .compare-mark {
+  background: #fee2e2;
+  color: #7f1d1d;
+}
+
+[data-theme="light"] .compare-cell[data-state="meh"] .compare-mark {
+  background: #fef3c7;
+  color: #78350f;
 }
 
 @media (max-width: 900px) {
@@ -2296,4 +2349,222 @@ body.reduce-motion .status-dot {
 .waypoint:hover {
   border-color: var(--hover-border);
   color: var(--hover-border);
+}
+
+/* --- Algolia Search ----------------------------------------------------- */
+
+.search-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 18px;
+  min-height: 44px;
+  border-radius: 22px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  opacity: 0.78;
+  transition:
+    opacity 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease;
+}
+
+.search-trigger:hover {
+  opacity: 1;
+  border-color: var(--hover-border);
+  color: var(--hover-border);
+}
+
+.search-trigger svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+/* Native <dialog>: UA stylesheet centers it via auto margins. We override
+   to align toward the top, transparent so the panel inside is the visual
+   surface, and use ::backdrop for the dimmed/blurred overlay. dvh units
+   shrink when iOS Safari raises the on-screen keyboard so the panel never
+   gets covered; keyboard-inset-height (Safari 16.4+) adds extra slack. */
+.search-modal {
+  width: min(640px, calc(100% - 32px));
+  max-height: 80dvh;
+  margin: clamp(24px, 8dvh, 120px) auto auto;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  overflow: visible;
+}
+
+.search-modal::backdrop {
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+[data-theme="light"] .search-modal::backdrop {
+  background: rgba(40, 40, 45, 0.35);
+}
+
+.search-modal-panel {
+  display: flex;
+  flex-direction: column;
+  max-height: 80dvh;
+  padding-bottom: env(keyboard-inset-height, 0);
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  overflow: hidden;
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+}
+
+.search-modal-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.search-modal-input-wrap svg {
+  width: 18px;
+  height: 18px;
+  opacity: 0.6;
+  flex-shrink: 0;
+}
+
+.search-input {
+  flex: 1;
+  background: transparent;
+  border: 0;
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+  padding: 6px 0;
+  outline: none;
+}
+
+.search-input::placeholder {
+  color: var(--text);
+  opacity: 0.45;
+}
+
+.search-modal-close {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  opacity: 0.7;
+}
+
+.search-modal-close:hover {
+  opacity: 1;
+  border-color: var(--hover-border);
+  color: var(--hover-border);
+}
+
+.search-status {
+  padding: 10px 20px;
+  font-size: 0.78rem;
+  opacity: 0.6;
+  border-bottom: 1px solid var(--border);
+  min-height: 1em;
+}
+
+.search-results {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px;
+}
+
+.search-results:empty::before {
+  content: "";
+}
+
+.search-result {
+  display: block;
+  padding: 14px 16px;
+  border-radius: 10px;
+  text-decoration: none;
+  color: var(--text);
+  border: 1px solid transparent;
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease;
+}
+
+.search-result + .search-result {
+  margin-top: 4px;
+}
+
+.search-result:hover,
+.search-result:focus-visible {
+  background: rgba(41, 151, 255, 0.08);
+  border-color: var(--hover-border);
+}
+
+.search-result-meta {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.search-result-tag {
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--link);
+  opacity: 0.85;
+}
+
+.search-result-title {
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  margin-bottom: 4px;
+  line-height: 1.3;
+}
+
+.search-result-snippet {
+  font-size: 0.85rem;
+  opacity: 0.72;
+  line-height: 1.5;
+}
+
+.search-mark {
+  background: rgba(255, 149, 0, 0.22);
+  color: inherit;
+  padding: 0 2px;
+  border-radius: 3px;
+}
+
+[data-theme="light"] .search-mark {
+  background: rgba(255, 149, 0, 0.32);
+}
+
+@media (max-width: 640px) {
+  .search-trigger {
+    gap: 0;
+    padding: 0;
+    width: 44px;
+    min-height: 44px;
+  }
+
+  .search-trigger > span {
+    display: none;
+  }
 }

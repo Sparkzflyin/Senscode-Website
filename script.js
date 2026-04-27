@@ -1580,7 +1580,6 @@ document.addEventListener("DOMContentLoaded", () => {
     navActions.forEach((container) => {
       const a11yBtn = document.createElement("button");
       a11yBtn.classList.add("theme-toggle");
-      a11yBtn.style.marginLeft = "10px";
 
       const updateA11yText = () => {
         const isReduced = document.body.classList.contains("reduce-motion");
