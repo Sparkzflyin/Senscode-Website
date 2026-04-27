@@ -27,7 +27,7 @@ const INDEX = process.env.ALGOLIA_INDEX_NAME || "senscode_site";
 
 if (!APP_ID || !ADMIN_KEY) {
   console.error(
-    "Missing ALGOLIA_APP_ID or ALGOLIA_ADMIN_KEY. Copy .env.example to .env and fill them in.",
+    "Missing ALGOLIA_APP_ID or ALGOLIA_ADMIN_KEY. Copy .env.example to .env and fill them in."
   );
   process.exit(1);
 }
@@ -733,7 +733,9 @@ async function call(path, method, body) {
     body: body ? JSON.stringify(body) : undefined,
   });
   if (!res.ok) {
-    throw new Error(`${method} ${path} failed: ${res.status} ${await res.text()}`);
+    throw new Error(
+      `${method} ${path} failed: ${res.status} ${await res.text()}`
+    );
   }
   return res.json();
 }
@@ -750,11 +752,7 @@ async function pushSynonyms(groups) {
     synonyms: words,
   }));
   // replaceExistingSynonyms wipes any prior entries so re-runs stay clean.
-  return call(
-    "/synonyms/batch?replaceExistingSynonyms=true",
-    "POST",
-    synonyms,
-  );
+  return call("/synonyms/batch?replaceExistingSynonyms=true", "POST", synonyms);
 }
 
 async function setSettings() {

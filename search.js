@@ -120,8 +120,7 @@
 
   // Warm the SDK during idle time so the first search feels instant.
   function warmSdk() {
-    const idle =
-      window.requestIdleCallback || ((cb) => setTimeout(cb, 800));
+    const idle = window.requestIdleCallback || ((cb) => setTimeout(cb, 800));
     idle(() => loadSdk().catch(() => {}));
   }
 
@@ -189,7 +188,7 @@
             ">": "&gt;",
             '"': "&quot;",
             "'": "&#39;",
-          })[c],
+          })[c]
       );
     }
 
@@ -212,10 +211,10 @@
       results.innerHTML = hits
         .map((hit) => {
           const title = safeHighlight(
-            hit._highlightResult?.title?.value || hit.title,
+            hit._highlightResult?.title?.value || hit.title
           );
           const snippet = safeHighlight(
-            hit._snippetResult?.content?.value || hit.content || "",
+            hit._snippetResult?.content?.value || hit.content || ""
           );
           const tag = escapeHTML(hit.section || hit.type || "");
           const url = escapeHTML(hit.url || "/");

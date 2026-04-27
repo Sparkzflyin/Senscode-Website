@@ -347,6 +347,29 @@ main {
   -webkit-backdrop-filter: blur(20px);
 }
 
+/* Generative aurora shader canvas — sits behind card content but above the
+   card's own background so it tints through. The existing spotlight stacks
+   on top via z-index. Pointer-events off so card hover/click still work. */
+.card-shader {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  z-index: 0;
+}
+
+.card-shader.is-active {
+  opacity: 1;
+}
+
+body.reduce-motion .card-shader {
+  display: none;
+}
+
 @media (max-width: 768px) {
   .grid-3 {
     grid-template-columns: 1fr;
@@ -966,9 +989,13 @@ main {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: clamp(8px, 1.2vh, 18px);
   min-height: clamp(200px, 24vh, 340px);
   box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5);
-  transition: transform 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    border-color 0.5s ease,
+    box-shadow 0.5s ease;
 }
 
 .sticky-skill-card:nth-child(1) {
@@ -1014,6 +1041,325 @@ main {
 .sticky-skill-card:nth-child(9) {
   top: 180px;
   z-index: 9;
+}
+
+.sticky-skill-card:nth-child(10) {
+  top: 190px;
+  z-index: 10;
+}
+
+/* --- Skill card logo + snippet + brand-tint orchestration --------------
+   Each card lays out: logo on top, h3, tagline, code snippet at bottom.
+   Logos start dim and pop to full presence when the card becomes the
+   active sticky one. */
+.skill-logo {
+  width: clamp(48px, 6vw, 72px);
+  height: clamp(48px, 6vw, 72px);
+  color: var(--text);
+  opacity: 0.35;
+  transform: scale(0.92);
+  transition:
+    opacity 0.5s ease,
+    transform 0.5s cubic-bezier(0.28, 0.11, 0.32, 1),
+    color 0.5s ease;
+}
+
+.sticky-skill-card.is-active .skill-logo {
+  opacity: 1;
+  transform: scale(1);
+  color: var(--card-glow, var(--link));
+}
+
+/* Active card carries its tool's brand color directly: border tints to the
+   --card-glow custom property and a soft halo radiates around it. This is
+   what actually shows the user the color (the viewport tint is too subtle
+   on its own since the cards' solid backgrounds block most of it). */
+.sticky-skill-card.is-active {
+  border-color: var(--card-glow, var(--hover-border));
+  box-shadow:
+    0 -10px 40px rgba(0, 0, 0, 0.5),
+    0 0 80px -10px var(--card-glow, transparent);
+}
+
+/* React's atom — rings stay locked in their three-axis arrangement. A single
+   electron orbits along the first ring's path so the atom shape remains
+   readable at every frame while still feeling alive.
+   transform-box: fill-box pins the rotation origin to the ellipse's own
+   bounding-box center (regardless of the SVG viewBox), so the rotated
+   rings stay perfectly centered on the dot. */
+.skill-logo .ring {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+}
+
+.skill-logo .ring:nth-of-type(2) {
+  transform: rotate(60deg);
+}
+
+.skill-logo .ring:nth-of-type(3) {
+  transform: rotate(-60deg);
+}
+
+.skill-logo .electron {
+  /* Trace the same ellipse the unrotated ring describes. */
+  offset-path: path("M -40 0 A 40 15 0 1 0 40 0 A 40 15 0 1 0 -40 0");
+  offset-distance: 0%;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.sticky-skill-card.is-active.skill-react .skill-logo .electron {
+  opacity: 1;
+  animation: skill-electron 2.4s linear infinite;
+}
+
+@keyframes skill-electron {
+  to {
+    offset-distance: 100%;
+  }
+}
+
+/* Tasteful per-tool flourishes when the card activates. Each tool gets a
+   distinct loop: stamp, punch, rise, swing, flip, etc. Action happens in
+   the first ~55% of each second; remaining time holds the resting state
+   so each loop reads as a clear trigger → settle → repeat rhythm. */
+.sticky-skill-card.is-active.skill-vercel .skill-logo,
+.sticky-skill-card.is-active.skill-next .skill-logo {
+  animation: skill-pop 2.5s ease-in-out infinite;
+}
+
+.sticky-skill-card.is-active.skill-animations .skill-logo {
+  animation: skill-wave 1.6s ease-in-out infinite;
+}
+
+.sticky-skill-card.is-active.skill-typescript .skill-logo {
+  animation: skill-stamp 2.5s ease-in-out infinite;
+}
+
+.sticky-skill-card.is-active.skill-node .skill-logo {
+  animation: skill-punch 2.5s ease-in-out infinite;
+}
+
+.sticky-skill-card.is-active.skill-html .skill-logo {
+  animation: skill-rise 2.5s ease-in-out infinite;
+}
+
+.sticky-skill-card.is-active.skill-git .skill-logo {
+  animation: skill-swing 2.5s ease-in-out infinite;
+}
+
+.sticky-skill-card.is-active.skill-python .skill-logo {
+  animation: skill-flip 2.5s ease-in-out infinite;
+}
+
+.sticky-skill-card.is-active.skill-seo .skill-logo {
+  animation: skill-scan 2.4s ease-in-out infinite;
+}
+
+@keyframes skill-pop {
+  0% {
+    transform: scale(0.85);
+  }
+  30% {
+    transform: scale(1.08);
+  }
+  55% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes skill-wave {
+  0%,
+  100% {
+    transform: scale(1) translateX(0);
+  }
+  50% {
+    transform: scale(1.04) translateX(2px);
+  }
+}
+
+/* TypeScript — stamp pressing in at a slight angle. */
+@keyframes skill-stamp {
+  0% {
+    transform: rotate(-14deg) scale(0.6);
+    opacity: 0;
+  }
+  30% {
+    transform: rotate(4deg) scale(1.08);
+    opacity: 1;
+  }
+  55% {
+    transform: rotate(0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(0) scale(1);
+    opacity: 1;
+  }
+}
+
+/* Node — scale punch with overshoot, like the runtime kicking on. */
+@keyframes skill-punch {
+  0% {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+  25% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  42% {
+    transform: scale(0.94);
+  }
+  55% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* HTML/CSS — shield rising up into place, gentle bounce at the top. */
+@keyframes skill-rise {
+  0% {
+    transform: translateY(18px) scale(0.85);
+    opacity: 0;
+  }
+  30% {
+    transform: translateY(-5px) scale(1.05);
+    opacity: 1;
+  }
+  55% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+/* Git — branch swings in from the left, snaps upright. */
+@keyframes skill-swing {
+  0% {
+    transform: translateX(-14px) rotate(-18deg) scale(0.8);
+    opacity: 0;
+  }
+  30% {
+    transform: translateX(4px) rotate(5deg) scale(1.04);
+    opacity: 1;
+  }
+  55% {
+    transform: translateX(0) rotate(0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(0) rotate(0) scale(1);
+    opacity: 1;
+  }
+}
+
+/* Python — coin-flip on the Y-axis as it locks into place. */
+@keyframes skill-flip {
+  0% {
+    transform: rotateY(180deg) scale(0.7);
+    opacity: 0;
+  }
+  35% {
+    transform: rotateY(-14deg) scale(1.05);
+    opacity: 1;
+  }
+  55% {
+    transform: rotateY(0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: rotateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+/* SEO — magnifying glass scanning back and forth, continuous. */
+@keyframes skill-scan {
+  0%,
+  100% {
+    transform: rotate(-5deg) scale(1);
+  }
+  50% {
+    transform: rotate(5deg) scale(1.03);
+  }
+}
+
+/* Code snippet — appears below the tagline, types in once when active.
+   Hidden until activation so each card's "reveal" feels intentional. */
+.skill-snippet {
+  font-family: ui-monospace, "SF Mono", "Fira Code", Menlo, monospace;
+  font-size: clamp(0.78rem, 1.1vw, 0.95rem);
+  letter-spacing: 0.02em;
+  color: var(--link);
+  background: rgba(127, 127, 127, 0.08);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 12px;
+  margin-top: 6px;
+  min-height: 1.6em;
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: min(90%, 520px);
+  text-overflow: ellipsis;
+  opacity: 0;
+  transform: translateY(6px);
+  transition:
+    opacity 0.4s ease 0.1s,
+    transform 0.4s ease 0.1s;
+}
+
+.sticky-skill-card.is-active .skill-snippet {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.skill-snippet.is-typing::after {
+  content: "▍";
+  display: inline-block;
+  margin-left: 2px;
+  color: var(--hover-border);
+  animation: skill-cursor-blink 0.9s steps(2) infinite;
+}
+
+@keyframes skill-cursor-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+body.reduce-motion .sticky-skill-card .skill-logo,
+body.reduce-motion .sticky-skill-card .skill-snippet {
+  transition: none !important;
+  animation: none !important;
+}
+
+@media (max-width: 600px) {
+  .skill-snippet {
+    font-size: 0.72rem;
+    padding: 4px 10px;
+    max-width: 92%;
+  }
+
+  .skill-logo {
+    width: 44px;
+    height: 44px;
+  }
 }
 
 .sticky-skill-card h3 {
@@ -2293,7 +2639,8 @@ body.reduce-motion .status-dot {
   background: var(--glass);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  font-family:
+    ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
   font-size: 0.82rem;
   text-align: left;
   max-width: 460px;
@@ -2396,7 +2743,9 @@ body.reduce-motion .status-dot {
    gets covered; keyboard-inset-height (Safari 16.4+) adds extra slack. */
 .search-modal {
   width: min(640px, calc(100% - 32px));
+  max-height: 80vh;
   max-height: 80dvh;
+  margin: clamp(24px, 8vh, 120px) auto auto;
   margin: clamp(24px, 8dvh, 120px) auto auto;
   padding: 0;
   border: 0;
@@ -2418,6 +2767,7 @@ body.reduce-motion .status-dot {
 .search-modal-panel {
   display: flex;
   flex-direction: column;
+  max-height: 80vh;
   max-height: 80dvh;
   padding-bottom: env(keyboard-inset-height, 0);
   background: var(--glass);
