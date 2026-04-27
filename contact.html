@@ -140,6 +140,21 @@
             <span class="tag">Get in Touch</span>
             <h2>Let's create together.</h2>
             <p>Send a message and I'll get back to you within 24 hours.</p>
+
+            <div class="yuma-status" data-yuma-status aria-live="polite">
+              <span
+                class="yuma-status-dot"
+                data-yuma-dot
+                data-state="active"
+                aria-hidden="true"
+              ></span>
+              <div class="yuma-status-text">
+                <span class="yuma-status-time" data-yuma-time>Yuma, AZ</span>
+                <span class="yuma-status-label" data-yuma-label
+                  >Checking the time…</span
+                >
+              </div>
+            </div>
           </header>
 
           <form
@@ -147,44 +162,47 @@
             action="https://formspree.io/f/mreaewrb"
             method="POST"
           >
-            <div class="input-group">
+            <div class="input-group input-floating">
               <input
                 type="text"
+                id="contact-name"
                 name="name"
                 maxlength="100"
-                placeholder="Name / Business Name"
-                aria-label="Your name or business name"
+                placeholder=" "
                 autocomplete="name"
                 required
               />
+              <label for="contact-name">Name / Business Name</label>
             </div>
-            <div class="input-group">
+            <div class="input-group input-floating">
               <input
+                id="contact-email"
                 maxlength="250"
                 type="email"
                 name="email"
-                placeholder="Email Address"
-                aria-label="Your email address"
+                placeholder=" "
                 autocomplete="email"
                 required
               />
+              <label for="contact-email">Email Address</label>
             </div>
-            <div class="input-group">
+            <div class="input-group input-floating">
               <input
+                id="contact-website"
                 type="url"
                 name="existing-website"
                 maxlength="250"
-                placeholder="Existing website URL (optional)"
-                aria-label="Your existing website URL"
+                placeholder=" "
                 autocomplete="url"
               />
+              <label for="contact-website"
+                >Existing website URL (optional)</label
+              >
             </div>
             <div class="form-row">
-              <div class="input-group">
-                <select name="project-type" aria-label="Project type" required>
-                  <option value="" disabled selected hidden>
-                    Project type
-                  </option>
+              <div class="input-group input-floating">
+                <select id="contact-project" name="project-type" required>
+                  <option value="" disabled selected hidden></option>
                   <option value="New website">New website</option>
                   <option value="Website redesign">Website redesign</option>
                   <option value="Landing page">Landing page</option>
@@ -192,12 +210,11 @@
                   <option value="Web app">Web app</option>
                   <option value="Other">Other</option>
                 </select>
+                <label for="contact-project">Project type</label>
               </div>
-              <div class="input-group">
-                <select name="budget" aria-label="Budget range" required>
-                  <option value="" disabled selected hidden>
-                    Budget range
-                  </option>
+              <div class="input-group input-floating">
+                <select id="contact-budget" name="budget" required>
+                  <option value="" disabled selected hidden></option>
                   <option value="Under $1,000">Under $1,000</option>
                   <option value="$1,000 – $3,000">$1,000 – $3,000</option>
                   <option value="$3,000 – $5,000">$3,000 – $5,000</option>
@@ -205,25 +222,39 @@
                   <option value="$10,000+">$10,000+</option>
                   <option value="Not sure yet">Not sure yet</option>
                 </select>
+                <label for="contact-budget">Budget range</label>
               </div>
-              <div class="input-group">
-                <select name="timeline" aria-label="Project timeline" required>
-                  <option value="" disabled selected hidden>Timeline</option>
+              <div class="input-group input-floating">
+                <select id="contact-timeline" name="timeline" required>
+                  <option value="" disabled selected hidden></option>
                   <option value="ASAP">ASAP</option>
                   <option value="Within 1 month">Within 1 month</option>
-                  <option value="1–3 months">1–3 months</option>
+                  <option value="1–3+ months">1–3+ months</option>
                   <option value="Flexible">Flexible</option>
                 </select>
+                <label for="contact-timeline">Timeline</label>
               </div>
             </div>
-            <div class="input-group">
-              <select
-                name="referral-source"
-                aria-label="How did you hear about us (optional)"
-              >
-                <option value="" disabled selected hidden>
-                  How did you hear about us? (optional)
-                </option>
+
+            <div
+              class="input-group input-floating conditional-field"
+              data-show-when="E-commerce"
+            >
+              <select id="contact-payment" name="payment-platform" disabled>
+                <option value="" disabled selected hidden></option>
+                <option value="Stripe">Stripe</option>
+                <option value="PayPal">PayPal</option>
+                <option value="Square">Square</option>
+                <option value="Shopify Payments">Shopify Payments</option>
+                <option value="Other">Other</option>
+                <option value="No preference">No preference yet</option>
+              </select>
+              <label for="contact-payment">Preferred payment platform</label>
+            </div>
+
+            <div class="input-group input-floating">
+              <select id="contact-referral" name="referral-source">
+                <option value="" disabled selected hidden></option>
                 <option value="Google / search">Google / search</option>
                 <option value="Referral / word of mouth">
                   Referral / word of mouth
@@ -233,16 +264,20 @@
                 <option value="GitHub">GitHub</option>
                 <option value="Other">Other</option>
               </select>
+              <label for="contact-referral"
+                >How did you hear about us? (optional)</label
+              >
             </div>
-            <div class="input-group">
+            <div class="input-group input-floating">
               <textarea
+                id="contact-message"
                 maxlength="2500"
                 name="message"
-                placeholder="Tell me about your project..."
-                aria-label="Your message"
+                placeholder=" "
                 rows="5"
                 required
               ></textarea>
+              <label for="contact-message">Tell me about your project</label>
             </div>
             <div class="form-toggle-group">
               <input
@@ -261,6 +296,43 @@
           </form>
         </div>
       </section>
+
+      <section class="panel reveal next-steps-section">
+        <h2>After You Hit Send.</h2>
+        <p class="next-steps-intro">
+          No funnels, no auto-replies, no &ldquo;thanks for your interest in our
+          solutions.&rdquo; Here&rsquo;s what actually happens.
+        </p>
+        <ol class="grid-3 next-steps-grid">
+          <li class="card glass-panel next-step">
+            <span class="next-step-num">01</span>
+            <h3>I read it.</h3>
+            <p>
+              Within 24 hours. Every message hits my inbox personally — no
+              triage queue, no team to loop in, no &ldquo;a representative will
+              reach out shortly.&rdquo;
+            </p>
+          </li>
+          <li class="card glass-panel next-step">
+            <span class="next-step-num">02</span>
+            <h3>Quick clarifications.</h3>
+            <p>
+              2–3 follow-up questions so I can quote you accurately instead of
+              giving a vague &ldquo;it depends&rdquo; non-answer. Plain English,
+              no consultant-speak.
+            </p>
+          </li>
+          <li class="card glass-panel next-step">
+            <span class="next-step-num">03</span>
+            <h3>We hop on a call.</h3>
+            <p>
+              A 15-minute Zoom or phone call to lock in scope. Free, no
+              obligation, no pitch deck. If we&rsquo;re a fit, I&rsquo;ll send a
+              written quote within a day.
+            </p>
+          </li>
+        </ol>
+      </section>
     </main>
     <button
       id="back-to-top"
@@ -278,6 +350,7 @@
       data-algolia-index="senscode_site"
     ></script>
     <script defer src="script.js"></script>
+    <script defer src="contact.js"></script>
     <footer class="footer-panel">
       <div class="footer-content">
         <section class="footer-column">

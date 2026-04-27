@@ -727,6 +727,557 @@ body.reduce-motion .card-shader {
   border: none;
   font-weight: 600;
   cursor: pointer;
+  transition:
+    background 0.35s ease,
+    border-color 0.35s ease,
+    color 0.35s ease,
+    transform 0.35s ease,
+    box-shadow 0.35s ease;
+}
+
+#submit-btn.is-loading {
+  pointer-events: none;
+  opacity: 0.65;
+}
+
+#submit-btn.is-success {
+  background: #047857 !important;
+  border-color: #047857 !important;
+  color: #fff !important;
+  box-shadow: 0 0 0 6px rgba(16, 185, 129, 0.18) !important;
+}
+
+#submit-btn.is-error {
+  background: #b91c1c !important;
+  border-color: #b91c1c !important;
+  color: #fff !important;
+  animation: contact-btn-shake 0.45s ease;
+}
+
+@keyframes contact-btn-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-6px);
+  }
+  50% {
+    transform: translateX(6px);
+  }
+  75% {
+    transform: translateX(-3px);
+  }
+}
+
+/* --- Floating labels --------------------------------------------------- */
+/* Inputs use placeholder=" " so :placeholder-shown reflects emptiness;
+   selects use a JS-toggled .has-value class on the parent. */
+.input-floating {
+  position: relative;
+}
+
+.input-floating > input,
+.input-floating > textarea,
+.input-floating > select {
+  padding-top: 22px;
+  padding-bottom: 8px;
+}
+
+.input-floating > textarea {
+  resize: none;
+  min-height: 132px;
+  overflow-y: auto;
+}
+
+.input-floating > label {
+  position: absolute;
+  left: 18px;
+  top: 16px;
+  font-size: 1rem;
+  color: var(--text);
+  opacity: 0.55;
+  pointer-events: none;
+  transform-origin: left top;
+  transition:
+    top 0.2s ease,
+    font-size 0.2s ease,
+    color 0.2s ease,
+    opacity 0.2s ease;
+  background: transparent;
+}
+
+.input-floating > input:focus ~ label,
+.input-floating > textarea:focus ~ label,
+.input-floating > select:focus ~ label,
+.input-floating > input:not(:placeholder-shown) ~ label,
+.input-floating > textarea:not(:placeholder-shown) ~ label,
+.input-floating.has-value > label {
+  top: 5px;
+  font-size: 0.7rem;
+  opacity: 0.85;
+  color: var(--link);
+  letter-spacing: 0.04em;
+}
+
+/* Selects use a JS-driven .has-value class on the parent (covered by the
+   shared rule above) so we don't have to require :has() for the float-up. */
+
+/* Validation-state borders. Subtle so we don't yell at the user. */
+.input-floating.is-valid > input,
+.input-floating.is-valid > textarea {
+  border-color: rgba(16, 185, 129, 0.55);
+  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.08);
+}
+
+.input-floating.is-invalid > input,
+.input-floating.is-invalid > textarea {
+  border-color: rgba(239, 68, 68, 0.6);
+  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.1);
+}
+
+/* --- Yuma status widget ------------------------------------------------ */
+.yuma-status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 18px;
+  padding: 10px 18px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: rgba(127, 127, 127, 0.06);
+  font-family: var(--font-body);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.yuma-status-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: #10b981;
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.7);
+  animation: yuma-pulse 2.4s ease-in-out infinite;
+}
+
+.yuma-status-dot[data-state="active"] {
+  background: #10b981;
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.7);
+}
+
+.yuma-status-dot[data-state="warming"] {
+  background: #f59e0b;
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.65);
+}
+
+.yuma-status-dot[data-state="lunch"] {
+  background: #fb923c;
+  box-shadow: 0 0 8px rgba(251, 146, 60, 0.65);
+}
+
+.yuma-status-dot[data-state="winding"] {
+  background: #f59e0b;
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.45);
+}
+
+.yuma-status-dot[data-state="off"] {
+  background: #6366f1;
+  box-shadow: 0 0 8px rgba(99, 102, 241, 0.5);
+  animation: none;
+}
+
+.yuma-status-dot[data-state="asleep"] {
+  background: #6b7280;
+  box-shadow: none;
+  animation: none;
+}
+
+@keyframes yuma-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.4);
+    opacity: 0.7;
+  }
+}
+
+.yuma-status-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+}
+
+.yuma-status-time {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.yuma-status-label {
+  font-size: 0.7rem;
+  opacity: 0.7;
+}
+
+body.reduce-motion .yuma-status-dot {
+  animation: none !important;
+}
+
+/* --- Conditional field reveal ----------------------------------------- */
+/* Hidden by default. JS adds .is-visible to expand. display: none when
+   hidden so the parent flex gap doesn't reserve empty space for it. */
+.conditional-field {
+  display: none;
+}
+
+.conditional-field.is-visible {
+  display: block;
+  animation: conditional-fade-in 0.4s ease;
+}
+
+@keyframes conditional-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+body.reduce-motion .conditional-field.is-visible {
+  animation: none;
+}
+
+/* --- Comms overlay (full-screen send modal) -------------------------- */
+/* Native <dialog> sized to viewport with a radar-sweep loading visual,
+   on-brand monospace status text, and clean checkmark/X states for
+   success/error. Stays out of the way until the user actually hits send. */
+.comms-overlay {
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  max-width: 100vw;
+  max-height: 100vh;
+  max-height: 100dvh;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  inset: 0;
+  background: var(--bg);
+  color: var(--text);
+  overflow: hidden;
+}
+
+.comms-overlay[open] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.comms-overlay::backdrop {
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.comms-stage {
+  text-align: center;
+  padding: 40px 24px;
+  max-width: 640px;
+  margin: 0 auto;
+  animation: comms-fade-in 0.5s ease;
+}
+
+.comms-stage[hidden] {
+  display: none;
+}
+
+@keyframes comms-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Radar — concentric rings + sweeping wedge + center pulse blip. */
+.comms-radar {
+  width: clamp(180px, 30vw, 240px);
+  height: clamp(180px, 30vw, 240px);
+  position: relative;
+  margin: 0 auto 36px;
+}
+
+.comms-radar-rings,
+.comms-radar-rings::before,
+.comms-radar-rings::after {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 149, 0, 0.18);
+}
+
+.comms-radar-rings {
+  inset: 0;
+}
+
+.comms-radar-rings::before {
+  content: "";
+  inset: 18%;
+}
+
+.comms-radar-rings::after {
+  content: "";
+  inset: 36%;
+}
+
+.comms-radar-sweep {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    rgba(255, 149, 0, 0.55) 0deg,
+    rgba(255, 149, 0, 0.25) 18deg,
+    rgba(255, 149, 0, 0) 70deg,
+    transparent 360deg
+  );
+  animation: comms-sweep-rot 2s linear infinite;
+}
+
+@keyframes comms-sweep-rot {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.comms-radar-blip {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #ff9500;
+  box-shadow:
+    0 0 12px #ff9500,
+    0 0 24px rgba(255, 149, 0, 0.5);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: comms-blip-pulse 2s ease-in-out infinite;
+}
+
+@keyframes comms-blip-pulse {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.6);
+    opacity: 0.55;
+  }
+}
+
+.comms-status {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: clamp(0.95rem, 1.6vw, 1.2rem);
+  letter-spacing: 0.18em;
+  color: #ff9500;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  min-height: 1.4em;
+  font-weight: 600;
+}
+
+.comms-detail {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.32em;
+  opacity: 0.5;
+  text-transform: uppercase;
+}
+
+/* Success / error icons — stroke-drawn circle and check/X. */
+.comms-check,
+.comms-error-icon {
+  width: clamp(96px, 12vw, 128px);
+  height: clamp(96px, 12vw, 128px);
+  margin: 0 auto 28px;
+  display: block;
+  fill: none;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.comms-check {
+  stroke: #047857;
+}
+
+.comms-error-icon {
+  stroke: #b91c1c;
+}
+
+.comms-check circle,
+.comms-error-icon circle {
+  stroke-dasharray: 164;
+  stroke-dashoffset: 164;
+  animation: comms-icon-circle 0.55s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+}
+
+.comms-check path {
+  stroke-dasharray: 36;
+  stroke-dashoffset: 36;
+  animation: comms-icon-path 0.4s ease-out 0.45s forwards;
+}
+
+.comms-error-icon path {
+  stroke-dasharray: 60;
+  stroke-dashoffset: 60;
+  animation: comms-icon-path 0.4s ease-out 0.45s forwards;
+}
+
+@keyframes comms-icon-circle {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes comms-icon-path {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+[data-comms-stage="success"] h2,
+[data-comms-stage="error"] h2 {
+  font-size: clamp(2.2rem, 6vw, 3.6rem);
+  margin-bottom: 12px;
+  font-style: italic;
+  letter-spacing: -0.01em;
+}
+
+.comms-sub {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 0.78rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: #ff9500;
+  margin-bottom: 28px;
+  font-weight: 600;
+}
+
+[data-comms-stage="error"] .comms-sub {
+  color: #ef4444;
+}
+
+.comms-humor {
+  font-size: clamp(1rem, 1.6vw, 1.15rem);
+  line-height: 1.55;
+  opacity: 0.78;
+  max-width: 480px;
+  margin: 0 auto 32px;
+}
+
+.comms-humor a {
+  color: var(--link);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.comms-close {
+  margin-top: 8px;
+  min-width: 180px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .comms-radar-sweep,
+  .comms-radar-blip,
+  .comms-check circle,
+  .comms-check path,
+  .comms-error-icon circle,
+  .comms-error-icon path,
+  .comms-stage {
+    animation: none !important;
+  }
+  .comms-check circle,
+  .comms-check path,
+  .comms-error-icon circle,
+  .comms-error-icon path {
+    stroke-dashoffset: 0 !important;
+  }
+}
+
+body.reduce-motion .comms-radar-sweep,
+body.reduce-motion .comms-radar-blip,
+body.reduce-motion .comms-check circle,
+body.reduce-motion .comms-check path,
+body.reduce-motion .comms-error-icon circle,
+body.reduce-motion .comms-error-icon path,
+body.reduce-motion .comms-stage {
+  animation: none !important;
+}
+
+body.reduce-motion .comms-check circle,
+body.reduce-motion .comms-check path,
+body.reduce-motion .comms-error-icon circle,
+body.reduce-motion .comms-error-icon path {
+  stroke-dashoffset: 0 !important;
+}
+
+/* --- "After you hit send" next-steps section -------------------------- */
+.next-steps-section {
+  padding-top: clamp(20px, 3vw, 40px);
+}
+
+.next-steps-intro {
+  max-width: 600px;
+  margin: 0 auto clamp(30px, 4vw, 50px);
+  text-align: center;
+  font-size: 0.98rem;
+  line-height: 1.6;
+  opacity: 0.78;
+}
+
+.next-steps-grid {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.next-step {
+  text-align: left;
+}
+
+.next-step-num {
+  display: block;
+  font-family: var(--font-heading);
+  font-style: italic;
+  font-size: clamp(2rem, 4vw, 2.6rem);
+  font-weight: 600;
+  color: var(--link);
+  letter-spacing: -0.02em;
+  line-height: 1;
+  margin-bottom: 14px;
+}
+
+.next-step h3 {
+  font-size: clamp(1.05rem, 1.6vw, 1.25rem);
+  margin-bottom: 10px;
+}
+
+.next-step p {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  opacity: 0.82;
 }
 
 /* Product Page Tags */
