@@ -58,31 +58,7 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     ></script>
-    <script>
-      // Vercel Analytics / Speed Insights endpoints are injected by
-      // the Vercel platform in production only. Skip loading them on
-      // local dev hosts so the dev server doesn't 404 on the paths.
-      (() => {
-        const h = location.hostname;
-        if (
-          h === "localhost" ||
-          h === "127.0.0.1" ||
-          h === "0.0.0.0" ||
-          h === "" ||
-          h === "::1"
-        )
-          return;
-        for (const src of [
-          "/_vercel/insights/script.js",
-          "/_vercel/speed-insights/script.js",
-        ]) {
-          const el = document.createElement("script");
-          el.defer = true;
-          el.src = src;
-          document.head.appendChild(el);
-        }
-      })();
-    </script>
+    <script defer src="cookies.js"></script>
   </head>
   <body>
     <nav class="navbar" aria-label="Navigation">
@@ -589,6 +565,7 @@
           <a href="/contact">Contact Us</a>
           <a href="/privacy">Privacy Policy</a>
           <a href="/terms">Terms of Use</a>
+          <a href="#" data-cookie-settings>Cookie Settings</a>
         </section>
 
         <section class="footer-column">

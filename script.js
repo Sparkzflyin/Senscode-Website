@@ -1314,26 +1314,11 @@ document.addEventListener("DOMContentLoaded", () => {
       cursor.classList.add("custom-cursor");
       const follower = document.createElement("div");
       follower.classList.add("cursor-follower");
-
-      // If the intro dialog is currently open, parent the cursor inside it so
-      // it participates in the dialog's top-layer stacking context. Otherwise
-      // a native cursor would need to be shown (since no z-index can compete
-      // with top layer). When the dialog closes, move the cursor back to body.
-      const openIntro = document.querySelector(".site-intro[open]");
-      const cursorHome = openIntro || document.body;
-      cursorHome.appendChild(cursor);
-      cursorHome.appendChild(follower);
-
-      if (openIntro) {
-        openIntro.addEventListener(
-          "close",
-          () => {
-            document.body.appendChild(cursor);
-            document.body.appendChild(follower);
-          },
-          { once: true }
-        );
-      }
+      // Cursor lives in body; while the intro <dialog> is open the native OS
+      // cursor takes over inside it (CSS handles the swap). The custom cursor
+      // can't compete with the top layer, so we don't try.
+      document.body.appendChild(cursor);
+      document.body.appendChild(follower);
 
       let mouseX = window.innerWidth / 2;
       let mouseY = window.innerHeight / 2;
