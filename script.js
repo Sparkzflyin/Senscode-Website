@@ -96,13 +96,18 @@ const SITE_SETTINGS = (() => {
   if (SITE_BROWSER.mobile) {
     return {
       ...base,
-      // Cap stays as a safety ceiling; the real driver is the divisor.
-      introMaxParticles: Math.floor(base.introMaxParticles * 0.75),
+      // Hard ceiling on mobile so a flagship Android with a wide CSS area
+      // doesn't try to render thousands of particles. 600 is plenty to read
+      // the headline letterforms; the divisor still controls density inside
+      // that cap.
+      introMaxParticles: Math.min(600, Math.floor(base.introMaxParticles * 0.5)),
       // Tighten the divisor (more particles per CSS area) so smaller phone
       // letters still get enough coverage to read as words, not dots.
       introDensityDivisor: base.introDensityDivisor * 0.6,
       introDprCap: Math.min(base.introDprCap, 1.5),
-      cursorMaxParticles: Math.floor(base.cursorMaxParticles * 0.6),
+      // The cursor canvas is gated off on mobile elsewhere, but keep this
+      // honest in case anything else reads the value.
+      cursorMaxParticles: Math.floor(base.cursorMaxParticles * 0.5),
       // Smaller particle radius on mobile so adjacent particles don't
       // overlap when they land on letter targets — keeps formed text crisp.
       introParticleRadiusMin: 0.9,
@@ -578,8 +583,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Lenis smooth scroll — falls back to native CSS scroll-behavior if library missing
+  // Lenis smooth scroll — falls back to native CSS scroll-behavior if library missing.
+  // Skip Lenis entirely on touch devices: Android Chrome's native fling already
+  // feels right, and Lenis's wheel/touch hijack only adds latency + jank there.
   safe("lenis-scroll", () => {
+    if (SITE_BROWSER.mobile) return;
     if (typeof window.Lenis === "function") {
       lenis = new window.Lenis({
         duration: 1.1,
@@ -667,7 +675,13 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // 5. Advanced Card Tilt & Spotlight Effect
+  // Gated to fine-pointer / hover-capable devices only. On touch the previous
+  // implementation called preventDefault() inside touchmove after a 50ms hold,
+  // which made vertical scrolls that started over a card feel locked/broken.
   safe("card-tilt", () => {
+    if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+      return;
+    }
     document
       .querySelectorAll(
         ".glass-panel:not(.no-spotlight), .card:not(.no-spotlight), .process-step:not(.no-spotlight)"
@@ -1192,7 +1206,11 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // 16. Luminous Orbs Parallax Effect
+  // Skipped on mobile: a per-frame transform write to every .orb is a layer
+  // re-rasterize on each scroll tick, which compounds with backdrop-filter
+  // and the blur-heavy orb visuals to murder mobile fps.
   safe("orbs-parallax", () => {
+    if (SITE_BROWSER.mobile) return;
     updateParallax = () => {
       const scrolled = window.scrollY;
       // Standard background orbs
@@ -1224,6 +1242,15 @@ document.addEventListener("DOMContentLoaded", () => {
           grid.classList.toggle("blown-up");
           if (grid.classList.contains("blown-up")) {
             blowUpBtn.textContent = "Collapse";
+
+            // Each exploding orb costs a fixed-position layer with
+            // mix-blend-mode: screen + filter: blur(45px) + a 80px box-shadow.
+            // Stacking 30 of those murders mobile GPUs, so the grid layout
+            // change is the only effect mobile gets — the confetti is desktop
+            // (and fine-pointer) only.
+            if (SITE_BROWSER.mobile) {
+              return;
+            }
 
             // Generate exploding orbs
             const rect = blowUpBtn.getBoundingClientRect();
@@ -1281,7 +1308,11 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // 18. Magnetic Elements
+  // Mouse-only effect (no touch equivalent), so skip the listener wiring on
+  // touch devices. attachMagnetic stays a no-op (default at top of file) so
+  // callers like the Motion toggle injection don't need a guard.
   safe("magnetic", () => {
+    if (!window.matchMedia("(pointer: fine)").matches) return;
     attachMagnetic = (el) => {
       let rect;
       el.addEventListener("mouseenter", () => {
@@ -1387,7 +1418,16 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // 20. Interactive Particle Canvas
+  // Skip entirely on mobile and on coarse pointers — the O(n²) connection-line
+  // pass + a permanent rAF loop is the single biggest perf cost on phones,
+  // and the canvas is purely cosmetic (mouse-driven repel/explode).
   safe("particle-canvas", () => {
+    if (
+      SITE_BROWSER.mobile ||
+      !window.matchMedia("(pointer: fine)").matches
+    ) {
+      return;
+    }
     const canvas = document.createElement("canvas");
     canvas.id = "particle-canvas";
     const curtainWrapper = document.querySelector(".curtain-wrapper");
@@ -1398,6 +1438,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     const ctx = canvas.getContext("2d");
     let width, height, particles;
+    let rafId = null;
 
     const initParticles = () => {
       width = canvas.width = window.innerWidth;
@@ -1443,12 +1484,17 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     const drawParticles = () => {
-      if (
-        document.hidden ||
-        document.body.classList.contains("reduce-motion")
-      ) {
+      // Bail entirely while the tab is hidden — the previous version still
+      // requested an rAF every frame, which is wasted work and prevents
+      // Chrome from idling the renderer process. visibilitychange below
+      // resumes the loop when the tab returns.
+      if (document.hidden) {
+        rafId = null;
+        return;
+      }
+      if (document.body.classList.contains("reduce-motion")) {
         ctx.clearRect(0, 0, width, height);
-        requestAnimationFrame(drawParticles);
+        rafId = requestAnimationFrame(drawParticles);
         return;
       }
 
@@ -1522,12 +1568,17 @@ document.addEventListener("DOMContentLoaded", () => {
           }
         }
       });
-      requestAnimationFrame(drawParticles);
+      rafId = requestAnimationFrame(drawParticles);
     };
 
     initParticles();
     drawParticles();
     window.addEventListener("resize", initParticles);
+    document.addEventListener("visibilitychange", () => {
+      if (!document.hidden && rafId === null) {
+        rafId = requestAnimationFrame(drawParticles);
+      }
+    });
   });
 
   // Matrix Konami Code

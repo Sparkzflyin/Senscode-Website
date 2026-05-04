@@ -3637,3 +3637,95 @@ body.reduce-motion .status-dot {
   border-color: var(--border);
   box-shadow: 0 0 24px rgba(0, 255, 0, 0.25);
 }
+
+/* =====================================================================
+   Mobile performance overrides (≤768px).
+   Targets the things that wreck phone GPUs: stacked backdrop-filter blur,
+   3D card layers, oversized blurred orbs, and per-element blur reveals.
+   The visual loss vs. desktop is intentional — a deliberately lighter
+   mobile experience beats a desktop one that chugs.
+   ================================================================== */
+@media (max-width: 768px) {
+  /* Kill compositor-expensive backdrop blurs. The frosted look becomes a
+     plain translucent fill, which still reads as a panel. */
+  .navbar,
+  .glass-panel,
+  .process-step,
+  .search-modal-panel,
+  .cookie-banner {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  .comms-overlay::backdrop {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: rgba(0, 0, 0, 0.92);
+  }
+
+  /* Cards: drop the 3D layer + per-child translateZ so the browser doesn't
+     have to allocate compositor layers for every card on the page. */
+  .card {
+    transform-style: flat;
+    will-change: auto;
+  }
+  .card h3,
+  .card p,
+  .card .card-icon,
+  .card .card-bullets {
+    transform: none;
+  }
+
+  /* Reveal: opacity-only on mobile. The 12px blur transition stacks with
+     other GPU work and can read as "stuck loading" on slower phones. */
+  .reveal,
+  .story-text {
+    filter: none;
+  }
+
+  /* Trim the background orbs. The original 6 orbs at 35–55vw with blur(40px)
+     cover most of the viewport and force off-screen GPU surfaces. Keep two,
+     shrink them, lower the blur radius. */
+  .orb-3,
+  .orb-4,
+  .orb-5,
+  .orb-6 {
+    display: none;
+  }
+  .orb {
+    filter: blur(24px);
+    opacity: 0.4;
+  }
+  .orb-1,
+  .orb-2 {
+    width: 30vw;
+    height: 30vw;
+  }
+
+  /* Use dynamic viewport height so the Android URL bar collapsing doesn't
+     cause the hero to jump. dvh is supported on Chrome 108+ / Safari 15.4+. */
+  .hero {
+    height: 60dvh;
+  }
+
+  /* 100vw can exceed 100% on Android Chrome when a vertical scrollbar is
+     present, briefly producing horizontal overflow. */
+  .comms-overlay {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  /* Touch-target minimums. Existing .theme-toggle already has min-height 44.
+     Fill in the gaps so every tap target meets the 44px guideline. */
+  .cta-button,
+  .cookie-banner__btn,
+  .search-trigger {
+    min-height: 44px;
+  }
+
+  /* The mobile-menu copy of the Search trigger should stack with the rest of
+     the menu links instead of inheriting the desktop pill width. */
+  .search-trigger--mobile {
+    margin-top: 12px;
+  }
+}
+

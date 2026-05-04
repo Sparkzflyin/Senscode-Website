@@ -42,25 +42,41 @@
   // Both inserts target landmarks the layout already provides. If a page
   // doesn't have .nav-actions (unlikely), the trigger just won't render.
 
+  function buildTrigger() {
+    const trigger = document.createElement("button");
+    trigger.type = "button";
+    trigger.className = "search-trigger";
+    trigger.setAttribute("data-search-trigger", "");
+    trigger.setAttribute("aria-label", "Search the site");
+    trigger.setAttribute("aria-controls", "search-modal");
+    trigger.innerHTML = `
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="11" cy="11" r="7" />
+        <line x1="21" y1="21" x2="16.65" y2="16.65" />
+      </svg>
+      <span>Search</span>
+    `;
+    return trigger;
+  }
+
   function inject() {
     if (document.getElementById("search-modal")) return; // already mounted
     const navActions = document.querySelector(".nav-actions");
     if (navActions) {
       const themeToggle = navActions.querySelector(".theme-toggle");
-      const trigger = document.createElement("button");
-      trigger.type = "button";
-      trigger.className = "search-trigger";
-      trigger.setAttribute("data-search-trigger", "");
-      trigger.setAttribute("aria-label", "Search the site");
-      trigger.setAttribute("aria-controls", "search-modal");
-      trigger.innerHTML = `
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="11" cy="11" r="7" />
-          <line x1="21" y1="21" x2="16.65" y2="16.65" />
-        </svg>
-        <span>Search</span>
-      `;
-      navActions.insertBefore(trigger, themeToggle || navActions.firstChild);
+      navActions.insertBefore(
+        buildTrigger(),
+        themeToggle || navActions.firstChild
+      );
+    }
+    // Also mount inside the mobile menu so the trigger is reachable on
+    // narrow viewports where .nav-actions is display:none.
+    const mobileMenu = document.getElementById("mobile-menu");
+    if (mobileMenu) {
+      const mobileTrigger = buildTrigger();
+      mobileTrigger.classList.add("search-trigger--mobile");
+      const themeToggle = mobileMenu.querySelector(".theme-toggle");
+      mobileMenu.insertBefore(mobileTrigger, themeToggle || null);
     }
 
     const dialog = document.createElement("dialog");
@@ -127,9 +143,9 @@
   // ---- Search wiring -----------------------------------------------------
   function init() {
     inject();
-    const trigger = document.querySelector("[data-search-trigger]");
+    const triggers = document.querySelectorAll("[data-search-trigger]");
     const modal = document.getElementById("search-modal");
-    if (!trigger || !modal) return;
+    if (!triggers.length || !modal) return;
 
     const input = modal.querySelector("[data-search-input]");
     const results = modal.querySelector("[data-search-results]");
@@ -273,7 +289,7 @@
       window.location.assign(href);
     });
 
-    trigger.addEventListener("click", open);
+    triggers.forEach((t) => t.addEventListener("click", open));
     closeBtn.addEventListener("click", close);
 
     modal.addEventListener("click", (e) => {
