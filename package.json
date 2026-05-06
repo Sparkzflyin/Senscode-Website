@@ -1,0 +1,39 @@
+{
+  "name": "senscode-website",
+  "version": "1.0.0",
+  "description": "This is a passion project for my own website. I'm actively using this website for commissions and i'm open to suggestions or questions!",
+  "main": "card-shader.js",
+  "scripts": {
+    "build": "echo \"Static site — no build step.\"",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "lint:css": "stylelint \"**/*.css\"",
+    "lint:html": "html-validate \"*.html\"",
+    "lint:all": "npm run lint && npm run lint:css && npm run lint:html",
+    "qa": "npm run format:check && npm run lint:all",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sparkzflyin/Senscode-Website.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Sparkzflyin/Senscode-Website/issues"
+  },
+  "homepage": "https://github.com/Sparkzflyin/Senscode-Website#readme",
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.3.0",
+    "eslint-plugin-sonarjs": "^4.0.3",
+    "globals": "^17.6.0",
+    "html-validate": "^10.15.0",
+    "prettier": "^3.8.3",
+    "stylelint": "^17.11.0",
+    "stylelint-config-standard": "^40.0.0"
+  }
+}

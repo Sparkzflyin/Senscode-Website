@@ -100,7 +100,10 @@ const SITE_SETTINGS = (() => {
       // doesn't try to render thousands of particles. 600 is plenty to read
       // the headline letterforms; the divisor still controls density inside
       // that cap.
-      introMaxParticles: Math.min(600, Math.floor(base.introMaxParticles * 0.5)),
+      introMaxParticles: Math.min(
+        600,
+        Math.floor(base.introMaxParticles * 0.5)
+      ),
       // Tighten the divisor (more particles per CSS area) so smaller phone
       // letters still get enough coverage to read as words, not dots.
       introDensityDivisor: base.introDensityDivisor * 0.6,
@@ -992,7 +995,7 @@ document.addEventListener("DOMContentLoaded", () => {
         );
 
         // Generate a realistic transposition typo for the second word
-        let typoWord = secondWord;
+        let typoWord;
         if (secondWord.length >= 3) {
           typoWord =
             secondWord.charAt(0) +
@@ -1422,10 +1425,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // pass + a permanent rAF loop is the single biggest perf cost on phones,
   // and the canvas is purely cosmetic (mouse-driven repel/explode).
   safe("particle-canvas", () => {
-    if (
-      SITE_BROWSER.mobile ||
-      !window.matchMedia("(pointer: fine)").matches
-    ) {
+    if (SITE_BROWSER.mobile || !window.matchMedia("(pointer: fine)").matches) {
       return;
     }
     const canvas = document.createElement("canvas");

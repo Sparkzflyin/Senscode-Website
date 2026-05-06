@@ -2,7 +2,12 @@
 <html lang="en" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta name="color-scheme" content="dark light" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta
       name="description"
       content="Explore SensCode's services: Full Scope web development, Technical Consulting, and Website Repair. High-performance, hand-coded solutions."
@@ -15,7 +20,7 @@
     <link rel="canonical" href="https://senscode.com/services" />
     <meta
       property="og:title"
-      content="Senscode | Web Design & Consulting Services"
+      content="SensCode | Web Design & Consulting Services"
     />
     <meta
       property="og:description"
@@ -23,6 +28,33 @@
     />
     <meta property="og:url" content="https://senscode.com/services" />
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="SensCode" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:image" content="https://senscode.com/og-card.png" />
+    <meta property="og:image:width" content="2400" />
+    <meta property="og:image:height" content="1260" />
+    <meta
+      property="og:image:alt"
+      content="SensCode — hand-coded web design and development services"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="SensCode | Web Design & Consulting Services"
+    />
+    <meta
+      name="twitter:description"
+      content="Full Scope web development, technical consulting, and website repair from SensCode. Hand-coded, performance-tuned, fully owned by the client."
+    />
+    <meta name="twitter:image" content="https://senscode.com/og-card.png" />
+    <meta
+      name="twitter:image:alt"
+      content="SensCode — hand-coded web design and development services"
+    />
+    <meta
+      name="robots"
+      content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"
+    />
     <meta name="geo.region" content="US-AZ" />
     <meta name="geo.placename" content="Yuma" />
     <meta name="geo.position" content="32.6927;-114.6277" />
@@ -43,7 +75,11 @@
       content="black-translucent"
     />
     <meta name="format-detection" content="telephone=no" />
-    <title>Senscode | Services</title>
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <title>SensCode | Web Design &amp; Consulting Services</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
@@ -60,6 +96,198 @@
       referrerpolicy="no-referrer"
     ></script>
     <script defer src="cookies.js"></script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "ProfessionalService",
+            "@id": "https://senscode.com/#organization",
+            "name": "SensCode",
+            "legalName": "Sensormedia LLC",
+            "url": "https://senscode.com/",
+            "logo": "https://senscode.com/dist/Signature.png",
+            "description": "Premium, hand-coded web design and development. USMC veteran-owned studio in Yuma, Arizona.",
+            "founder": {
+              "@type": "Person",
+              "@id": "https://senscode.com/#christian-sparks",
+              "name": "Christian Sparks",
+              "jobTitle": "Founder & Lead Engineer",
+              "url": "https://senscode.com/about"
+            },
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "Yuma",
+              "addressRegion": "AZ",
+              "postalCode": "85364",
+              "addressCountry": "US"
+            },
+            "areaServed": [
+              { "@type": "Country", "name": "United States" },
+              { "@type": "AdministrativeArea", "name": "Worldwide (remote)" }
+            ],
+            "geo": {
+              "@type": "GeoCoordinates",
+              "latitude": 32.6927,
+              "longitude": -114.6277
+            },
+            "sameAs": [
+              "https://github.com/Sparkzflyin",
+              "https://www.linkedin.com/in/christian-sparks/",
+              "https://www.credly.com/users/christian-sparks.536305e8",
+              "https://www.instagram.com/thekid_sparks/"
+            ]
+          },
+          {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": "https://senscode.com/"
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Services",
+                "item": "https://senscode.com/services"
+              }
+            ]
+          },
+          {
+            "@type": "Service",
+            "@id": "https://senscode.com/services#full-scope",
+            "name": "Full Scope Web Development",
+            "serviceType": "Custom website design and development",
+            "provider": { "@id": "https://senscode.com/#organization" },
+            "areaServed": [
+              { "@type": "Country", "name": "United States" },
+              { "@type": "AdministrativeArea", "name": "Worldwide (remote)" }
+            ],
+            "description": "End-to-end builds: custom UI/UX design, full-stack development, responsive mobile design, SEO and performance tuning.",
+            "offers": {
+              "@type": "Offer",
+              "price": "1000",
+              "priceCurrency": "USD",
+              "priceSpecification": {
+                "@type": "PriceSpecification",
+                "price": "1000",
+                "priceCurrency": "USD",
+                "minPrice": "1000"
+              },
+              "availability": "https://schema.org/InStock",
+              "url": "https://senscode.com/contact"
+            }
+          },
+          {
+            "@type": "Service",
+            "@id": "https://senscode.com/services#consulting",
+            "name": "Technical Consulting",
+            "serviceType": "Web architecture and consulting",
+            "provider": { "@id": "https://senscode.com/#organization" },
+            "description": "Architecture planning, technology stack selection, code review and audits, scalability strategy.",
+            "offers": {
+              "@type": "Offer",
+              "price": "500",
+              "priceCurrency": "USD",
+              "priceSpecification": {
+                "@type": "PriceSpecification",
+                "price": "500",
+                "priceCurrency": "USD",
+                "minPrice": "500",
+                "description": "Starting fee plus hourly engagement."
+              },
+              "url": "https://senscode.com/contact"
+            }
+          },
+          {
+            "@type": "Service",
+            "@id": "https://senscode.com/services#repair",
+            "name": "Website Repair and Modernization",
+            "serviceType": "Website performance, accessibility, and modernization",
+            "provider": { "@id": "https://senscode.com/#organization" },
+            "description": "Performance optimization, bug squashing and refactoring, design modernization, accessibility compliance.",
+            "offers": {
+              "@type": "Offer",
+              "price": "300",
+              "priceCurrency": "USD",
+              "priceSpecification": {
+                "@type": "PriceSpecification",
+                "price": "300",
+                "priceCurrency": "USD",
+                "minPrice": "300"
+              },
+              "url": "https://senscode.com/contact"
+            }
+          },
+          {
+            "@type": "FAQPage",
+            "@id": "https://senscode.com/services#faq",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "Why no React or big frameworks?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Because clients hate waiting and rewriting perfectly good code every 18 months is a tax. Vanilla HTML, CSS, and JavaScript is faster, lighter, and still going to work in 2030. If a project needs backend functionality, that is handled too."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Do you work with agencies?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "SensCode is a one-person studio. There are no project managers, no handoffs, and no looping in additional team members."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "How long does a project take?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Full-scope builds typically run 3 to 6 weeks depending on complexity. Timelines are locked in writing before work starts."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "What happens after launch?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Clients own the code outright. Source is handed over and post-launch questions are supported. Retainers are available for ongoing updates and maintenance."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Do you host the site?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Sites can be deployed to Vercel, Netlify, or any host the client prefers, with credentials handed over at launch. Managed hosting is also available for an additional fee."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "How does the veteran discount work?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Active-duty military and veterans receive 15% off the final invoice. The discount is applied on the honor system; no paperwork or verification is required."
+                }
+              }
+            ]
+          },
+          {
+            "@type": "WebPage",
+            "@id": "https://senscode.com/services#webpage",
+            "url": "https://senscode.com/services",
+            "name": "SensCode | Web Design & Consulting Services",
+            "description": "Full Scope web development, technical consulting, and website repair from SensCode. Hand-coded, performance-tuned, fully owned by the client.",
+            "isPartOf": { "@id": "https://senscode.com/#website" },
+            "about": { "@id": "https://senscode.com/#organization" },
+            "inLanguage": "en-US"
+          }
+        ]
+      }
+    </script>
   </head>
   <body>
     <nav class="navbar" aria-label="Navigation">

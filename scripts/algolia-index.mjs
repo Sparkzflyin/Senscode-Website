@@ -14,9 +14,9 @@ const ROOT = join(__dirname, "..");
 const envPath = join(ROOT, ".env");
 if (existsSync(envPath)) {
   for (const line of readFileSync(envPath, "utf8").split("\n")) {
-    const m = line.match(/^\s*([A-Z0-9_]+)\s*=\s*(.*?)\s*$/);
+    const m = line.match(/^\s*([A-Z0-9_]+)\s*=(.*)$/);
     if (m && !process.env[m[1]]) {
-      process.env[m[1]] = m[2].replace(/^["']|["']$/g, "");
+      process.env[m[1]] = m[2].trim().replace(/^["']|["']$/g, "");
     }
   }
 }

@@ -2,7 +2,12 @@
 <html lang="en" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta name="color-scheme" content="dark light" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta
       name="description"
       content="SensCode offers premium, hand-coded web design and development services by Christian Sparks. Experience next-generation aesthetic beauty."
@@ -23,6 +28,33 @@
     />
     <meta property="og:url" content="https://senscode.com/" />
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="SensCode" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:image" content="https://senscode.com/og-card.png" />
+    <meta property="og:image:width" content="2400" />
+    <meta property="og:image:height" content="1260" />
+    <meta
+      property="og:image:alt"
+      content="SensCode — hand-coded web design and development"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="SensCode | Premium Web Design & Development"
+    />
+    <meta
+      name="twitter:description"
+      content="SensCode offers premium, hand-coded web design and development services by Christian Sparks."
+    />
+    <meta name="twitter:image" content="https://senscode.com/og-card.png" />
+    <meta
+      name="twitter:image:alt"
+      content="SensCode — hand-coded web design and development"
+    />
+    <meta
+      name="robots"
+      content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"
+    />
     <meta name="geo.region" content="US-AZ" />
     <meta name="geo.placename" content="Yuma" />
     <meta name="geo.position" content="32.6927;-114.6277" />
@@ -43,6 +75,10 @@
       content="black-translucent"
     />
     <meta name="format-detection" content="telephone=no" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
     <title>SensCode | Premium Web Design</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -57,6 +93,173 @@
       src="https://cdn.jsdelivr.net/npm/lenis@1.3.11/dist/lenis.min.js"
     ></script>
     <script defer src="cookies.js"></script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "ProfessionalService",
+            "@id": "https://senscode.com/#organization",
+            "name": "SensCode",
+            "legalName": "Sensormedia LLC",
+            "alternateName": "Sensormedia LLC dba SensCode",
+            "url": "https://senscode.com/",
+            "logo": "https://senscode.com/dist/Signature.png",
+            "image": "https://senscode.com/og-card.png",
+            "description": "Premium, hand-coded web design and development services. A USMC veteran-owned studio based in Yuma, Arizona, building bespoke websites in vanilla HTML, CSS, and JavaScript with no frameworks or templates.",
+            "slogan": "Hand-Coded From Scratch.",
+            "founder": { "@id": "https://senscode.com/#christian-sparks" },
+            "founders": [{ "@id": "https://senscode.com/#christian-sparks" }],
+            "employee": { "@id": "https://senscode.com/#christian-sparks" },
+            "knowsAbout": [
+              "Web Design",
+              "Web Development",
+              "Front-End Engineering",
+              "UI/UX Design",
+              "Performance Optimization",
+              "Accessibility",
+              "Search Engine Optimization",
+              "Vanilla JavaScript",
+              "HTML",
+              "CSS"
+            ],
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "Yuma",
+              "addressRegion": "AZ",
+              "postalCode": "85364",
+              "addressCountry": "US"
+            },
+            "areaServed": [
+              { "@type": "Country", "name": "United States" },
+              { "@type": "AdministrativeArea", "name": "Worldwide (remote)" }
+            ],
+            "geo": {
+              "@type": "GeoCoordinates",
+              "latitude": 32.6927,
+              "longitude": -114.6277
+            },
+            "sameAs": [
+              "https://github.com/Sparkzflyin",
+              "https://www.instagram.com/thekid_sparks/",
+              "https://www.linkedin.com/in/christian-sparks/",
+              "https://www.credly.com/users/christian-sparks.536305e8"
+            ],
+            "knowsLanguage": "en",
+            "hasOfferCatalog": {
+              "@type": "OfferCatalog",
+              "name": "SensCode Services",
+              "itemListElement": [
+                {
+                  "@type": "Offer",
+                  "itemOffered": {
+                    "@type": "Service",
+                    "name": "Full Scope Web Development",
+                    "serviceType": "Custom website design and development",
+                    "description": "End-to-end builds covering custom UI/UX design, full-stack development, responsive layouts, and SEO/performance tuning."
+                  },
+                  "price": "1000",
+                  "priceCurrency": "USD",
+                  "priceSpecification": {
+                    "@type": "PriceSpecification",
+                    "price": "1000",
+                    "priceCurrency": "USD",
+                    "minPrice": "1000",
+                    "description": "Starting price; final scope priced per project."
+                  }
+                },
+                {
+                  "@type": "Offer",
+                  "itemOffered": {
+                    "@type": "Service",
+                    "name": "Technical Consulting",
+                    "serviceType": "Web architecture and consulting",
+                    "description": "Architecture planning, technology stack selection, code review and audits, scalability strategy."
+                  },
+                  "price": "500",
+                  "priceCurrency": "USD",
+                  "priceSpecification": {
+                    "@type": "PriceSpecification",
+                    "price": "500",
+                    "priceCurrency": "USD",
+                    "minPrice": "500",
+                    "description": "Starting fee plus hourly engagement."
+                  }
+                },
+                {
+                  "@type": "Offer",
+                  "itemOffered": {
+                    "@type": "Service",
+                    "name": "Website Repair and Modernization",
+                    "serviceType": "Website performance and accessibility remediation",
+                    "description": "Performance optimization, bug fixes and refactoring, design modernization, accessibility compliance."
+                  },
+                  "price": "300",
+                  "priceCurrency": "USD",
+                  "priceSpecification": {
+                    "@type": "PriceSpecification",
+                    "price": "300",
+                    "priceCurrency": "USD",
+                    "minPrice": "300"
+                  }
+                }
+              ]
+            },
+            "contactPoint": {
+              "@type": "ContactPoint",
+              "contactType": "sales",
+              "url": "https://senscode.com/contact",
+              "availableLanguage": "English",
+              "areaServed": "Worldwide"
+            }
+          },
+          {
+            "@type": "Person",
+            "@id": "https://senscode.com/#christian-sparks",
+            "name": "Christian Sparks",
+            "givenName": "Christian",
+            "familyName": "Sparks",
+            "jobTitle": "Founder & Lead Engineer",
+            "worksFor": { "@id": "https://senscode.com/#organization" },
+            "url": "https://senscode.com/about",
+            "image": "https://senscode.com/dist/Signature.png",
+            "description": "Founder of SensCode, a USMC veteran and front-end engineer who hand-codes every site without frameworks or templates.",
+            "knowsAbout": [
+              "Web Design",
+              "Web Development",
+              "Front-End Engineering",
+              "UI/UX Design",
+              "Performance Optimization"
+            ],
+            "sameAs": [
+              "https://github.com/Sparkzflyin",
+              "https://www.linkedin.com/in/christian-sparks/",
+              "https://www.credly.com/users/christian-sparks.536305e8",
+              "https://www.instagram.com/thekid_sparks/"
+            ]
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://senscode.com/#website",
+            "url": "https://senscode.com/",
+            "name": "SensCode",
+            "description": "Premium, hand-coded web design and development by Christian Sparks.",
+            "inLanguage": "en-US",
+            "publisher": { "@id": "https://senscode.com/#organization" }
+          },
+          {
+            "@type": "WebPage",
+            "@id": "https://senscode.com/#webpage",
+            "url": "https://senscode.com/",
+            "name": "SensCode | Premium Web Design",
+            "isPartOf": { "@id": "https://senscode.com/#website" },
+            "about": { "@id": "https://senscode.com/#organization" },
+            "primaryImageOfPage": "https://senscode.com/og-card.png",
+            "inLanguage": "en-US"
+          }
+        ]
+      }
+    </script>
   </head>
   <body>
     <dialog class="site-intro" aria-label="Welcome">

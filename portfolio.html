@@ -2,7 +2,12 @@
 <html lang="en" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta name="color-scheme" content="dark light" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta
       name="description"
       content="Explore the portfolio, case studies, and digital experiments by SensCode."
@@ -20,6 +25,34 @@
     />
     <meta property="og:url" content="https://senscode.com/portfolio" />
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="SensCode" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:image" content="https://senscode.com/og-card.png" />
+    <meta property="og:image:width" content="2400" />
+    <meta property="og:image:height" content="1260" />
+    <meta
+      property="og:image:alt"
+      content="SensCode portfolio and lab — case studies and digital experiments"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="SensCode | Portfolio & Lab" />
+    <meta
+      name="twitter:description"
+      content="Explore the portfolio, case studies, and digital experiments by SensCode."
+    />
+    <meta name="twitter:image" content="https://senscode.com/og-card.png" />
+    <meta
+      name="twitter:image:alt"
+      content="SensCode portfolio and lab — case studies and digital experiments"
+    />
+    <meta name="geo.region" content="US-AZ" />
+    <meta name="geo.placename" content="Yuma" />
+    <meta name="geo.position" content="32.6927;-114.6277" />
+    <meta name="ICBM" content="32.6927, -114.6277" />
+    <meta
+      name="robots"
+      content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"
+    />
     <meta
       name="theme-color"
       content="#000000"
@@ -36,7 +69,11 @@
       content="black-translucent"
     />
     <meta name="format-detection" content="telephone=no" />
-    <title>Senscode | Portfolio &amp; Lab</title>
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <title>SensCode | Portfolio &amp; Lab</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
@@ -337,6 +374,78 @@
         animation: orb-implode 0.8s cubic-bezier(0.7, 0, 0.3, 1) forwards;
       }
     </style>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "ProfessionalService",
+            "@id": "https://senscode.com/#organization",
+            "name": "SensCode",
+            "legalName": "Sensormedia LLC",
+            "url": "https://senscode.com/",
+            "logo": "https://senscode.com/dist/Signature.png",
+            "description": "Premium, hand-coded web design and development. USMC veteran-owned studio in Yuma, Arizona.",
+            "founder": {
+              "@type": "Person",
+              "@id": "https://senscode.com/#christian-sparks",
+              "name": "Christian Sparks",
+              "jobTitle": "Founder & Lead Engineer",
+              "url": "https://senscode.com/about"
+            },
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "Yuma",
+              "addressRegion": "AZ",
+              "postalCode": "85364",
+              "addressCountry": "US"
+            },
+            "areaServed": [
+              { "@type": "Country", "name": "United States" },
+              { "@type": "AdministrativeArea", "name": "Worldwide (remote)" }
+            ],
+            "geo": {
+              "@type": "GeoCoordinates",
+              "latitude": 32.6927,
+              "longitude": -114.6277
+            },
+            "sameAs": [
+              "https://github.com/Sparkzflyin",
+              "https://www.linkedin.com/in/christian-sparks/",
+              "https://www.credly.com/users/christian-sparks.536305e8",
+              "https://www.instagram.com/thekid_sparks/"
+            ]
+          },
+          {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": "https://senscode.com/"
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Portfolio",
+                "item": "https://senscode.com/portfolio"
+              }
+            ]
+          },
+          {
+            "@type": "CollectionPage",
+            "@id": "https://senscode.com/portfolio#webpage",
+            "url": "https://senscode.com/portfolio",
+            "name": "SensCode | Portfolio & Lab",
+            "description": "Portfolio, case studies, and digital experiments by SensCode.",
+            "isPartOf": { "@id": "https://senscode.com/#website" },
+            "about": { "@id": "https://senscode.com/#organization" },
+            "inLanguage": "en-US"
+          }
+        ]
+      }
+    </script>
   </head>
   <body>
     <nav class="navbar" aria-label="Navigation">

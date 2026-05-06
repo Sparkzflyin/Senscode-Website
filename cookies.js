@@ -3,13 +3,7 @@
 (() => {
   const CONSENT_COOKIE = "senscode_consent";
   const CONSENT_VERSION = "1";
-  const LOCAL_HOSTS = new Set([
-    "localhost",
-    "127.0.0.1",
-    "0.0.0.0",
-    "",
-    "::1",
-  ]);
+  const LOCAL_HOSTS = new Set(["localhost", "127.0.0.1", "0.0.0.0", "", "::1"]);
 
   const setCookie = (name, value, days) => {
     const expires = new Date(Date.now() + days * 864e5).toUTCString();
@@ -22,7 +16,7 @@
   const getCookie = (name) => {
     const escaped = name.replace(/([.$?*|{}()[\]\\/+^])/g, "\\$1");
     const match = document.cookie.match(
-      new RegExp("(?:^|; )" + escaped + "=([^;]*)"),
+      new RegExp("(?:^|; )" + escaped + "=([^;]*)")
     );
     return match ? decodeURIComponent(match[1]) : null;
   };
