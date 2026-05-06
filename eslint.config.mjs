@@ -29,10 +29,11 @@ export default [
       "no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
       // Math.random in animation/particle code is the right primitive.
       "sonarjs/pseudo-random": "off",
-      // Long animation pipelines naturally exceed the cognitive-complexity
-      // and nesting heuristics; demoted so they surface but don't gate.
+      // Cognitive-complexity surfaces real refactor candidates — keep visible.
       "sonarjs/cognitive-complexity": "warn",
-      "sonarjs/no-nested-functions": "warn",
+      // Nested-function depth is a Java/OO heuristic that misfits browser
+      // callback orchestration (setTimeout inside forEach inside listeners).
+      "sonarjs/no-nested-functions": "off",
       // Time-band / state branches with intentionally-equal handlers are a
       // readability-vs-DRY tradeoff; surface as warnings, not errors.
       "sonarjs/no-duplicated-branches": "warn",

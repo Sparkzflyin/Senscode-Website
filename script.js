@@ -951,6 +951,47 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // 13. Typewriter Effect for Hero Headers
   safe("typewriter", () => {
+    // Realistic transposition typo for a single word.
+    const makeTypoWord = (word) => {
+      if (word.length >= 3) {
+        return word.charAt(0) + word.charAt(2) + word.charAt(1) + word.slice(3);
+      }
+      if (word.length === 2) return word.charAt(1) + word.charAt(0);
+      return word + "x";
+    };
+
+    // Build the action queue for a "type-typo-correct-it" sequence.
+    const buildTypoActions = (text) => {
+      const actions = [];
+      const words = text.trim().split(" ");
+      const firstWordAndSpace = words[0] + " ";
+      const secondWord = words[1];
+      const restOfText = text.substring(
+        text.indexOf(firstWordAndSpace) +
+          firstWordAndSpace.length +
+          secondWord.length
+      );
+      const typoWord = makeTypoWord(secondWord);
+
+      for (const c of firstWordAndSpace)
+        actions.push({ type: "type", char: c });
+      for (const c of typoWord) actions.push({ type: "type", char: c });
+      actions.push({ type: "pause", ms: 400 });
+      for (let i = 0; i < typoWord.length; i++)
+        actions.push({ type: "delete" });
+      actions.push({ type: "pause", ms: 200 });
+      for (const c of secondWord + restOfText)
+        actions.push({ type: "type", char: c });
+      return actions;
+    };
+
+    const buildPlainActions = (text) =>
+      [...text].map((char) => ({ type: "type", char }));
+
+    const isIndexPage =
+      window.location.pathname.endsWith("index.html") ||
+      window.location.pathname === "/";
+
     const heroHeaders = document.querySelectorAll(
       ".hero-content h1, .founder-note h1, .founder-note h2"
     );
@@ -977,50 +1018,10 @@ document.addEventListener("DOMContentLoaded", () => {
       animatedPart.classList.add("typewriter-cursor");
       header.appendChild(animatedPart);
 
-      const actions = [];
-
-      const isIndexPage =
-        window.location.pathname.endsWith("index.html") ||
-        window.location.pathname === "/";
-
-      // Introduce a typo if there are multiple words AND we are on the index page
-      if (text.trim().includes(" ") && isIndexPage) {
-        const words = text.trim().split(" ");
-        const firstWordAndSpace = words[0] + " ";
-        const secondWord = words[1];
-        const restOfText = text.substring(
-          text.indexOf(firstWordAndSpace) +
-            firstWordAndSpace.length +
-            secondWord.length
-        );
-
-        // Generate a realistic transposition typo for the second word
-        let typoWord;
-        if (secondWord.length >= 3) {
-          typoWord =
-            secondWord.charAt(0) +
-            secondWord.charAt(2) +
-            secondWord.charAt(1) +
-            secondWord.slice(3);
-        } else if (secondWord.length === 2) {
-          typoWord = secondWord.charAt(1) + secondWord.charAt(0);
-        } else {
-          typoWord = secondWord + "x";
-        }
-
-        // Action queue: type prefix -> type typo -> pause -> delete typo -> pause -> type correctly
-        for (const c of firstWordAndSpace)
-          actions.push({ type: "type", char: c });
-        for (const c of typoWord) actions.push({ type: "type", char: c });
-        actions.push({ type: "pause", ms: 400 });
-        for (let i = 0; i < typoWord.length; i++)
-          actions.push({ type: "delete" });
-        actions.push({ type: "pause", ms: 200 });
-        for (const c of secondWord + restOfText)
-          actions.push({ type: "type", char: c });
-      } else {
-        for (const c of text) actions.push({ type: "type", char: c });
-      }
+      const actions =
+        text.trim().includes(" ") && isIndexPage
+          ? buildTypoActions(text)
+          : buildPlainActions(text);
 
       let actionIndex = 0;
       const processAction = () => {
