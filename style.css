@@ -1405,6 +1405,14 @@ body.reduce-motion .comms-error-icon path {
   .hamburger {
     display: flex;
   }
+
+  /* On pages without a <header class="hero"> (about, privacy, terms), <main>
+     starts at the very top of the viewport and the fixed navbar above covers
+     its first content. Hero pages already place ~60vh of headroom below the
+     navbar, so they don't need this offset. */
+  body:not(:has(header.hero)) main {
+    padding-top: 60px;
+  }
 }
 
 /* This class will be toggled by JavaScript */
