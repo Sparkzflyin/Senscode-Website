@@ -429,6 +429,107 @@ document.addEventListener("DOMContentLoaded", () => {
             });
           };
 
+          const stepIntroParticle = (p, w, h) => {
+            if (p.tx !== null && p.ty !== null) {
+              p.vx = (p.tx - p.x) * 0.11;
+              p.vy = (p.ty - p.y) * 0.11;
+            } else {
+              if (p.x < 0) {
+                p.x = 0;
+                p.vx *= -1;
+              } else if (p.x > w) {
+                p.x = w;
+                p.vx *= -1;
+              }
+              if (p.y < 0) {
+                p.y = 0;
+                p.vy *= -1;
+              } else if (p.y > h) {
+                p.y = h;
+                p.vy *= -1;
+              }
+            }
+            p.x += p.vx;
+            p.y += p.vy;
+          };
+
+          const buildIntroGrid = (cellSize) => {
+            const grid = new Map();
+            for (let i = 0; i < iParticles.length; i++) {
+              const p = iParticles[i];
+              const key =
+                Math.floor(p.x / cellSize) + "," + Math.floor(p.y / cellSize);
+              let bucket = grid.get(key);
+              if (!bucket) {
+                bucket = [];
+                grid.set(key, bucket);
+              }
+              bucket.push(p);
+            }
+            return grid;
+          };
+
+          const linkPairsInBucket = (bucket, maxDistSq) => {
+            for (let i = 0; i < bucket.length; i++) {
+              const p = bucket[i];
+              for (let j = i + 1; j < bucket.length; j++) {
+                const p2 = bucket[j];
+                const dx = p.x - p2.x;
+                const dy = p.y - p2.y;
+                if (dx * dx + dy * dy < maxDistSq) {
+                  ictx.moveTo(p.x, p.y);
+                  ictx.lineTo(p2.x, p2.y);
+                }
+              }
+            }
+          };
+
+          const linkAcrossBuckets = (a, b, maxDistSq) => {
+            for (let i = 0; i < a.length; i++) {
+              const p = a[i];
+              for (let j = 0; j < b.length; j++) {
+                const p2 = b[j];
+                const dx = p.x - p2.x;
+                const dy = p.y - p2.y;
+                if (dx * dx + dy * dy < maxDistSq) {
+                  ictx.moveTo(p.x, p.y);
+                  ictx.lineTo(p2.x, p2.y);
+                }
+              }
+            }
+          };
+
+          // Half-set of neighbor offsets — pairing each cell with these four
+          // covers all 8 adjacent cells exactly once across the full sweep.
+          const HALF_NEIGHBORS = [
+            [1, 0],
+            [-1, 1],
+            [0, 1],
+            [1, 1],
+          ];
+
+          const drawIntroConnections = () => {
+            const cellSize = 100;
+            const maxDistSq = 4900; // ~70px visible threshold
+            const grid = buildIntroGrid(cellSize);
+            ictx.beginPath();
+            for (const [key, bucket] of grid) {
+              const sep = key.indexOf(",");
+              const cx = +key.slice(0, sep);
+              const cy = +key.slice(sep + 1);
+              linkPairsInBucket(bucket, maxDistSq);
+              for (let n = 0; n < HALF_NEIGHBORS.length; n++) {
+                const nk =
+                  cx + HALF_NEIGHBORS[n][0] + "," + (cy + HALF_NEIGHBORS[n][1]);
+                const other = grid.get(nk);
+                if (other) linkAcrossBuckets(bucket, other, maxDistSq);
+              }
+            }
+            ictx.strokeStyle = "rgba(255, 255, 255, 0.11)";
+            ictx.lineWidth = 0.5;
+            ictx.stroke();
+          };
+
           const drawIntroParticles = () => {
             if (document.hidden) {
               introRafId = requestAnimationFrame(drawIntroParticles);
@@ -439,108 +540,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
             for (let i = 0; i < iParticles.length; i++) {
               const p = iParticles[i];
-              if (p.tx !== null && p.ty !== null) {
-                p.vx = (p.tx - p.x) * 0.11;
-                p.vy = (p.ty - p.y) * 0.11;
-              } else {
-                if (p.x < 0) {
-                  p.x = 0;
-                  p.vx *= -1;
-                } else if (p.x > w) {
-                  p.x = w;
-                  p.vx *= -1;
-                }
-                if (p.y < 0) {
-                  p.y = 0;
-                  p.vy *= -1;
-                } else if (p.y > h) {
-                  p.y = h;
-                  p.vy *= -1;
-                }
-              }
-              p.x += p.vx;
-              p.y += p.vy;
-
+              stepIntroParticle(p, w, h);
               ictx.beginPath();
               ictx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
               ictx.fillStyle = "rgba(255, 149, 0, 0.85)";
               ictx.fill();
             }
 
-            // Draw connection lines only during drift phases to keep the
+            // Connection lines only during drift phases — keeps the
             // "constellation" ambience without cluttering assembled letters.
-            // Uses spatial grid + batched Path2D so cursor RAF stays smooth
-            // at high particle counts. Skipped entirely on engines where the
-            // line pass dominates the frame budget.
             if (
               SITE_SETTINGS.introConnections &&
               (phase === "drifting" || phase === "dispersing")
             ) {
-              const cellSize = 100;
-              const maxDistSq = 4900; // ~70px visible threshold
-              const grid = new Map();
-              for (let i = 0; i < iParticles.length; i++) {
-                const p = iParticles[i];
-                const gx = Math.floor(p.x / cellSize);
-                const gy = Math.floor(p.y / cellSize);
-                const key = gx + "," + gy;
-                let bucket = grid.get(key);
-                if (!bucket) {
-                  bucket = [];
-                  grid.set(key, bucket);
-                }
-                bucket.push(p);
-              }
-
-              ictx.beginPath();
-              const halfNeighbors = [
-                [1, 0],
-                [-1, 1],
-                [0, 1],
-                [1, 1],
-              ];
-              for (const [key, bucket] of grid) {
-                const sep = key.indexOf(",");
-                const cx = +key.slice(0, sep);
-                const cy = +key.slice(sep + 1);
-
-                // Pairs within the same cell
-                for (let i = 0; i < bucket.length; i++) {
-                  const p = bucket[i];
-                  for (let j = i + 1; j < bucket.length; j++) {
-                    const p2 = bucket[j];
-                    const dx = p.x - p2.x;
-                    const dy = p.y - p2.y;
-                    if (dx * dx + dy * dy < maxDistSq) {
-                      ictx.moveTo(p.x, p.y);
-                      ictx.lineTo(p2.x, p2.y);
-                    }
-                  }
-                }
-
-                // Pairs with half of the 8 neighbors (avoids double-counting)
-                for (let n = 0; n < 4; n++) {
-                  const nk =
-                    cx + halfNeighbors[n][0] + "," + (cy + halfNeighbors[n][1]);
-                  const other = grid.get(nk);
-                  if (!other) continue;
-                  for (let i = 0; i < bucket.length; i++) {
-                    const p = bucket[i];
-                    for (let j = 0; j < other.length; j++) {
-                      const p2 = other[j];
-                      const dx = p.x - p2.x;
-                      const dy = p.y - p2.y;
-                      if (dx * dx + dy * dy < maxDistSq) {
-                        ictx.moveTo(p.x, p.y);
-                        ictx.lineTo(p2.x, p2.y);
-                      }
-                    }
-                  }
-                }
-              }
-              ictx.strokeStyle = "rgba(255, 255, 255, 0.11)";
-              ictx.lineWidth = 0.5;
-              ictx.stroke();
+              drawIntroConnections();
             }
 
             introRafId = requestAnimationFrame(drawIntroParticles);
