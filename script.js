@@ -669,7 +669,11 @@ document.addEventListener("DOMContentLoaded", () => {
             }
           });
         },
-        { threshold: 0.2 }
+        // Low threshold so sections taller than the viewport still trigger.
+        // The About page "Arsenal" panel exceeds mobile viewport height, so
+        // its max intersection ratio never reaches 20% — anything above ~0.05
+        // would leave cards stuck at opacity:0 on phones.
+        { threshold: 0.05 }
       );
       revealEls.forEach((el) => observer.observe(el));
     } else {
