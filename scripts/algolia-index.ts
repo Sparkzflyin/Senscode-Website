@@ -29,10 +29,17 @@ const APP_ID = process.env.NEXT_PUBLIC_ALGOLIA_APP_ID;
 const ADMIN_KEY = process.env.ALGOLIA_ADMIN_KEY;
 const INDEX = process.env.NEXT_PUBLIC_ALGOLIA_INDEX || "senscode_site";
 
-if (!APP_ID || !ADMIN_KEY) {
-  console.error(
-    "Missing NEXT_PUBLIC_ALGOLIA_APP_ID or ALGOLIA_ADMIN_KEY in .env.local.",
-  );
+const missing: string[] = [];
+if (!APP_ID) missing.push("NEXT_PUBLIC_ALGOLIA_APP_ID");
+if (!ADMIN_KEY) missing.push("ALGOLIA_ADMIN_KEY");
+if (missing.length) {
+  console.error(`Missing ${missing.join(" + ")} in .env.local.`);
+  if (missing.includes("ALGOLIA_ADMIN_KEY")) {
+    console.error(
+      "Get the Admin API Key from algolia.com → API Keys (the one with all permissions),",
+    );
+    console.error("paste it as ALGOLIA_ADMIN_KEY=... and re-run.");
+  }
   process.exit(1);
 }
 
