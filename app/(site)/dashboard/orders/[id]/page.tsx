@@ -53,12 +53,22 @@ export default async function OrderDetailPage({
             )}
           </p>
         </div>
-        <Link
-          href="/dashboard/orders"
-          style={{ opacity: 0.7, fontSize: "0.95rem" }}
-        >
-          ← All orders
-        </Link>
+        <div style={{ display: "flex", gap: 16, alignItems: "center" }}>
+          {isOwner ? (
+            <Link
+              href={`/dashboard/orders/${order.id}/edit`}
+              className="cta-button small-btn"
+            >
+              Edit
+            </Link>
+          ) : null}
+          <Link
+            href="/dashboard/orders"
+            style={{ opacity: 0.7, fontSize: "0.95rem" }}
+          >
+            ← All orders
+          </Link>
+        </div>
       </div>
 
       <div className="grid-3" style={{ marginBottom: 32 }}>

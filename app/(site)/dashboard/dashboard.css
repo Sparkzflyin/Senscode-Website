@@ -272,3 +272,27 @@
   margin-top: 8px;
   user-select: all;
 }
+
+.danger-btn {
+  padding: 10px 18px;
+  border-radius: 8px;
+  border: 1px solid rgb(244 63 94 / 50%);
+  background: rgb(244 63 94 / 10%);
+  color: #f43f5e;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background var(--transition),
+    border-color var(--transition);
+}
+
+.danger-btn:hover:not(:disabled) {
+  background: rgb(244 63 94 / 18%);
+  border-color: rgb(244 63 94 / 75%);
+}
+
+.danger-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

@@ -126,3 +126,29 @@ export async function listClients() {
     .where(eq(users.role, "client"))
     .orderBy(asc(users.email));
 }
+
+export async function getClientById(clientId: string) {
+  const db = getDb();
+  const [client] = await db
+    .select({
+      id: users.id,
+      name: users.name,
+      email: users.email,
+      role: users.role,
+      createdAt: users.createdAt,
+    })
+    .from(users)
+    .where(eq(users.id, clientId))
+    .limit(1);
+  if (!client || client.role !== "client") return null;
+  return client;
+}
+
+export async function countOrdersForClient(clientId: string): Promise<number> {
+  const db = getDb();
+  const rows = await db
+    .select({ id: orders.id })
+    .from(orders)
+    .where(eq(orders.clientId, clientId));
+  return rows.length;
+}

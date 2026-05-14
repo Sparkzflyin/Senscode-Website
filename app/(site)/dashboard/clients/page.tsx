@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { requireOwner } from "@/lib/auth";
 import { listClients } from "@/lib/orders";
 import { formatDate } from "@/lib/format";
@@ -32,7 +33,11 @@ export default async function ClientsPage() {
         ) : (
           <div>
             {clients.map((c) => (
-              <div key={c.id} className="order-row">
+              <Link
+                key={c.id}
+                href={`/dashboard/clients/${c.id}`}
+                className="order-row"
+              >
                 <div>
                   <strong style={{ fontSize: "1.05rem" }}>
                     {c.name || c.email}
@@ -48,7 +53,7 @@ export default async function ClientsPage() {
                     Joined {formatDate(c.createdAt)}
                   </span>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         )}
