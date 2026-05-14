@@ -11,7 +11,8 @@
     "db:push": "drizzle-kit push",
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio",
-    "seed:owner": "tsx scripts/seed-owner.ts"
+    "seed:owner": "tsx scripts/seed-owner.ts",
+    "index": "tsx scripts/algolia-index.ts"
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.11.2",
