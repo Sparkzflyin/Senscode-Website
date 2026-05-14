@@ -31,9 +31,14 @@ export default async function DashboardOverview() {
               Welcome back{session.user.name ? `, ${session.user.name}` : ""}.
             </p>
           </div>
-          <Link href="/dashboard/orders/new" className="cta-button small-btn">
-            + New order
-          </Link>
+          <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+            <Link href="/dashboard/orders/new" className="cta-button small-btn">
+              + New order
+            </Link>
+            <Link href="/studio" className="cta-button small-btn">
+              + Create new post
+            </Link>
+          </div>
         </div>
 
         <div className="grid-3">
