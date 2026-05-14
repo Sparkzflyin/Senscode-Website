@@ -3,7 +3,6 @@ import Script from "next/script";
 import { Inter, Playfair_Display, Dancing_Script } from "next/font/google";
 import "../globals.css";
 import "../senscode.css";
-import { ThemeInit } from "@/components/ThemeInit";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { CookieBanner } from "@/components/CookieBanner";
@@ -132,10 +131,18 @@ export default function RootLayout({
       data-theme="dark"
       className={`${inter.variable} ${playfair.variable} ${dancing.variable}`}
     >
-      <head>
-        <ThemeInit />
-      </head>
       <body>
+        {/* Inline no-FOUC theme init. Runs synchronously before paint so
+            stored localStorage theme applies before the user sees the default
+            dark theme flash. React 19 may emit a dev-only console warning
+            about script tags in JSX; the script executes correctly via SSR
+            and the warning is suppressed in production builds. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "(function(){try{var t=localStorage.getItem('theme');if(!t){t=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();",
+          }}
+        />
         <SmoothScroll />
         <ScrollReveal />
         <CardTilt />
