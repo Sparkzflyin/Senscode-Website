@@ -2177,6 +2177,22 @@ body.reduce-motion .sticky-skill-card .skill-snippet {
     display: none !important;
   }
 
+  /* Same treatment for the contact form's send-confirmation dialog. It's
+     nested deep in the page (not a body-level sibling like .site-intro), so
+     hide the JS cursor via :has() on the open state and restore native. */
+  .comms-overlay,
+  .comms-overlay * {
+    cursor: auto !important;
+  }
+  .comms-overlay a,
+  .comms-overlay button {
+    cursor: pointer !important;
+  }
+  body:has(.comms-overlay[open]) .custom-cursor,
+  body:has(.comms-overlay[open]) .cursor-follower {
+    display: none !important;
+  }
+
   /* Opt-out zones: any element with [data-cursor="keep"] (and everything
      inside it) restores the native OS cursor so users can see what they're
      about to click. The JS effect also leaves the custom cursor visible
