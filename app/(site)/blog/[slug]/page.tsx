@@ -114,7 +114,7 @@ export default async function PostPage({
       <article className="panel">
         <div
           style={{
-            maxWidth: 760,
+            maxWidth: 960,
             margin: "0 auto",
             paddingTop: "clamp(60px, 8vh, 120px)",
           }}
@@ -172,7 +172,7 @@ export default async function PostPage({
               alt={post.coverImage.alt || post.title}
               width={1600}
               height={900}
-              sizes="(max-width: 768px) 100vw, 760px"
+              sizes="(max-width: 768px) 100vw, 960px"
               priority
               style={{
                 width: "100%",
@@ -185,8 +185,8 @@ export default async function PostPage({
 
           <div
             style={{
-              fontSize: "1.05rem",
-              lineHeight: 1.7,
+              fontSize: "1.1rem",
+              lineHeight: 1.75,
             }}
           >
             <PortableTextRenderer value={post.body} />
