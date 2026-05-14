@@ -144,6 +144,9 @@ export default function RootLayout({
               "(function(){try{var t=localStorage.getItem('theme');if(!t){t=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();",
           }}
         />
+        <a href="#main" className="skip-link">
+          Skip to main content
+        </a>
         <AuthProvider>
           <SmoothScroll />
           <ScrollReveal />
@@ -152,7 +155,9 @@ export default function RootLayout({
           <FooterCurtain />
           <div className="curtain-wrapper">
             <Navbar />
-            <main id="main">{children}</main>
+            <main id="main" tabIndex={-1}>
+              {children}
+            </main>
             <CookieBanner />
             <BackToTop />
           </div>

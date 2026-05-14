@@ -57,3 +57,76 @@ body:has(.curtain-wrapper) > .footer-panel {
   width: 100%;
   z-index: 1;
 }
+
+/* Blog category filter chips */
+.category-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 7px 14px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  border: 1px solid var(--border);
+  color: var(--text);
+  text-decoration: none;
+  background: transparent;
+  transition:
+    background var(--transition),
+    border-color var(--transition),
+    color var(--transition),
+    transform 0.2s ease;
+}
+
+.category-chip:hover {
+  border-color: var(--hover-border);
+  transform: translateY(-1px);
+}
+
+.category-chip[data-active="true"] {
+  background: var(--text);
+  color: var(--bg);
+  border-color: var(--text);
+}
+
+/* Skip-to-content link — keyboard a11y. Hidden by default, visible on focus.
+   First focusable element in the document so Tab from page load reveals it. */
+.skip-link {
+  position: fixed;
+  top: -100px;
+  left: 12px;
+  z-index: 10000;
+  padding: 10px 16px;
+  background: var(--text);
+  color: var(--bg);
+  text-decoration: none;
+  border-radius: 0 0 10px 10px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus,
+.skip-link:focus-visible {
+  top: 0;
+  outline: 3px solid var(--hover-border);
+  outline-offset: 2px;
+}
+
+/* The :has() rule in senscode.css adds top padding to <main> when the page
+   has no .hero header (privacy, terms, about, signin). Older Firefox / Safari
+   don't support :has() and would render content under the fixed navbar.
+   Below uses :first-child which works everywhere and produces the same effect.
+   senscode.css's modern rule still wins where supported. */
+main > .panel:first-child,
+main > .contact-card:first-child,
+main > .founder-note:first-child {
+  padding-top: clamp(80px, 12vh, 140px);
+}
+@supports selector(:has(*)) {
+  main > .panel:first-child,
+  main > .contact-card:first-child,
+  main > .founder-note:first-child {
+    padding-top: 0;
+  }
+}
