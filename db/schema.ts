@@ -21,6 +21,7 @@ export const users = pgTable("user", {
   image: text("image"),
   passwordHash: text("passwordHash"),
   role: userRole("role").notNull().default("client"),
+  canAuthorBlog: boolean("can_author_blog").notNull().default(false),
   createdAt: timestamp("createdAt", { mode: "date" }).notNull().defaultNow(),
 });
 

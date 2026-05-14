@@ -55,6 +55,22 @@ export function NewClientForm() {
           </label>
         </div>
 
+        <label
+          className="form-toggle-group"
+          style={{ marginBottom: 16 }}
+          htmlFor="client-can-author"
+        >
+          <input
+            id="client-can-author"
+            name="canAuthorBlog"
+            type="checkbox"
+          />
+          <span>
+            Blog permissions — this user will see a &ldquo;Create new
+            post&rdquo; button on their dashboard
+          </span>
+        </label>
+
         {state.error ? (
           <p style={{ color: "#ff6b6b", marginBottom: 12 }} role="alert">
             {state.error}

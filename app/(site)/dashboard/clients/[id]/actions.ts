@@ -39,6 +39,7 @@ export async function updateClientAction(
   const name = (formData.get("name") as string | null)?.trim() || null;
   const passwordRaw = (formData.get("password") as string | null)?.trim();
   const resetPassword = formData.get("resetPassword") === "on";
+  const canAuthorBlog = formData.get("canAuthorBlog") === "on";
 
   if (!email) return { error: "Email is required." };
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
@@ -83,6 +84,7 @@ export async function updateClientAction(
     .set({
       email,
       name,
+      canAuthorBlog,
       ...(passwordHash ? { passwordHash } : {}),
     })
     .where(eq(users.id, clientId));

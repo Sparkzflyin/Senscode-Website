@@ -135,6 +135,7 @@ export async function getClientById(clientId: string) {
       name: users.name,
       email: users.email,
       role: users.role,
+      canAuthorBlog: users.canAuthorBlog,
       createdAt: users.createdAt,
     })
     .from(users)

@@ -38,6 +38,7 @@ export async function createClientAction(
     .toLowerCase();
   const name = (formData.get("name") as string | null)?.trim();
   const passwordRaw = (formData.get("password") as string | null)?.trim();
+  const canAuthorBlog = formData.get("canAuthorBlog") === "on";
 
   if (!email) return { error: "Email is required." };
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
@@ -66,6 +67,7 @@ export async function createClientAction(
     name: name || null,
     passwordHash,
     role: "client",
+    canAuthorBlog,
   });
 
   revalidatePath("/dashboard/clients");

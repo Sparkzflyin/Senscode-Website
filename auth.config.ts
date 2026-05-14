@@ -20,6 +20,9 @@ export const authConfig = {
       if (user) {
         token.id = (user as { id?: string }).id;
         token.role = (user as { role?: "owner" | "client" }).role;
+        token.canAuthorBlog = (
+          user as { canAuthorBlog?: boolean }
+        ).canAuthorBlog;
       }
       return token;
     },
@@ -28,6 +31,7 @@ export const authConfig = {
         if (token.id) session.user.id = token.id as string;
         if (token.role)
           session.user.role = token.role as "owner" | "client";
+        session.user.canAuthorBlog = Boolean(token.canAuthorBlog);
       }
       return session;
     },

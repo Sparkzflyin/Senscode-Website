@@ -12,7 +12,12 @@ const initialState: UpdateClientState = {};
 export function EditClientForm({
   client,
 }: {
-  client: { id: string; name: string | null; email: string };
+  client: {
+    id: string;
+    name: string | null;
+    email: string;
+    canAuthorBlog: boolean;
+  };
 }) {
   const action = updateClientAction.bind(null, client.id);
   const [state, formAction, pending] = useActionState(action, initialState);
@@ -46,6 +51,23 @@ export function EditClientForm({
             <label htmlFor="edit-client-name">Name (optional)</label>
           </div>
         </div>
+
+        <label
+          className="form-toggle-group"
+          style={{ marginBottom: 12 }}
+          htmlFor="edit-client-can-author"
+        >
+          <input
+            id="edit-client-can-author"
+            name="canAuthorBlog"
+            type="checkbox"
+            defaultChecked={client.canAuthorBlog}
+          />
+          <span>
+            Blog permissions — author can post to the blog from their
+            dashboard
+          </span>
+        </label>
 
         <label
           className="form-toggle-group"

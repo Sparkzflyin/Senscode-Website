@@ -75,6 +75,7 @@ export default async function DashboardOverview() {
   }
 
   // Client view
+  const canAuthorBlog = session.user.canAuthorBlog === true;
   const [myOrderCounts] = await db
     .select({
       total: sql<number>`count(*)::int`,
@@ -90,6 +91,11 @@ export default async function DashboardOverview() {
           <h1>Hey{session.user.name ? `, ${session.user.name}` : ""}.</h1>
           <p>Here&apos;s where your projects live.</p>
         </div>
+        {canAuthorBlog ? (
+          <Link href="/studio" className="cta-button small-btn">
+            + Create new post
+          </Link>
+        ) : null}
       </div>
 
       <div className="grid-3">
