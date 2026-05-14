@@ -27,6 +27,14 @@ export const post = defineType({
       validation: (rule) => rule.max(300),
     }),
     defineField({
+      name: "readTime",
+      title: "Read time (minutes)",
+      type: "number",
+      description:
+        "Estimated reading time in minutes. Shows on the blog card + post header. Leave blank to hide.",
+      validation: (rule) => rule.min(1).max(120).integer().positive(),
+    }),
+    defineField({
       name: "coverImage",
       title: "Cover Image",
       type: "image",

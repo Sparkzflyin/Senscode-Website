@@ -40,6 +40,7 @@ export default async function PendingPostReviewPage({
             by <strong>{post.author?.name || "Unknown"}</strong> · last edited{" "}
             {formatDate(post.updatedAt)} · scheduled for{" "}
             {formatDate(post.publishedAt)}
+            {post.readTime ? ` · ${post.readTime} min read` : ""}
           </p>
         </div>
         <Link

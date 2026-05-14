@@ -70,12 +70,25 @@ export function PostGrid({ posts }: { posts: PostSummary[] }) {
             className="card-footer"
             style={{ justifyContent: "space-between" }}
           >
-            <time
-              dateTime={post.publishedAt}
-              style={{ opacity: 0.7, fontSize: "0.9rem" }}
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 10,
+                opacity: 0.7,
+                fontSize: "0.9rem",
+              }}
             >
-              {formatDate(post.publishedAt)}
-            </time>
+              <time dateTime={post.publishedAt}>
+                {formatDate(post.publishedAt)}
+              </time>
+              {post.readTime ? (
+                <>
+                  <span aria-hidden="true">·</span>
+                  <span>{post.readTime} min read</span>
+                </>
+              ) : null}
+            </div>
             <Link href={`/blog/${post.slug}`} className="cta-button small-btn">
               Read
             </Link>

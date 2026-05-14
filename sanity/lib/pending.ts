@@ -7,6 +7,7 @@ export type PendingPostSummary = {
   title?: string;
   slug?: string;
   excerpt?: string;
+  readTime?: number;
   coverImage?: Image & { alt?: string };
   publishedAt?: string;
   updatedAt: string;
@@ -43,6 +44,7 @@ const DETAIL_QUERY = groq`
     title,
     "slug": slug.current,
     excerpt,
+    readTime,
     coverImage,
     body,
     publishedAt,

@@ -16,6 +16,7 @@ export type PostSummary = {
   title: string;
   slug: string;
   excerpt?: string;
+  readTime?: number;
   coverImage?: Image & { alt?: string };
   publishedAt: string;
   author?: { name: string; slug: string; avatar?: Image };

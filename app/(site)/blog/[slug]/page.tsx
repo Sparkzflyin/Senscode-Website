@@ -162,6 +162,7 @@ export default async function PostPage({
               <time dateTime={post.publishedAt}>
                 {formatDate(post.publishedAt)}
               </time>
+              {post.readTime ? ` · ${post.readTime} min read` : ""}
             </span>
           </div>
 
