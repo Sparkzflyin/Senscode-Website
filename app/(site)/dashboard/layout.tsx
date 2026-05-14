@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { requireAuth } from "@/lib/auth";
 import { countPendingPosts } from "@/sanity/lib/pending";
+import { countNewLeads } from "@/lib/leads";
 import { DashboardNav } from "./DashboardNav";
 import { SignOutButton } from "./SignOutButton";
 import "./dashboard.css";
@@ -20,8 +21,11 @@ export default async function DashboardLayout({
   const session = await requireAuth();
   const role = session.user.role ?? "client";
 
-  // Only owners get the pending-posts count; non-owners never see that nav item.
-  const pendingPostCount = role === "owner" ? await countPendingPosts() : 0;
+  // Owner-only counts: pending blog posts + new (unhandled) leads.
+  const [pendingPostCount, newLeadCount] =
+    role === "owner"
+      ? await Promise.all([countPendingPosts(), countNewLeads()])
+      : [0, 0];
 
   return (
     <div className="dashboard-shell">
@@ -32,7 +36,11 @@ export default async function DashboardLayout({
           </div>
           <div className="dashboard-user-role">{role}</div>
         </div>
-        <DashboardNav role={role} pendingPostCount={pendingPostCount} />
+        <DashboardNav
+          role={role}
+          pendingPostCount={pendingPostCount}
+          newLeadCount={newLeadCount}
+        />
         <SignOutButton />
       </aside>
       <main className="dashboard-main">{children}</main>

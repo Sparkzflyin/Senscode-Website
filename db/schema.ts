@@ -6,6 +6,7 @@ import {
   integer,
   pgEnum,
   boolean,
+  jsonb,
 } from "drizzle-orm/pg-core";
 import type { AdapterAccountType } from "next-auth/adapters";
 
@@ -166,3 +167,37 @@ export const siteSettings = pgTable("site_settings", {
 
 export type SiteSettings = typeof siteSettings.$inferSelect;
 export type SiteStatusColor = (typeof siteStatusColor.enumValues)[number];
+
+// ----- Leads ----------------------------------------------------------------
+// Captures public form submissions (contact form + project estimator) so they
+// surface in the owner dashboard inbox and can be converted to an order with
+// one click. `payload` is the raw form snapshot — schema varies by source.
+
+export const leadSource = pgEnum("lead_source", ["contact", "estimator"]);
+
+export const leadStatus = pgEnum("lead_status", [
+  "new",
+  "contacted",
+  "converted",
+  "archived",
+]);
+
+export const leads = pgTable("lead", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  name: text("name"),
+  email: text("email").notNull(),
+  source: leadSource("source").notNull(),
+  payload: jsonb("payload").notNull(),
+  status: leadStatus("status").notNull().default("new"),
+  convertedOrderId: text("converted_order_id").references(() => orders.id, {
+    onDelete: "set null",
+  }),
+  createdAt: timestamp("created_at", { mode: "date" }).notNull().defaultNow(),
+});
+
+export type Lead = typeof leads.$inferSelect;
+export type NewLead = typeof leads.$inferInsert;
+export type LeadSource = (typeof leadSource.enumValues)[number];
+export type LeadStatus = (typeof leadStatus.enumValues)[number];

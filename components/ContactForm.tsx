@@ -162,6 +162,25 @@ export function ContactForm() {
 
     if (!reduced) openOverlay();
 
+    // Persist to our own DB inbox in parallel with the Formspree email.
+    // Best-effort: a failure here shouldn't break the user-facing submit.
+    const leadPayload: Record<string, string> = {};
+    data.forEach((value, key) => {
+      if (typeof value === "string") leadPayload[key] = value;
+    });
+    void fetch("/api/leads", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        source: "contact",
+        name: leadPayload.name || null,
+        email: leadPayload.email || "",
+        payload: leadPayload,
+      }),
+    }).catch((err) => {
+      console.warn("[senscode] lead save failed:", err);
+    });
+
     try {
       const res = await fetch(FORMSPREE_ENDPOINT, {
         method: "POST",

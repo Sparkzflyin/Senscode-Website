@@ -214,6 +214,61 @@
   color: #f43f5e;
 }
 
+.order-status[data-status="contacted"] {
+  background: rgb(255 149 0 / 12%);
+  border-color: rgb(255 149 0 / 40%);
+  color: #ff9500;
+}
+
+.order-status[data-status="converted"] {
+  background: rgb(52 211 153 / 12%);
+  border-color: rgb(52 211 153 / 40%);
+  color: #34d399;
+}
+
+.order-status[data-status="archived"] {
+  background: rgb(180 180 180 / 12%);
+  border-color: rgb(180 180 180 / 40%);
+  color: #b0b0b0;
+}
+
+.lead-fields {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+}
+
+.lead-field {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 16px;
+  padding: 12px 16px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--glass);
+}
+
+.lead-field dt {
+  font-size: 0.85rem;
+  opacity: 0.7;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  align-self: center;
+}
+
+.lead-field dd {
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+@media (max-width: 640px) {
+  .lead-field {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+}
+
 .order-row {
   display: grid;
   grid-template-columns: 1fr auto;

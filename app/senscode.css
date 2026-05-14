@@ -2483,6 +2483,32 @@ input:checked + .slider::before {
   }
 }
 
+.estimator-send {
+  margin-top: 30px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.estimator-send-lede {
+  margin: 0 0 4px;
+  opacity: 0.85;
+  text-align: center;
+}
+
+.estimator-send-grid {
+  display: grid;
+  gap: 12px;
+}
+
+@media (min-width: 640px) {
+  .estimator-send-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
 .form-toggle-group {
   display: flex;
   align-items: center;

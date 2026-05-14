@@ -13,9 +13,11 @@ type NavItem = {
 export function DashboardNav({
   role,
   pendingPostCount = 0,
+  newLeadCount = 0,
 }: {
   role: "owner" | "client";
   pendingPostCount?: number;
+  newLeadCount?: number;
 }) {
   const pathname = usePathname();
 
@@ -24,6 +26,11 @@ export function DashboardNav({
       ? [
           { href: "/dashboard", label: "Overview", exact: true },
           { href: "/dashboard/orders", label: "Orders" },
+          {
+            href: "/dashboard/leads",
+            label: "Leads",
+            badge: newLeadCount,
+          },
           { href: "/dashboard/clients", label: "Clients" },
           {
             href: "/dashboard/pending-posts",
