@@ -129,8 +129,8 @@ const STATE_MARK = { yes: "✓", no: "✕", meh: "~" } as const;
 
 const FAQS = [
   {
-    q: "Why no React or big frameworks?",
-    a: "Because my clients hate waiting, and I hate rewriting perfectly good code every 18 months. Vanilla HTML, CSS, and JavaScript is faster, lighter, and still going to work in 2030. Should you have a need for backend functionality for whatever reason, trust and believe I can handle it.",
+    q: "What stack do you build on, and why?",
+    a: "Next.js, Tailwind, Sanity, and Postgres, deployed on Vercel. Boring, modern, and built to still be supported in 2030. I pick tools that ship fast, keep the bundle lean, and survive the platform churn that kills WordPress and Wix sites every few years. You own the codebase outright — no proprietary builder, no platform lock-in, no monthly ransom.",
   },
   {
     q: "Do you work with agencies?",

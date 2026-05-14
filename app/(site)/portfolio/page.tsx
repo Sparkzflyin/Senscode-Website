@@ -286,7 +286,7 @@ export default function PortfolioPage() {
             </div>
           </article>
 
-          {/* 8 — Zero Dependencies (wide, centered) */}
+          {/* 8 — Engineered, Not Assembled (wide, centered) */}
           <article
             className="card glass-panel reveal bento-wide bento-item"
             style={{
@@ -296,13 +296,13 @@ export default function PortfolioPage() {
             }}
           >
             <div className="bento-icon">⚡</div>
-            <h3 style={{ fontSize: "1.8rem" }}>Zero Dependencies</h3>
+            <h3 style={{ fontSize: "1.8rem" }}>Engineered, Not Assembled</h3>
             <p style={{ maxWidth: 600, margin: "0 auto" }}>
-              No React. No Vue. No jQuery. No bloated CSS frameworks like
-              Tailwind or Bootstrap. Everything you see—from the intersection
-              observers to the layout engine—is hand-forged in vanilla HTML,
-              CSS, and JavaScript, resulting in perfect Lighthouse performance
-              scores and instantaneous load times.
+              No drag-and-drop builders, no inherited template debt. Every
+              dependency in the stack — Next.js, Tailwind, Sanity, Postgres —
+              earns its place by being measured before it ships. Code is
+              hand-written, render paths are profiled, and you walk away with
+              the entire source on day one.
             </p>
           </article>
         </div>

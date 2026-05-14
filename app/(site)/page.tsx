@@ -26,7 +26,7 @@ export default function Home() {
             url: "https://senscode.com/about",
             image: "https://senscode.com/assets/Signature.png",
             description:
-              "Founder of SensCode, a USMC veteran and front-end engineer who hand-codes every site without frameworks or templates.",
+              "Founder of SensCode, a USMC veteran and full-stack engineer who hand-codes every site on a deliberate, modern stack — no templates, no drag-and-drop builders.",
             knowsAbout: [
               "Web Design",
               "Web Development",
@@ -228,7 +228,7 @@ export default function Home() {
           <div className="marquee-group">
             <span>Hand-Coded From Scratch</span>
             <span className="dot">◆</span>
-            <span>Zero Frameworks Were Harmed</span>
+            <span>Engineered, Not Templated</span>
             <span className="dot">◆</span>
             <span>Powered By Coffee &amp; Broken Keyboards</span>
             <span className="dot">◆</span>
@@ -244,7 +244,7 @@ export default function Home() {
           <div className="marquee-group" aria-hidden="true">
             <span>Hand-Coded From Scratch</span>
             <span className="dot">◆</span>
-            <span>Zero Frameworks Were Harmed</span>
+            <span>Engineered, Not Templated</span>
             <span className="dot">◆</span>
             <span>Powered By Coffee &amp; Broken Keyboards</span>
             <span className="dot">◆</span>

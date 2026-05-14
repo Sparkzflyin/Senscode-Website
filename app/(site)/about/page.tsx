@@ -254,7 +254,7 @@ export default function AboutPage() {
             url: "https://senscode.com/about",
             image: "https://senscode.com/assets/Signature.png",
             description:
-              "Founder and Lead Engineer at SensCode. USMC veteran and front-end engineer who hand-codes every site without frameworks or templates.",
+              "Founder and Lead Engineer at SensCode. USMC veteran and full-stack engineer who hand-codes every site on a deliberate, modern stack — no templates, no drag-and-drop builders.",
             knowsAbout: [
               "Web Design",
               "Web Development",
@@ -390,7 +390,7 @@ export default function AboutPage() {
               feature — it&apos;s the baseline everything else sits on.
             </p>
             <ul className="card-bullets">
-              <li>No build tools, bundlers, or framework runtime to ship</li>
+              <li>Every dependency measured before it ships — no bundle bloat</li>
               <li>Images encoded per-route, not uploaded once and forgotten</li>
               <li>Render paths profiled so 60fps holds on older hardware</li>
             </ul>
