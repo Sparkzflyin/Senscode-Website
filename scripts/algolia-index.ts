@@ -32,7 +32,7 @@ const INDEX = process.env.NEXT_PUBLIC_ALGOLIA_INDEX || "senscode_site";
 const missing: string[] = [];
 if (!APP_ID) missing.push("NEXT_PUBLIC_ALGOLIA_APP_ID");
 if (!ADMIN_KEY) missing.push("ALGOLIA_ADMIN_KEY");
-if (missing.length) {
+if (missing.length || !APP_ID || !ADMIN_KEY) {
   console.error(`Missing ${missing.join(" + ")} in .env.local.`);
   if (missing.includes("ALGOLIA_ADMIN_KEY")) {
     console.error(
