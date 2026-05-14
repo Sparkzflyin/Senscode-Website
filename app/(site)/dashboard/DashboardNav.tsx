@@ -7,9 +7,16 @@ type NavItem = {
   href: string;
   label: string;
   exact?: boolean;
+  badge?: number;
 };
 
-export function DashboardNav({ role }: { role: "owner" | "client" }) {
+export function DashboardNav({
+  role,
+  pendingPostCount = 0,
+}: {
+  role: "owner" | "client";
+  pendingPostCount?: number;
+}) {
   const pathname = usePathname();
 
   const items: NavItem[] =
@@ -18,6 +25,11 @@ export function DashboardNav({ role }: { role: "owner" | "client" }) {
           { href: "/dashboard", label: "Overview", exact: true },
           { href: "/dashboard/orders", label: "Orders" },
           { href: "/dashboard/clients", label: "Clients" },
+          {
+            href: "/dashboard/pending-posts",
+            label: "Pending posts",
+            badge: pendingPostCount,
+          },
         ]
       : [
           { href: "/dashboard", label: "Overview", exact: true },
@@ -36,7 +48,10 @@ export function DashboardNav({ role }: { role: "owner" | "client" }) {
             href={item.href}
             className={`dashboard-nav-link${active ? " is-active" : ""}`}
           >
-            {item.label}
+            <span>{item.label}</span>
+            {item.badge ? (
+              <span className="dashboard-nav-badge">{item.badge}</span>
+            ) : null}
           </Link>
         );
       })}

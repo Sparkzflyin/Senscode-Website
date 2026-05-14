@@ -44,13 +44,32 @@
 }
 
 .dashboard-nav-link {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
   padding: 10px 14px;
   border-radius: 8px;
   font-size: 0.95rem;
   color: var(--text);
   text-decoration: none;
   transition: background var(--transition);
+}
+
+.dashboard-nav-badge {
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  background: rgb(255 149 0 / 20%);
+  border: 1px solid rgb(255 149 0 / 45%);
+  color: #ff9500;
+  line-height: 1;
 }
 
 .dashboard-nav-link:hover {
