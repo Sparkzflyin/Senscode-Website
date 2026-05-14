@@ -6,9 +6,10 @@ let cached: NeonHttpDatabase<typeof schema> | null = null;
 
 export function getDb(): NeonHttpDatabase<typeof schema> {
   if (cached) return cached;
-  // Vercel Neon integration ships the connection string as SENSSTORAGE_URL
-  // (the custom prefix we set in the integration UI).
-  const url = process.env.SENSSTORAGE_URL;
+  // Vercel Neon integration ships pooled URLs under SENSSTORAGE_DATABASE_URL
+  // (auto-set by the integration). Local .env.local uses SENSSTORAGE_URL.
+  const url =
+    process.env.SENSSTORAGE_URL || process.env.SENSSTORAGE_DATABASE_URL;
   if (!url) {
     throw new Error(
       "SENSSTORAGE_URL is not set — add it to .env.local. See .env.example.",
