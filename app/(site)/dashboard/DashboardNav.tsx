@@ -30,10 +30,12 @@ export function DashboardNav({
             label: "Pending posts",
             badge: pendingPostCount,
           },
+          { href: "/dashboard/account", label: "Account" },
         ]
       : [
           { href: "/dashboard", label: "Overview", exact: true },
           { href: "/dashboard/orders", label: "Your orders" },
+          { href: "/dashboard/account", label: "Account" },
         ];
 
   return (
