@@ -1,50 +1,133 @@
-import type { Metadata } from "next";
+import Link from "next/link";
+import { eq, sql } from "drizzle-orm";
 import { requireAuth } from "@/lib/auth";
-import { SignOutButton } from "./SignOutButton";
+import { getDb } from "@/db";
+import { orders, users } from "@/db/schema";
 
-export const metadata: Metadata = {
-  title: "Dashboard",
-  robots: { index: false, follow: false },
-};
-
-export const dynamic = "force-dynamic";
-
-export default async function DashboardPage() {
+export default async function DashboardOverview() {
   const session = await requireAuth();
   const isOwner = session.user.role === "owner";
+  const db = getDb();
+
+  if (isOwner) {
+    const [orderCounts] = await db
+      .select({
+        total: sql<number>`count(*)::int`,
+        active: sql<number>`count(*) filter (where status in ('new', 'in_progress', 'review'))::int`,
+      })
+      .from(orders);
+
+    const [clientCount] = await db
+      .select({ count: sql<number>`count(*)::int` })
+      .from(users)
+      .where(eq(users.role, "client"));
+
+    return (
+      <>
+        <div className="dashboard-page-header">
+          <div>
+            <h1>Overview</h1>
+            <p>
+              Welcome back{session.user.name ? `, ${session.user.name}` : ""}.
+            </p>
+          </div>
+          <Link href="/dashboard/orders/new" className="cta-button small-btn">
+            + New order
+          </Link>
+        </div>
+
+        <div className="grid-3">
+          <div className="card glass-panel no-spotlight">
+            <span className="tag">Orders</span>
+            <h2 style={{ fontSize: "2.2rem", marginTop: 8, marginBottom: 0 }}>
+              {orderCounts?.total ?? 0}
+            </h2>
+            <p className="card-desc" style={{ marginTop: 4 }}>
+              total orders
+            </p>
+          </div>
+          <div className="card glass-panel no-spotlight">
+            <span className="tag">Active</span>
+            <h2 style={{ fontSize: "2.2rem", marginTop: 8, marginBottom: 0 }}>
+              {orderCounts?.active ?? 0}
+            </h2>
+            <p className="card-desc" style={{ marginTop: 4 }}>
+              in flight
+            </p>
+          </div>
+          <div className="card glass-panel no-spotlight">
+            <span className="tag">Clients</span>
+            <h2 style={{ fontSize: "2.2rem", marginTop: 8, marginBottom: 0 }}>
+              {clientCount?.count ?? 0}
+            </h2>
+            <p className="card-desc" style={{ marginTop: 4 }}>
+              accounts
+            </p>
+          </div>
+        </div>
+      </>
+    );
+  }
+
+  // Client view
+  const [myOrderCounts] = await db
+    .select({
+      total: sql<number>`count(*)::int`,
+      active: sql<number>`count(*) filter (where status in ('new', 'in_progress', 'review'))::int`,
+    })
+    .from(orders)
+    .where(eq(orders.clientId, session.user.id));
 
   return (
-    <section className="panel" style={{ paddingTop: "clamp(80px, 12vh, 160px)" }}>
-      <div style={{ maxWidth: 760, margin: "0 auto" }}>
-        <span className="tag">{isOwner ? "Owner" : "Client"}</span>
-        <h1 style={{ marginTop: 12 }}>
-          Welcome{session.user.name ? `, ${session.user.name}` : ""}.
-        </h1>
-
-        {isOwner ? (
-          <div className="card glass-panel no-spotlight" style={{ marginTop: 32 }}>
-            <h3>Owner dashboard</h3>
-            <p className="card-desc">
-              Order management lands in Phase 4 — for now this is just the
-              auth check. From here you&apos;ll create client accounts, view
-              every order, post status updates, and run the books.
-            </p>
-          </div>
-        ) : (
-          <div className="card glass-panel no-spotlight" style={{ marginTop: 32 }}>
-            <h3>Your projects</h3>
-            <p className="card-desc">
-              No active projects yet. Once Christian kicks off an order for
-              you it&apos;ll appear here with status, deliverables, and a
-              timeline.
-            </p>
-          </div>
-        )}
-
-        <div style={{ marginTop: 40, display: "flex", gap: 16 }}>
-          <SignOutButton />
+    <>
+      <div className="dashboard-page-header">
+        <div>
+          <h1>Hey{session.user.name ? `, ${session.user.name}` : ""}.</h1>
+          <p>Here&apos;s where your projects live.</p>
         </div>
       </div>
-    </section>
+
+      <div className="grid-3">
+        <div className="card glass-panel no-spotlight">
+          <span className="tag">Projects</span>
+          <h2 style={{ fontSize: "2.2rem", marginTop: 8, marginBottom: 0 }}>
+            {myOrderCounts?.total ?? 0}
+          </h2>
+          <p className="card-desc" style={{ marginTop: 4 }}>
+            total
+          </p>
+        </div>
+        <div className="card glass-panel no-spotlight">
+          <span className="tag">In progress</span>
+          <h2 style={{ fontSize: "2.2rem", marginTop: 8, marginBottom: 0 }}>
+            {myOrderCounts?.active ?? 0}
+          </h2>
+          <p className="card-desc" style={{ marginTop: 4 }}>
+            active
+          </p>
+        </div>
+      </div>
+
+      {(myOrderCounts?.total ?? 0) === 0 ? (
+        <div className="dashboard-empty" style={{ marginTop: 32 }}>
+          <p>
+            No active projects yet. Once Christian kicks off an order for you
+            it&apos;ll appear under{" "}
+            <Link href="/dashboard/orders" style={{ color: "var(--link)" }}>
+              Your orders
+            </Link>{" "}
+            with status, deliverables, and a timeline.
+          </p>
+        </div>
+      ) : (
+        <p style={{ marginTop: 32 }}>
+          See everything under{" "}
+          <Link href="/dashboard/orders" style={{ color: "var(--link)" }}>
+            Your orders
+          </Link>
+          .
+        </p>
+      )}
+    </>
   );
 }
