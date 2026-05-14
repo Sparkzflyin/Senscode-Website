@@ -67,6 +67,46 @@ function formatDate(iso: string): string {
   });
 }
 
+type AuthorSocial = NonNullable<
+  NonNullable<
+    Awaited<ReturnType<typeof getPostBySlug>>
+  >["author"]
+>["social"];
+
+function AuthorSocialLinks({ social }: { social: AuthorSocial }) {
+  const links: Array<{ label: string; href: string }> = [];
+  if (social?.website) links.push({ label: "Website", href: social.website });
+  if (social?.github) links.push({ label: "GitHub", href: social.github });
+  if (social?.linkedin) links.push({ label: "LinkedIn", href: social.linkedin });
+  if (social?.instagram)
+    links.push({ label: "Instagram", href: social.instagram });
+  if (links.length === 0) return null;
+
+  return (
+    <div
+      style={{
+        display: "flex",
+        flexWrap: "wrap",
+        gap: 16,
+        marginTop: 12,
+        fontSize: "0.95rem",
+      }}
+    >
+      {links.map((link) => (
+        <a
+          key={link.label}
+          href={link.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ color: "var(--link)" }}
+        >
+          {link.label}
+        </a>
+      ))}
+    </div>
+  );
+}
+
 export default async function PostPage({
   params,
 }: {
@@ -192,14 +232,17 @@ export default async function PostPage({
             <PortableTextRenderer value={post.body} />
           </div>
 
-          {post.author?.bio ? (
+          {post.author && (post.author.bio || post.author.social) ? (
             <div
               className="card glass-panel no-spotlight"
               style={{ marginTop: 60 }}
             >
               <span className="tag">About the Author</span>
               <h3 style={{ marginTop: 8 }}>{post.author.name}</h3>
-              <p>{post.author.bio}</p>
+              {post.author.bio ? <p>{post.author.bio}</p> : null}
+              {post.author.social ? (
+                <AuthorSocialLinks social={post.author.social} />
+              ) : null}
             </div>
           ) : null}
         </div>
