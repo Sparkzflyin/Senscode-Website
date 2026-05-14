@@ -4,12 +4,14 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { ThemeToggle } from "./ThemeToggle";
 import { SearchTrigger } from "./SearchTrigger";
+import { AuthCTA } from "./AuthCTA";
 
 const NAV_LINKS = [
   { href: "/", label: "Home" },
   { href: "/services", label: "Services" },
   { href: "/about", label: "About Us" },
   { href: "/portfolio", label: "Work" },
+  { href: "/blog", label: "Blog" },
   { href: "/contact", label: "Contact" },
 ];
 
@@ -49,6 +51,7 @@ export function Navbar() {
         </ul>
         <div className="nav-actions">
           <SearchTrigger />
+          <AuthCTA />
           <ThemeToggle />
         </div>
         <button
@@ -76,8 +79,12 @@ export function Navbar() {
           </Link>
         ))}
         <SearchTrigger className="search-trigger--mobile" />
-        <ThemeToggle
+        <AuthCTA
           style={{ marginTop: 20, fontSize: "1.2rem", padding: "10px 20px" }}
+          onNavigate={() => setOpen(false)}
+        />
+        <ThemeToggle
+          style={{ marginTop: 12, fontSize: "1.2rem", padding: "10px 20px" }}
         />
       </nav>
     </>

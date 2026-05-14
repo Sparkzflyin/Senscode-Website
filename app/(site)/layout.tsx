@@ -12,6 +12,7 @@ import { ScrollReveal } from "@/components/ScrollReveal";
 import { CardTilt } from "@/components/CardTilt";
 import { FooterCurtain } from "@/components/FooterCurtain";
 import { Magnetic } from "@/components/Magnetic";
+import { AuthProvider } from "@/components/AuthProvider";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -143,18 +144,20 @@ export default function RootLayout({
               "(function(){try{var t=localStorage.getItem('theme');if(!t){t=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();",
           }}
         />
-        <SmoothScroll />
-        <ScrollReveal />
-        <CardTilt />
-        <Magnetic />
-        <FooterCurtain />
-        <div className="curtain-wrapper">
-          <Navbar />
-          <main id="main">{children}</main>
-          <CookieBanner />
-          <BackToTop />
-        </div>
-        <Footer />
+        <AuthProvider>
+          <SmoothScroll />
+          <ScrollReveal />
+          <CardTilt />
+          <Magnetic />
+          <FooterCurtain />
+          <div className="curtain-wrapper">
+            <Navbar />
+            <main id="main">{children}</main>
+            <CookieBanner />
+            <BackToTop />
+          </div>
+          <Footer />
+        </AuthProvider>
         <Script src="/legacy-effects.js" strategy="afterInteractive" />
       </body>
     </html>
