@@ -1433,18 +1433,24 @@ const runLegacyInit = () => {
       };
       animateCursor();
 
-      const hoverTargets = document.querySelectorAll(
-        "a, button, .card, .interactive-orb, .theme-toggle, .process-step, .blow-up-btn"
-      );
-      hoverTargets.forEach((el) => {
-        el.addEventListener("mouseenter", () => {
+      // Delegated hover state. Previous version bound mouseenter/mouseleave
+      // to each element at page load, which broke under Next.js soft
+      // navigations: clicking a link unmounted it before mouseleave could
+      // fire, leaving .hover stuck and the cursor invisible. Recomputing
+      // from event.target on every mouseover survives DOM churn.
+      const HOVER_SELECTOR =
+        "a, button, .card, .interactive-orb, .theme-toggle, .process-step, .blow-up-btn";
+      document.addEventListener("mouseover", (e) => {
+        const target = e.target;
+        const isOverHoverTarget =
+          target instanceof Element && target.closest(HOVER_SELECTOR);
+        if (isOverHoverTarget) {
           follower.classList.add("hover");
           cursor.classList.add("hover");
-        });
-        el.addEventListener("mouseleave", () => {
+        } else {
           follower.classList.remove("hover");
           cursor.classList.remove("hover");
-        });
+        }
       });
 
       // Shifting to a smaller cursor for the local constellation
