@@ -232,6 +232,30 @@
   color: #b0b0b0;
 }
 
+/* The marketing site hides the native cursor in favor of a JS-driven dot
+   (see senscode.css "Custom Cursor" + public/legacy-effects.js). The
+   dashboard is a productivity surface, so restore the OS cursor here and
+   hide the decorative one while a dashboard page is mounted. */
+@media (pointer: fine) {
+  .dashboard-shell,
+  .dashboard-shell * {
+    cursor: auto !important;
+  }
+  .dashboard-shell a,
+  .dashboard-shell button,
+  .dashboard-shell label.toggle-switch,
+  .dashboard-shell [role="button"] {
+    cursor: pointer !important;
+  }
+  .dashboard-shell button:disabled {
+    cursor: not-allowed !important;
+  }
+  body:has(.dashboard-shell) .custom-cursor,
+  body:has(.dashboard-shell) .cursor-follower {
+    display: none !important;
+  }
+}
+
 .lead-fields {
   display: grid;
   gap: 12px;
