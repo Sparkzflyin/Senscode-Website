@@ -4,7 +4,7 @@ import { revalidatePath, revalidateTag } from "next/cache";
 import { requireOwner } from "@/lib/auth";
 import { getWriteClient } from "@/sanity/lib/writeClient";
 
-export type ReviewActionResult = { error?: string };
+export type ReviewActionResult = { error?: string; slug?: string };
 
 function assertDraftId(id: string) {
   if (!id.startsWith("drafts.")) {
@@ -52,7 +52,14 @@ export async function approvePostAction(
   revalidatePath("/dashboard/pending-posts");
   revalidatePath("/dashboard");
 
-  return {};
+  // Surface the slug so the client can offer a direct link to the now-live
+  // post instead of bouncing back to the queue.
+  const slug =
+    typeof content === "object" && content && "slug" in content
+      ? (content.slug as { current?: string } | undefined)?.current
+      : undefined;
+
+  return { slug };
 }
 
 export async function rejectPostAction(

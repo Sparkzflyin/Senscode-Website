@@ -72,6 +72,21 @@
   line-height: 1;
 }
 
+.dashboard-nav-divider {
+  border: 0;
+  border-top: 1px solid var(--border);
+  margin: 6px 0;
+  opacity: 0.5;
+}
+
+.dashboard-nav-link--external {
+  opacity: 0.85;
+}
+
+.dashboard-nav-link--external:hover {
+  opacity: 1;
+}
+
 .dashboard-nav-link:hover {
   background: rgb(255 255 255 / 6%);
 }

@@ -30,7 +30,8 @@ export function ReviewButtons({
         setError(result.error);
         return;
       }
-      router.push("/dashboard/pending-posts");
+      // Land directly on the now-live post so the owner can eyeball it.
+      router.push(result.slug ? `/blog/${result.slug}` : "/blog");
       router.refresh();
     });
   }

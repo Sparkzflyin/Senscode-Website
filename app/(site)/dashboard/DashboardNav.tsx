@@ -57,6 +57,14 @@ export function DashboardNav({
           </Link>
         );
       })}
+      <hr className="dashboard-nav-divider" />
+      <Link
+        href="/blog"
+        className="dashboard-nav-link dashboard-nav-link--external"
+      >
+        <span>View blog</span>
+        <span aria-hidden="true">↗</span>
+      </Link>
     </nav>
   );
 }

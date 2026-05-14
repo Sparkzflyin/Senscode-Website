@@ -38,6 +38,13 @@ export default async function DashboardOverview() {
             <Link href="/studio" className="cta-button small-btn">
               + Create new post
             </Link>
+            <Link
+              href="/blog"
+              className="cta-button small-btn"
+              style={{ background: "transparent" }}
+            >
+              View blog ↗
+            </Link>
           </div>
         </div>
 
