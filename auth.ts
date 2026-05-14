@@ -9,17 +9,6 @@ import { users } from "./db/schema";
 export const { handlers, signIn, signOut, auth } = NextAuth({
   ...authConfig,
   session: { strategy: "jwt" },
-  logger: {
-    error(error) {
-      const cause = (error as Error & { cause?: unknown }).cause;
-      console.error(
-        "[auth:error]",
-        error.name,
-        error.message,
-        cause ? JSON.stringify(cause, Object.getOwnPropertyNames(cause)) : "",
-      );
-    },
-  },
   providers: [
     Credentials({
       credentials: {
@@ -27,33 +16,28 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         password: { label: "Password", type: "password" },
       },
       async authorize(creds) {
-        try {
-          if (!creds?.email || !creds?.password) return null;
-          const email = String(creds.email).toLowerCase().trim();
-          const password = String(creds.password);
+        if (!creds?.email || !creds?.password) return null;
+        const email = String(creds.email).toLowerCase().trim();
+        const password = String(creds.password);
 
-          const db = getDb();
-          const [user] = await db
-            .select()
-            .from(users)
-            .where(eq(users.email, email))
-            .limit(1);
+        const db = getDb();
+        const [user] = await db
+          .select()
+          .from(users)
+          .where(eq(users.email, email))
+          .limit(1);
 
-          if (!user || !user.passwordHash) return null;
-          const ok = await bcrypt.compare(password, user.passwordHash);
-          if (!ok) return null;
+        if (!user || !user.passwordHash) return null;
+        const ok = await bcrypt.compare(password, user.passwordHash);
+        if (!ok) return null;
 
-          return {
-            id: user.id,
-            name: user.name ?? undefined,
-            email: user.email,
-            image: user.image ?? undefined,
-            role: user.role,
-          };
-        } catch (err) {
-          console.error("[auth:authorize]", err);
-          throw err;
-        }
+        return {
+          id: user.id,
+          name: user.name ?? undefined,
+          email: user.email,
+          image: user.image ?? undefined,
+          role: user.role,
+        };
       },
     }),
   ],
