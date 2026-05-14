@@ -3,13 +3,20 @@ import Link from "next/link";
 import { JsonLd, ORGANIZATION_LD } from "@/lib/jsonLd";
 import { Typewriter } from "@/components/Typewriter";
 import { SplitH2 } from "@/components/SplitH2";
+import { getSiteSettings } from "@/lib/siteSettings";
 
 export const metadata: Metadata = {
   title: { absolute: "SensCode | Premium Web Design" },
   alternates: { canonical: "/" },
 };
 
-export default function Home() {
+// ISR with a long ceiling — the dashboard settings action calls
+// revalidatePath("/") on save so updates appear immediately. The ceiling
+// just protects against an unrevalidated cache lingering forever.
+export const revalidate = 3600;
+
+export default async function Home() {
+  const settings = await getSiteSettings();
   return (
     <>
       <JsonLd
@@ -91,8 +98,12 @@ export default function Home() {
             {/* TODO(#14): time-based greeting */}
             <p id="time-greeting"></p>
             <output className="status-pill" aria-label="Current availability">
-              <span className="status-dot" aria-hidden="true"></span>
-              <span>Accepting Booking Until June</span>
+              <span
+                className="status-dot"
+                data-color={settings.statusColor}
+                aria-hidden="true"
+              ></span>
+              <span>{settings.statusText}</span>
             </output>
           </div>
           <Typewriter text="Website Design." typo />

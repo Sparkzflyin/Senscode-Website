@@ -141,3 +141,28 @@ export type NewOrder = typeof orders.$inferInsert;
 export type OrderItem = typeof orderItems.$inferSelect;
 export type OrderUpdate = typeof orderUpdates.$inferSelect;
 export type OrderStatus = (typeof orderStatus.enumValues)[number];
+
+// ----- Site settings (singleton) --------------------------------------------
+// One row, id="singleton". Holds owner-mutable knobs that surface on the
+// public site — currently just the landing-page availability pill.
+
+export const siteStatusColor = pgEnum("site_status_color", [
+  "green",
+  "yellow",
+  "red",
+]);
+
+export const siteSettings = pgTable("site_settings", {
+  id: text("id").primaryKey(),
+  statusColor: siteStatusColor("status_color").notNull().default("green"),
+  statusText: text("status_text")
+    .notNull()
+    .default("Accepting Booking Until June"),
+  updatedAt: timestamp("updated_at", { mode: "date" })
+    .notNull()
+    .defaultNow()
+    .$onUpdateFn(() => new Date()),
+});
+
+export type SiteSettings = typeof siteSettings.$inferSelect;
+export type SiteStatusColor = (typeof siteStatusColor.enumValues)[number];

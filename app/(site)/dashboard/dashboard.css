@@ -87,6 +87,30 @@
   opacity: 1;
 }
 
+.settings-color-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--glass);
+  cursor: pointer;
+  transition:
+    border-color var(--transition),
+    background var(--transition);
+}
+
+.settings-color-option:hover {
+  border-color: var(--hover-border);
+}
+
+.settings-color-option[data-checked="true"] {
+  border-color: var(--hover-border);
+  background: var(--accent);
+  box-shadow: 0 0 0 1px var(--hover-border) inset;
+}
+
 .dashboard-nav-link:hover {
   background: rgb(255 255 255 / 6%);
 }

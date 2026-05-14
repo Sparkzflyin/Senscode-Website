@@ -30,6 +30,7 @@ export function DashboardNav({
             label: "Pending posts",
             badge: pendingPostCount,
           },
+          { href: "/dashboard/settings", label: "Settings" },
           { href: "/dashboard/account", label: "Account" },
         ]
       : [
