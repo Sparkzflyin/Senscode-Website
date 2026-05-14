@@ -2852,6 +2852,21 @@ body.reduce-motion .char {
   flex-shrink: 0;
 }
 
+.status-dot[data-color="green"] {
+  background: #22c55e;
+  box-shadow: 0 0 10px #22c55e;
+}
+
+.status-dot[data-color="yellow"] {
+  background: #eab308;
+  box-shadow: 0 0 10px #eab308;
+}
+
+.status-dot[data-color="red"] {
+  background: #ef4444;
+  box-shadow: 0 0 10px #ef4444;
+}
+
 @keyframes status-pulse {
   0%,
   100% {
