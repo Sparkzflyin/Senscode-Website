@@ -1442,9 +1442,17 @@ const runLegacyInit = () => {
         "a, button, .card, .interactive-orb, .theme-toggle, .process-step, .blow-up-btn";
       document.addEventListener("mouseover", (e) => {
         const target = e.target;
-        const isOverHoverTarget =
-          target instanceof Element && target.closest(HOVER_SELECTOR);
-        if (isOverHoverTarget) {
+        if (!(target instanceof Element)) {
+          follower.classList.remove("hover");
+          cursor.classList.remove("hover");
+          return;
+        }
+        // Opt-out: any ancestor with [data-cursor="keep"] keeps both the
+        // custom + native cursor visible so the user can see what they're
+        // about to click (CSS restores the native arrow inside).
+        const keepCursor = target.closest('[data-cursor="keep"]');
+        const isOverHoverTarget = target.closest(HOVER_SELECTOR);
+        if (isOverHoverTarget && !keepCursor) {
           follower.classList.add("hover");
           cursor.classList.add("hover");
         } else {

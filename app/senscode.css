@@ -2177,6 +2177,19 @@ body.reduce-motion .sticky-skill-card .skill-snippet {
     display: none !important;
   }
 
+  /* Opt-out zones: any element with [data-cursor="keep"] (and everything
+     inside it) restores the native OS cursor so users can see what they're
+     about to click. The JS effect also leaves the custom cursor visible
+     inside, so both indicators are available. */
+  [data-cursor="keep"],
+  [data-cursor="keep"] * {
+    cursor: auto !important;
+  }
+  [data-cursor="keep"] a,
+  [data-cursor="keep"] button {
+    cursor: pointer !important;
+  }
+
   .custom-cursor {
     position: fixed;
     top: 0;
@@ -3760,4 +3773,45 @@ body.reduce-motion .status-dot {
   .search-trigger--mobile {
     margin-top: 12px;
   }
+}
+
+/* Blog "About the Author" social icon row */
+.author-social-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.author-social-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  color: #fff;
+  background: rgb(255 255 255 / 6%);
+  border: 1px solid rgb(255 255 255 / 12%);
+  transition:
+    background var(--transition),
+    border-color var(--transition),
+    transform var(--transition);
+}
+
+.author-social-link:hover {
+  background: rgb(255 255 255 / 14%);
+  border-color: rgb(255 255 255 / 30%);
+  transform: translateY(-2px);
+}
+
+[data-theme="light"] .author-social-link {
+  color: #1a1a1a;
+  background: rgb(0 0 0 / 5%);
+  border-color: rgb(0 0 0 / 10%);
+}
+
+[data-theme="light"] .author-social-link:hover {
+  background: rgb(0 0 0 / 10%);
+  border-color: rgb(0 0 0 / 25%);
 }
