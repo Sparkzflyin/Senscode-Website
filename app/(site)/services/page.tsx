@@ -130,7 +130,7 @@ const STATE_MARK = { yes: "✓", no: "✕", meh: "~" } as const;
 const FAQS = [
   {
     q: "What stack do you build on, and why?",
-    a: "Next.js, Tailwind, Sanity, and Postgres, deployed on Vercel. Boring, modern, and built to still be supported in 2030. I pick tools that ship fast, keep the bundle lean, and survive the platform churn that kills WordPress and Wix sites every few years. You own the codebase outright — no proprietary builder, no platform lock-in, no monthly ransom.",
+    a: "Next.js, Tailwind, Sanity, and Postgres, deployed on Vercel. Boring, modern, and built to still be supported in 2030. I pick tools that ship fast, keep the bundle lean, and survive the platform churn that kills WordPress and Wix sites every few years. You own the codebase outright, no proprietary builder, no platform lock-in, no monthly ransom.",
   },
   {
     q: "Do you work with agencies?",
@@ -150,7 +150,7 @@ const FAQS = [
   },
   {
     q: "How does the veteran discount work?",
-    a: "Honor system. If you’ve served, 15% comes off the final invoice. No paperwork, no verification rituals — I trust my fellow service members...we'll see how it works out.",
+    a: "Honor system. If you’ve served, 15% comes off the final invoice. No paperwork, no verification rituals, I trust my fellow service members...we'll see how it works out.",
   },
 ];
 
