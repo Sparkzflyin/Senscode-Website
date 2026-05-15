@@ -224,3 +224,31 @@ export type Lead = typeof leads.$inferSelect;
 export type NewLead = typeof leads.$inferInsert;
 export type LeadSource = (typeof leadSource.enumValues)[number];
 export type LeadStatus = (typeof leadStatus.enumValues)[number];
+
+// ----- Reviews / testimonials ------------------------------------------------
+// Owner issues a tokenized review request from a completed order; the client
+// visits /review/[token] and submits a rating + quote. Reviews don't go
+// public until the owner toggles `approved`.
+
+export const reviews = pgTable("review", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  orderId: text("order_id")
+    .notNull()
+    .references(() => orders.id, { onDelete: "cascade" }),
+  token: text("token").notNull().unique(),
+  rating: integer("rating"),
+  quote: text("quote"),
+  clientName: text("client_name"),
+  clientRole: text("client_role"),
+  submittedAt: timestamp("submitted_at", { mode: "date" }),
+  approved: boolean("approved").notNull().default(false),
+  approvedAt: timestamp("approved_at", { mode: "date" }),
+  tokenIssuedAt: timestamp("token_issued_at", { mode: "date" })
+    .notNull()
+    .defaultNow(),
+});
+
+export type Review = typeof reviews.$inferSelect;
+export type NewReview = typeof reviews.$inferInsert;

@@ -162,6 +162,9 @@ const runLegacyInit = () => {
     "card-tilt",
     // Magnetic CTA buttons — same soft-nav issue as card-tilt; bind via React.
     "magnetic",
+    // Time-of-day greeting — re-implemented in components/TimeGreeting.tsx
+    // so React owns the text node and there's no fight at render time.
+    "time-greeting",
   ]);
 
   // Per-feature error isolation. If one block throws while initializing,

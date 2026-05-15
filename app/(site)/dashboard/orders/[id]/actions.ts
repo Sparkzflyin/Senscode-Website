@@ -7,6 +7,7 @@ import { requireAuth, requireOwner } from "@/lib/auth";
 import { getDb } from "@/db";
 import { orders, orderUpdates, users } from "@/db/schema";
 import type { OrderStatus } from "@/db/schema";
+import { createReviewRequest } from "@/lib/reviews";
 
 export type UpdateState = { error?: string; success?: boolean };
 export type EditOrderState = { error?: string; success?: boolean };
@@ -184,6 +185,15 @@ export async function updateOrderAction(
   revalidatePath("/dashboard/orders");
   revalidatePath("/dashboard");
   return { success: true };
+}
+
+export async function createReviewRequestAction(formData: FormData) {
+  await requireOwner();
+  const orderId = (formData.get("orderId") as string | null)?.trim();
+  if (!orderId) return;
+  await createReviewRequest(orderId);
+  revalidatePath(`/dashboard/orders/${orderId}`);
+  revalidatePath("/dashboard/reviews");
 }
 
 export async function deleteOrderAction(

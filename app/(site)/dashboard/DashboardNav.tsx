@@ -14,10 +14,12 @@ export function DashboardNav({
   role,
   pendingPostCount = 0,
   newLeadCount = 0,
+  pendingReviewCount = 0,
 }: {
   role: "owner" | "client";
   pendingPostCount?: number;
   newLeadCount?: number;
+  pendingReviewCount?: number;
 }) {
   const pathname = usePathname();
 
@@ -26,12 +28,18 @@ export function DashboardNav({
       ? [
           { href: "/dashboard", label: "Overview", exact: true },
           { href: "/dashboard/orders", label: "Orders" },
+          { href: "/dashboard/calendar", label: "Calendar" },
           {
             href: "/dashboard/leads",
             label: "Leads",
             badge: newLeadCount,
           },
           { href: "/dashboard/clients", label: "Clients" },
+          {
+            href: "/dashboard/reviews",
+            label: "Reviews",
+            badge: pendingReviewCount,
+          },
           {
             href: "/dashboard/pending-posts",
             label: "Pending posts",

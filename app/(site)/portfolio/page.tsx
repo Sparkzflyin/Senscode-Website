@@ -4,6 +4,7 @@ import { JsonLd, ORGANIZATION_LD, breadcrumbLd } from "@/lib/jsonLd";
 import { BlowUpToggle } from "@/components/BlowUpToggle";
 import { ThemeDemoButton } from "@/components/ThemeDemoButton";
 import { Typewriter } from "@/components/Typewriter";
+import { listApprovedReviews } from "@/lib/reviews";
 import "./portfolio.css";
 
 export const metadata: Metadata = {
@@ -41,7 +42,10 @@ export const metadata: Metadata = {
   },
 };
 
-export default function PortfolioPage() {
+export const revalidate = 60;
+
+export default async function PortfolioPage() {
+  const reviews = await listApprovedReviews();
   return (
     <>
       <JsonLd
@@ -307,6 +311,57 @@ export default function PortfolioPage() {
           </article>
         </div>
       </section>
+
+      {reviews.length > 0 ? (
+        <section className="panel reveal" aria-labelledby="reviews-heading">
+          <div style={{ textAlign: "center", marginBottom: 48 }}>
+            <span className="tag">Receipts</span>
+            <h2
+              id="reviews-heading"
+              style={{
+                fontSize: "clamp(1.8rem, 4vw, 2.6rem)",
+                marginTop: 12,
+              }}
+            >
+              Words from the Room.
+            </h2>
+            <p style={{ opacity: 0.75, maxWidth: 600, margin: "8px auto 0" }}>
+              The work speaks loudest through the people who&apos;ve hired it.
+            </p>
+          </div>
+          <div className="reviews-grid">
+            {reviews.map((r) => (
+              <figure
+                key={r.id}
+                className="card glass-panel no-spotlight review-card"
+              >
+                <span
+                  className="review-stars"
+                  aria-label={`${r.rating} of 5 stars`}
+                >
+                  {"★".repeat(r.rating)}
+                  <span style={{ opacity: 0.3 }}>
+                    {"★".repeat(5 - r.rating)}
+                  </span>
+                </span>
+                <blockquote className="review-quote">
+                  &ldquo;{r.quote}&rdquo;
+                </blockquote>
+                <figcaption className="review-meta">
+                  <strong>{r.clientName}</strong>
+                  {r.clientRole ? (
+                    <span style={{ opacity: 0.7 }}>{r.clientRole}</span>
+                  ) : null}
+                  <span style={{ opacity: 0.55, fontSize: "0.8rem" }}>
+                    {r.orderTitle}
+                  </span>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        </section>
+      ) : null}
+
       <Script src="/card-shader.js" strategy="afterInteractive" />
       <Script src="/portfolio-effects.js" strategy="afterInteractive" />
     </>

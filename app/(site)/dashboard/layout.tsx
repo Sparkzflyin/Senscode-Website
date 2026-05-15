@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { requireAuth } from "@/lib/auth";
 import { countPendingPosts } from "@/sanity/lib/pending";
 import { countNewLeads } from "@/lib/leads";
+import { countPendingReviews } from "@/lib/reviews";
 import { DashboardNav } from "./DashboardNav";
 import { SignOutButton } from "./SignOutButton";
 import "./dashboard.css";
@@ -21,11 +22,15 @@ export default async function DashboardLayout({
   const session = await requireAuth();
   const role = session.user.role ?? "client";
 
-  // Owner-only counts: pending blog posts + new (unhandled) leads.
-  const [pendingPostCount, newLeadCount] =
+  // Owner-only counts: pending blog posts + new leads + pending reviews.
+  const [pendingPostCount, newLeadCount, pendingReviewCount] =
     role === "owner"
-      ? await Promise.all([countPendingPosts(), countNewLeads()])
-      : [0, 0];
+      ? await Promise.all([
+          countPendingPosts(),
+          countNewLeads(),
+          countPendingReviews(),
+        ])
+      : [0, 0, 0];
 
   return (
     <div className="dashboard-shell">
@@ -40,6 +45,7 @@ export default async function DashboardLayout({
           role={role}
           pendingPostCount={pendingPostCount}
           newLeadCount={newLeadCount}
+          pendingReviewCount={pendingReviewCount}
         />
         <SignOutButton />
       </aside>

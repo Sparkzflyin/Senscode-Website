@@ -710,6 +710,42 @@
   }
 }
 
+/* Bulk action bar (leads list) */
+.bulk-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 16px;
+  margin-bottom: 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--glass);
+  backdrop-filter: blur(10px);
+  flex-wrap: wrap;
+  transition: border-color var(--transition);
+}
+
+.bulk-bar[data-active="true"] {
+  border-color: var(--hover-border);
+}
+
+.lead-row {
+  align-items: center;
+}
+
+.lead-row[data-selected="true"] {
+  border-color: var(--hover-border);
+  background: rgb(255 149 0 / 5%);
+}
+
+.lead-row-link {
+  display: block;
+  text-decoration: none;
+  color: var(--text);
+  min-width: 0;
+}
+
 /* Quote draft form */
 .quote-line {
   display: grid;

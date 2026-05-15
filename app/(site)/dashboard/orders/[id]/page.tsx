@@ -9,6 +9,8 @@ import {
   statusLabel,
 } from "@/lib/format";
 import { ClientMessageForm, OwnerUpdateForm } from "./UpdateForms";
+import { ReviewRequestPanel } from "./ReviewRequestPanel";
+import { getReviewForOrder } from "@/lib/reviews";
 
 export default async function OrderDetailPage({
   params,
@@ -26,6 +28,11 @@ export default async function OrderDetailPage({
   if (!data) notFound();
   const { order, items, updates } = data;
   const isOwner = role === "owner";
+
+  const review =
+    isOwner && order.status === "completed"
+      ? await getReviewForOrder(order.id)
+      : null;
 
   const itemTotalCents = items.reduce(
     (sum, item) => sum + item.unitPriceCents * item.quantity,
@@ -141,6 +148,10 @@ export default async function OrderDetailPage({
             </div>
           </div>
         </section>
+      ) : null}
+
+      {isOwner && order.status === "completed" ? (
+        <ReviewRequestPanel orderId={order.id} review={review} />
       ) : null}
 
       {isOwner && order.notes ? (

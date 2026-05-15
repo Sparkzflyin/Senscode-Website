@@ -3,6 +3,7 @@ import Link from "next/link";
 import { JsonLd, ORGANIZATION_LD } from "@/lib/jsonLd";
 import { Typewriter } from "@/components/Typewriter";
 import { SplitH2 } from "@/components/SplitH2";
+import { TimeGreeting } from "@/components/TimeGreeting";
 import { getResolvedSiteStatus } from "@/lib/siteSettings";
 
 export const metadata: Metadata = {
@@ -95,8 +96,7 @@ export default async function Home() {
           style={{ position: "relative", zIndex: 2 }}
         >
           <div className="greeting-container">
-            {/* TODO(#14): time-based greeting */}
-            <p id="time-greeting"></p>
+            <TimeGreeting />
             <output className="status-pill" aria-label="Current availability">
               <span
                 className="status-dot"

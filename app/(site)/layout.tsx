@@ -133,17 +133,11 @@ export default function RootLayout({
       className={`${inter.variable} ${playfair.variable} ${dancing.variable}`}
     >
       <body>
-        {/* Inline no-FOUC theme init. Runs synchronously before paint so
-            stored localStorage theme applies before the user sees the default
-            dark theme flash. React 19 may emit a dev-only console warning
-            about script tags in JSX; the script executes correctly via SSR
-            and the warning is suppressed in production builds. */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html:
-              "(function(){try{var t=localStorage.getItem('theme');if(!t){t=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();",
-          }}
-        />
+        {/* No-FOUC theme init — external sync script runs before the rest of
+            <body> renders, so the stored localStorage theme applies before
+            paint. External-src avoids the React 19 dev warning that
+            `dangerouslySetInnerHTML` on `<script>` triggers. */}
+        <script src="/theme-init.js" />
         <a href="#main" className="skip-link">
           Skip to main content
         </a>
