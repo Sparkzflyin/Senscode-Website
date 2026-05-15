@@ -1,9 +1,12 @@
 import { getClient } from "./client";
 import {
   ALL_POSTS_QUERY,
+  AUTHOR_BY_SLUG_QUERY,
+  AUTHOR_SLUGS_QUERY,
   CATEGORIES_WITH_POSTS_QUERY,
   CATEGORY_BY_SLUG_QUERY,
   CATEGORY_SLUGS_QUERY,
+  POSTS_BY_AUTHOR_QUERY,
   POST_BY_SLUG_QUERY,
   POST_SITEMAP_QUERY,
   POST_SLUGS_QUERY,
@@ -118,4 +121,45 @@ export async function getAllCategorySlugs(): Promise<string[]> {
   const client = getClient();
   if (!client) return [];
   return client.fetch<string[]>(CATEGORY_SLUGS_QUERY);
+}
+
+export type AuthorDetail = {
+  name: string;
+  slug: string;
+  avatar?: Image;
+  bio?: string;
+  social?: {
+    github?: string;
+    linkedin?: string;
+    instagram?: string;
+    website?: string;
+  };
+};
+
+export async function getAuthorBySlug(
+  slug: string,
+): Promise<AuthorDetail | null> {
+  const client = getClient();
+  if (!client) return null;
+  return client.fetch<AuthorDetail | null>(
+    AUTHOR_BY_SLUG_QUERY,
+    { slug },
+    { next: { revalidate: 60, tags: [`author:${slug}`] } },
+  );
+}
+
+export async function getPostsByAuthor(slug: string): Promise<PostSummary[]> {
+  const client = getClient();
+  if (!client) return [];
+  return client.fetch<PostSummary[]>(
+    POSTS_BY_AUTHOR_QUERY,
+    { slug },
+    { next: { revalidate: 60, tags: [`author:${slug}`, "post"] } },
+  );
+}
+
+export async function getAllAuthorSlugs(): Promise<string[]> {
+  const client = getClient();
+  if (!client) return [];
+  return client.fetch<string[]>(AUTHOR_SLUGS_QUERY);
 }

@@ -3872,3 +3872,115 @@ body.reduce-motion .status-dot {
   background: rgb(0 0 0 / 10%);
   border-color: rgb(0 0 0 / 25%);
 }
+
+/* Author page hero */
+.author-hero {
+  display: flex;
+  align-items: center;
+  gap: clamp(20px, 4vw, 40px);
+  flex-wrap: wrap;
+}
+
+.author-hero-avatar {
+  width: clamp(96px, 14vw, 140px);
+  height: clamp(96px, 14vw, 140px);
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--border);
+}
+
+@media (max-width: 540px) {
+  .author-hero {
+    justify-content: center;
+    text-align: center;
+  }
+}
+
+/* Public quote view (no auth) — /quote/[token] */
+.quote-public {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: clamp(80px, 12vh, 140px) clamp(16px, 4vw, 32px) 100px;
+}
+
+.quote-public-head {
+  margin-bottom: 32px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.quote-public-head h1 {
+  margin: 12px 0 8px;
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+}
+
+.quote-public-meta {
+  opacity: 0.7;
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.quote-public-section {
+  margin-bottom: 36px;
+}
+
+.quote-public-section h2 {
+  font-size: 1.3rem;
+  margin: 0 0 14px;
+}
+
+.quote-public-items {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--glass);
+  backdrop-filter: blur(10px);
+}
+
+.quote-public-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border);
+  gap: 16px;
+}
+
+.quote-public-line:last-of-type {
+  border-bottom: none;
+}
+
+.quote-public-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 16px 18px;
+  background: rgb(255 149 0 / 8%);
+  font-size: 1.05rem;
+}
+
+.quote-public-total strong {
+  font-size: 1.5rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.quote-public-cta {
+  margin-top: 40px;
+  padding: 28px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--glass);
+  backdrop-filter: blur(10px);
+  text-align: center;
+}
+
+.quote-public-accepted h2 {
+  font-size: 1.4rem;
+  margin: 0 0 8px;
+  color: #34d399;
+}
+
+.quote-public-accepted p {
+  opacity: 0.85;
+  margin: 0 0 16px;
+}

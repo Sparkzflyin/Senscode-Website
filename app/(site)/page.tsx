@@ -3,7 +3,7 @@ import Link from "next/link";
 import { JsonLd, ORGANIZATION_LD } from "@/lib/jsonLd";
 import { Typewriter } from "@/components/Typewriter";
 import { SplitH2 } from "@/components/SplitH2";
-import { getSiteSettings } from "@/lib/siteSettings";
+import { getResolvedSiteStatus } from "@/lib/siteSettings";
 
 export const metadata: Metadata = {
   title: { absolute: "SensCode | Premium Web Design" },
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 export const revalidate = 3600;
 
 export default async function Home() {
-  const settings = await getSiteSettings();
+  const settings = await getResolvedSiteStatus();
   return (
     <>
       <JsonLd
@@ -100,10 +100,10 @@ export default async function Home() {
             <output className="status-pill" aria-label="Current availability">
               <span
                 className="status-dot"
-                data-color={settings.statusColor}
+                data-color={settings.color}
                 aria-hidden="true"
               ></span>
-              <span>{settings.statusText}</span>
+              <span>{settings.text}</span>
             </output>
           </div>
           <Typewriter text="Website Design." typo />

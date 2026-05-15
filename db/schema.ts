@@ -153,8 +153,11 @@ export const siteStatusColor = pgEnum("site_status_color", [
   "red",
 ]);
 
+export const siteStatusMode = pgEnum("site_status_mode", ["manual", "auto"]);
+
 export const siteSettings = pgTable("site_settings", {
   id: text("id").primaryKey(),
+  statusMode: siteStatusMode("status_mode").notNull().default("manual"),
   statusColor: siteStatusColor("status_color").notNull().default("green"),
   statusText: text("status_text")
     .notNull()
@@ -167,6 +170,7 @@ export const siteSettings = pgTable("site_settings", {
 
 export type SiteSettings = typeof siteSettings.$inferSelect;
 export type SiteStatusColor = (typeof siteStatusColor.enumValues)[number];
+export type SiteStatusMode = (typeof siteStatusMode.enumValues)[number];
 
 // ----- Leads ----------------------------------------------------------------
 // Captures public form submissions (contact form + project estimator) so they
@@ -194,8 +198,27 @@ export const leads = pgTable("lead", {
   convertedOrderId: text("converted_order_id").references(() => orders.id, {
     onDelete: "set null",
   }),
+  // Quote workflow — owner drafts a proposal, generates a token, shares the
+  // public URL /quote/[token]. Recipient hits "Accept" → creates the order.
+  quoteToken: text("quote_token").unique(),
+  quoteData: jsonb("quote_data"),
+  quoteSentAt: timestamp("quote_sent_at", { mode: "date" }),
+  quoteAcceptedAt: timestamp("quote_accepted_at", { mode: "date" }),
   createdAt: timestamp("created_at", { mode: "date" }).notNull().defaultNow(),
 });
+
+export type QuoteLineItem = {
+  description: string;
+  quantity: number;
+  unitPriceCents: number;
+};
+
+export type QuoteData = {
+  title: string;
+  description?: string;
+  items: QuoteLineItem[];
+  totalCents: number;
+};
 
 export type Lead = typeof leads.$inferSelect;
 export type NewLead = typeof leads.$inferInsert;

@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { headers } from "next/headers";
 import { requireOwner } from "@/lib/auth";
 import { getLead, leadStatusLabel } from "@/lib/leads";
-import { formatDateTime } from "@/lib/format";
+import { formatDateTime, formatMoney } from "@/lib/format";
+import type { QuoteData } from "@/db/schema";
 import { ConvertButton } from "./ConvertButton";
 import { updateLeadStatusAction } from "./actions";
 
@@ -20,6 +22,14 @@ export default async function LeadDetailPage({
   const entries = Object.entries(payload).filter(
     ([, v]) => v !== null && v !== undefined && v !== "",
   );
+
+  const quote = (lead.quoteData ?? null) as QuoteData | null;
+  const hdrs = await headers();
+  const host = hdrs.get("host") ?? "";
+  const proto = hdrs.get("x-forwarded-proto") ?? "https";
+  const quoteUrl = lead.quoteToken
+    ? `${proto}://${host}/quote/${lead.quoteToken}`
+    : null;
 
   return (
     <>
@@ -64,6 +74,49 @@ export default async function LeadDetailPage({
         )}
       </section>
 
+      {quote ? (
+        <section style={{ marginBottom: 32 }}>
+          <h2 style={{ fontSize: "1.4rem", marginBottom: 12 }}>Quote</h2>
+          <div className="quote-summary card glass-panel no-spotlight">
+            <div className="quote-summary-head">
+              <div>
+                <strong style={{ fontSize: "1.1rem" }}>{quote.title}</strong>
+                <p
+                  style={{
+                    opacity: 0.7,
+                    fontSize: "0.85rem",
+                    margin: "4px 0 0",
+                  }}
+                >
+                  {quote.items.length} line item
+                  {quote.items.length === 1 ? "" : "s"} ·{" "}
+                  {formatMoney(quote.totalCents)}
+                  {lead.quoteSentAt
+                    ? ` · sent ${formatDateTime(lead.quoteSentAt)}`
+                    : null}
+                  {lead.quoteAcceptedAt
+                    ? ` · accepted ${formatDateTime(lead.quoteAcceptedAt)}`
+                    : null}
+                </p>
+              </div>
+              <Link
+                href={`/dashboard/leads/${lead.id}/quote`}
+                className="cta-button small-btn"
+                style={{ background: "transparent" }}
+              >
+                Edit
+              </Link>
+            </div>
+            {quoteUrl ? (
+              <div className="quote-share-row">
+                <span className="quote-share-label">Share link</span>
+                <code className="quote-share-link">{quoteUrl}</code>
+              </div>
+            ) : null}
+          </div>
+        </section>
+      ) : null}
+
       <section style={{ marginBottom: 32 }}>
         <h2 style={{ fontSize: "1.4rem", marginBottom: 12 }}>Actions</h2>
         {lead.status === "converted" && lead.convertedOrderId ? (
@@ -78,6 +131,12 @@ export default async function LeadDetailPage({
           </p>
         ) : (
           <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
+            <Link
+              href={`/dashboard/leads/${lead.id}/quote`}
+              className="cta-button small-btn"
+            >
+              {quote ? "Edit quote" : "Draft quote"}
+            </Link>
             <ConvertButton leadId={lead.id} />
             <form action={updateLeadStatusAction}>
               <input type="hidden" name="id" value={lead.id} />

@@ -27,9 +27,8 @@ export async function generateMetadata({
   const { slug } = await params;
   const post = await getPostBySlug(slug);
   if (!post) return { title: "Post not found" };
-  const ogImage = post.coverImage
-    ? urlFor(post.coverImage).width(1200).height(630).url()
-    : "/og-card.png";
+  // OG and Twitter images are generated dynamically by the colocated
+  // opengraph-image.tsx route — Next auto-injects the meta tags.
   return {
     title: post.title,
     description: post.excerpt,
@@ -41,20 +40,11 @@ export async function generateMetadata({
       type: "article",
       publishedTime: post.publishedAt,
       authors: post.author ? [post.author.name] : undefined,
-      images: [
-        {
-          url: ogImage,
-          width: 1200,
-          height: 630,
-          alt: post.coverImage?.alt || post.title,
-        },
-      ],
     },
     twitter: {
       card: "summary_large_image",
       title: post.title,
       description: post.excerpt,
-      images: [ogImage],
     },
   };
 }
@@ -241,16 +231,42 @@ export default async function PostPage({
             }}
           >
             {post.author?.avatar?.asset ? (
-              <Image
-                src={urlFor(post.author.avatar).width(80).height(80).url()}
-                alt={post.author.name}
-                width={40}
-                height={40}
-                style={{ borderRadius: "50%" }}
-              />
+              post.author.slug ? (
+                <Link href={`/blog/author/${post.author.slug}`}>
+                  <Image
+                    src={urlFor(post.author.avatar).width(80).height(80).url()}
+                    alt={post.author.name}
+                    width={40}
+                    height={40}
+                    style={{ borderRadius: "50%" }}
+                  />
+                </Link>
+              ) : (
+                <Image
+                  src={urlFor(post.author.avatar).width(80).height(80).url()}
+                  alt={post.author.name}
+                  width={40}
+                  height={40}
+                  style={{ borderRadius: "50%" }}
+                />
+              )
             ) : null}
             <span>
-              {post.author ? `${post.author.name} · ` : ""}
+              {post.author ? (
+                post.author.slug ? (
+                  <>
+                    <Link
+                      href={`/blog/author/${post.author.slug}`}
+                      style={{ color: "var(--link)" }}
+                    >
+                      {post.author.name}
+                    </Link>
+                    {" · "}
+                  </>
+                ) : (
+                  `${post.author.name} · `
+                )
+              ) : null}
               <time dateTime={post.publishedAt}>
                 {formatDate(post.publishedAt)}
               </time>
@@ -291,7 +307,18 @@ export default async function PostPage({
               style={{ marginTop: 60 }}
             >
               <span className="tag">About the Author</span>
-              <h3 style={{ marginTop: 8 }}>{post.author.name}</h3>
+              <h3 style={{ marginTop: 8 }}>
+                {post.author.slug ? (
+                  <Link
+                    href={`/blog/author/${post.author.slug}`}
+                    style={{ color: "inherit" }}
+                  >
+                    {post.author.name}
+                  </Link>
+                ) : (
+                  post.author.name
+                )}
+              </h3>
               {post.author.bio ? <p>{post.author.bio}</p> : null}
               {post.author.social ? (
                 <AuthorSocialLinks social={post.author.social} />

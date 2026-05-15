@@ -75,3 +75,32 @@ export const POSTS_BY_CATEGORY_QUERY = groq`
 export const CATEGORY_SLUGS_QUERY = groq`
   *[_type == "category" && defined(slug.current) && count(*[_type == "post" && references(^._id)]) > 0][].slug.current
 `;
+
+// Authors that have at least one published post.
+export const AUTHOR_BY_SLUG_QUERY = groq`
+  *[_type == "author" && slug.current == $slug][0] {
+    name,
+    "slug": slug.current,
+    avatar,
+    bio,
+    social
+  }
+`;
+
+export const POSTS_BY_AUTHOR_QUERY = groq`
+  *[_type == "post" && defined(slug.current) && author->slug.current == $slug] | order(publishedAt desc) {
+    _id,
+    title,
+    "slug": slug.current,
+    excerpt,
+    readTime,
+    coverImage,
+    publishedAt,
+    "author": author->{name, "slug": slug.current, avatar},
+    "categories": categories[]->{title, "slug": slug.current}
+  }
+`;
+
+export const AUTHOR_SLUGS_QUERY = groq`
+  *[_type == "author" && defined(slug.current) && count(*[_type == "post" && references(^._id)]) > 0][].slug.current
+`;
