@@ -6,6 +6,7 @@ import { getLead, leadStatusLabel } from "@/lib/leads";
 import { formatDateTime, formatMoney } from "@/lib/format";
 import type { QuoteData } from "@/db/schema";
 import { ConvertButton } from "./ConvertButton";
+import { DeleteLeadButton } from "./DeleteLeadButton";
 import { updateLeadStatusAction } from "./actions";
 
 export default async function LeadDetailPage({
@@ -168,6 +169,37 @@ export default async function LeadDetailPage({
             </form>
           </div>
         )}
+      </section>
+
+      <section
+        style={{
+          marginTop: 16,
+          paddingTop: 20,
+          borderTop: "1px solid var(--border)",
+        }}
+      >
+        <h2
+          style={{
+            fontSize: "1rem",
+            margin: "0 0 8px",
+            opacity: 0.7,
+            textTransform: "uppercase",
+            letterSpacing: "0.06em",
+          }}
+        >
+          Danger zone
+        </h2>
+        <p
+          style={{
+            opacity: 0.7,
+            fontSize: "0.9rem",
+            margin: "0 0 14px",
+          }}
+        >
+          Deleting removes the submission permanently. Any order already
+          created from this lead stays put.
+        </p>
+        <DeleteLeadButton leadId={lead.id} />
       </section>
     </>
   );

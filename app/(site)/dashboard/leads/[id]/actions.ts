@@ -44,6 +44,21 @@ export async function updateLeadStatusAction(formData: FormData) {
   revalidatePath("/dashboard");
 }
 
+export async function deleteLeadAction(formData: FormData) {
+  await requireOwner();
+  const id = (formData.get("id") as string | null)?.trim();
+  if (!id) return;
+
+  const db = getDb();
+  // No FK points back from orders to leads, so any order spawned from this
+  // lead survives — we just lose the source attribution.
+  await db.delete(leads).where(eq(leads.id, id));
+
+  revalidatePath("/dashboard/leads");
+  revalidatePath("/dashboard");
+  redirect("/dashboard/leads");
+}
+
 export type ConvertLeadState = {
   error?: string;
 };
