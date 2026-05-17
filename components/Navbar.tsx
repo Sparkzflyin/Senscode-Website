@@ -80,11 +80,11 @@ export function Navbar() {
         ))}
         <SearchTrigger className="search-trigger--mobile" />
         <AuthCTA
-          style={{ marginTop: 20, fontSize: "1.2rem", padding: "10px 20px" }}
+          style={{ marginTop: 8, fontSize: "1.1rem", padding: "10px 20px" }}
           onNavigate={() => setOpen(false)}
         />
         <ThemeToggle
-          style={{ marginTop: 12, fontSize: "1.2rem", padding: "10px 20px" }}
+          style={{ fontSize: "1.1rem", padding: "10px 20px" }}
         />
       </nav>
     </>

@@ -1357,8 +1357,17 @@ body.reduce-motion .comms-error-icon path {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 30px;
+  /* `safe center` centers when content fits, falls back to flex-start when it
+     overflows — keeps both ends visible on short phones. */
+  justify-content: safe center;
+  gap: 22px;
+  /* Top padding clears the fixed 60px navbar + notch; bottom padding clears
+     the home-indicator. Without this the first/last items get clipped. */
+  padding: calc(60px + env(safe-area-inset-top) + 24px) 24px
+    calc(env(safe-area-inset-bottom) + 24px);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
   z-index: 2500;
   transition: 0.5s cubic-bezier(0.77, 0.2, 0.05, 1);
 }
@@ -1368,17 +1377,30 @@ body.reduce-motion .comms-error-icon path {
 }
 
 .mobile-menu a {
-  font-size: 2rem;
+  font-size: 1.6rem;
   color: var(--text);
   text-decoration: none;
   font-weight: 600;
   opacity: 0.6;
   transition: opacity 0.3s;
-  padding: 8px 16px;
+  padding: 6px 16px;
   min-height: 44px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+}
+
+/* Shorter phones (small landscape, older devices): tighten further so the
+   full list fits without scroll where possible. */
+@media (max-height: 720px) {
+  .mobile-menu {
+    gap: 16px;
+    padding-top: calc(60px + env(safe-area-inset-top) + 16px);
+    padding-bottom: calc(env(safe-area-inset-bottom) + 16px);
+  }
+  .mobile-menu a {
+    font-size: 1.35rem;
+  }
 }
 
 .mobile-menu a.active {
