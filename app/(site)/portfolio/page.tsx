@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Script from "next/script";
 import { JsonLd, ORGANIZATION_LD, breadcrumbLd } from "@/lib/jsonLd";
 import { BlowUpToggle } from "@/components/BlowUpToggle";
@@ -6,6 +7,25 @@ import { ThemeDemoButton } from "@/components/ThemeDemoButton";
 import { Typewriter } from "@/components/Typewriter";
 import { listApprovedReviews } from "@/lib/reviews";
 import "./portfolio.css";
+
+const FEATURED_WORK = [
+  {
+    title: "NextQuest",
+    href: "https://nextquests.com",
+    image: "/assets/work-nextquest.png",
+    blurb:
+      "A community-driven gaming platform where players log titles, rate them 1–10, and vote on genre-specific leaderboards. Retro-arcade aesthetic with pixelated type, neon accents, and XP-based progression.",
+    tags: ["Next.js", "Postgres", "Auth.js", "SensCode-built"],
+  },
+  {
+    title: "Peaches N' Plushies",
+    href: "https://peaches-n-plushies.vercel.app/",
+    image: "/assets/work-peaches.png",
+    blurb:
+      "Boutique e-commerce for hand-sewn felt plushies, featuring the Orchard Pals line, a behind-the-scenes content hub, and a tiered Patreon membership for early drops and commissions.",
+    tags: ["Next.js", "E-commerce", "Patreon", "Vercel"],
+  },
+] as const;
 
 export const metadata: Metadata = {
   title: "Portfolio & Lab",
@@ -99,6 +119,56 @@ export default async function PortfolioPage() {
           <p>A deconstruction of the elements that forge SensCode.</p>
         </div>
       </header>
+
+      <section className="panel reveal" aria-labelledby="featured-work-heading">
+        <div style={{ textAlign: "center", marginBottom: 40 }}>
+          <span className="tag">Featured Work</span>
+          <h2
+            id="featured-work-heading"
+            style={{
+              fontSize: "clamp(1.8rem, 4vw, 2.6rem)",
+              marginTop: 12,
+            }}
+          >
+            Sites in the Wild.
+          </h2>
+          <p style={{ opacity: 0.75, maxWidth: 600, margin: "8px auto 0" }}>
+            A look at recent builds — every line hand-coded, every render path
+            measured.
+          </p>
+        </div>
+        <div className="work-grid">
+          {FEATURED_WORK.map((project) => (
+            <a
+              key={project.href}
+              href={project.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="card glass-panel no-spotlight work-card"
+            >
+              <div className="work-shot">
+                <Image
+                  src={project.image}
+                  alt={`Screenshot of ${project.title}`}
+                  width={1600}
+                  height={865}
+                  sizes="(max-width: 768px) 100vw, 600px"
+                />
+              </div>
+              <div className="work-body">
+                <h3>{project.title}</h3>
+                <p>{project.blurb}</p>
+                <div className="work-tags">
+                  {project.tags.map((tag) => (
+                    <span key={tag}>{tag}</span>
+                  ))}
+                </div>
+                <span className="work-link">Visit live site</span>
+              </div>
+            </a>
+          ))}
+        </div>
+      </section>
 
       <section className="panel" style={{ paddingTop: 20, position: "relative" }}>
         <div
