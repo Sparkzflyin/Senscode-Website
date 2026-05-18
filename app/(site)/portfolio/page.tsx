@@ -133,7 +133,7 @@ export default async function PortfolioPage() {
             Sites in the Wild.
           </h2>
           <p style={{ opacity: 0.75, maxWidth: 600, margin: "8px auto 0" }}>
-            A look at recent builds — every line hand-coded, every render path
+            A look at recent builds - every line hand-coded, every render path
             measured.
           </p>
         </div>
